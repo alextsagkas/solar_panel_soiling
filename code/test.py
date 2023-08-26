@@ -2,7 +2,7 @@ import os
 import argparse
 
 
-parser = argparse.ArgumentParser(description="Get hyperparameters")
+parser = argparse.ArgumentParser(description="Get hyper-parameters")
 
 # Get an arg for num_epochs
 parser.add_argument("--num_epochs",
@@ -46,7 +46,7 @@ args = parser.parse_args()
 with open("config.txt", "w") as f:
     f.write(args.__str__())
 
-# Setup hyperparameters
+# Setup hyper-parameters
 NUM_EPOCHS = args.num_epochs
 BATCH_SIZE = args.batch_size
 HIDDEN_UNITS = args.hidden_units
