@@ -1,6 +1,6 @@
 import os
 import argparse
-
+import torch
 
 parser = argparse.ArgumentParser(description="Get hyper-parameters")
 

@@ -2,6 +2,7 @@
 *.ipynb
 
 data/
+debug/
 miscellaneous/
 .vscode
 .DS_Store
