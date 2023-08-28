@@ -1,14 +1,16 @@
 import os
 import torch
+import torch.utils.tensorboard
 from pathlib import Path
 from datetime import datetime
-from torch.utils.tensorboard import SummaryWriter
+from torch.utils.tensorboard.writer import SummaryWriter
+from typing import Union
 
 
 def create_writer(
     experiment_name: str,
     model_name: str,
-    extra: str = None
+    extra: Union[str, None] = None
 ) -> torch.utils.tensorboard.writer.SummaryWriter:
     """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to a specific log_dir.
 

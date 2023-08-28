@@ -21,11 +21,11 @@ data_transform = transforms.Compose([
 ])
 
 # Load data
-train_data = datasets.ImageFolder(root=train_dir,  # target folder of images
+train_data = datasets.ImageFolder(root=str(train_dir),  # target folder of images
                                   transform=data_transform,  # transforms to perform on data
                                   target_transform=None)  # transforms to perform on labels
 
-test_data = datasets.ImageFolder(root=test_dir,
+test_data = datasets.ImageFolder(root=str(test_dir),
                                  transform=data_transform)
 
 # Create data loaders

@@ -1,10 +1,11 @@
 import torch
+from pathlib import Path
 from pathlib import PosixPath
 
 
 def save_model(
     model: torch.nn.Module,
-    MODELS_PATH: PosixPath,
+    MODELS_PATH: Path,
     MODEL_NAME: str,
 
 ) -> None:

@@ -1,5 +1,6 @@
 import os
 import torch
+import torch.backends.mps
 import argparse
 from pathlib import Path
 
@@ -65,22 +66,24 @@ if __name__ == "__main__":
 
     # Setup device-agnostic code
     if torch.cuda.is_available():
-        device = "cuda"  # NVIDIA GPU
+        device = torch.device("cuda")  # NVIDIA GPU
     elif torch.backends.mps.is_available():
-        device = "mps"  # Apple GPU
+        device = torch.device("mps")  # Apple GPU
     else:
-        device = "cpu"  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
+        device = torch.device("cpu")  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
 
     print(f"[INFO] Using {device} device")
 
     # Setup data loaders
+    NUM_WORKERS = os.cpu_count()
+
     train_dataloader, test_dataloader = get_dataloaders(
-        train_dir=train_dir,
+        train_dir=str(train_dir),
         train_transform=train_data_transform,
-        test_dir=test_dir,
+        test_dir=str(test_dir),
         test_transform=test_data_transform,
         BATCH_SIZE=BATCH_SIZE,
-        NUM_WORKERS=os.cpu_count()
+        NUM_WORKERS=NUM_WORKERS if NUM_WORKERS is not None else 1
     )
 
     # Instantiate the model
