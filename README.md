@@ -12,3 +12,9 @@ Image file names contain the time of the day, power loss of the panel with respe
 
 - `solar_Wed_Jun_28_7__5__6_2017_L_0.0123268698061_I_0.0566274509804.jpg`
 - `solar_day_Month_date__hour__minute__second_year_L_loss_I_irradiancelevel.jpg`
+
+## Loss Function & Class Probabilities
+
+Using Cross Entropy Loss function for the binary classification of images in tow classes. Therefore, the
+model outputs two logits, one for each class. The probabilities for each class are caclulated using the
+softmax function.

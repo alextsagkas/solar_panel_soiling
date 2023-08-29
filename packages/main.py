@@ -94,10 +94,12 @@ if __name__ == "__main__":
     ).to(device)
 
     # Instantiate the writer
+    EXTRA = f"{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
+
     writer = create_writer(
         experiment_name="initial_test_tiny_vgg",
         model_name="tiny_vgg",
-        extra=f"{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
+        extra=EXTRA
     )
 
     # Set Seeds
@@ -121,8 +123,10 @@ if __name__ == "__main__":
     )
 
     # Save the model
+    MODEL_NAME = f"tiny_vgg-{EXTRA}.pth"
+
     save_model(
         model=model,
         MODELS_PATH=models_path,
-        MODEL_NAME="tiny_vgg.pth",
+        MODEL_NAME=MODEL_NAME,
     )

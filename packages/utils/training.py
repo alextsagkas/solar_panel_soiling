@@ -180,7 +180,7 @@ def inference(
 
     Args:
       model: A PyTorch model to be trained and tested.
-      test_dataloader: A DataLoader instance for the model to be tested on.
+      test_dataloader: A DataLoader instance for the model to be tested on (NUM_BATCHES = 1).
       class_names: A list of the classes the model is trained on.
       save_folder: A Path instance to save the image.
       model_name: The model's name to use it as a subfolder where the images will be saved.
