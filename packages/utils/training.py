@@ -6,6 +6,15 @@ from tqdm import tqdm
 from typing import Dict, List, Union
 import matplotlib.pyplot as plt
 from pathlib import Path
+import torchvision.datasets
+import numpy as np
+from sklearn.model_selection import KFold
+from torch.utils.data.sampler import SubsetRandomSampler
+from torch.utils.data import DataLoader
+from torch import optim
+
+from packages.models.tiny_vgg import TinyVGG
+from packages.utils.storage import save_model
 
 
 def _train_step(model: torch.nn.Module,
@@ -224,3 +233,244 @@ def inference(
         results_acc = results_acc / len(test_dataloader)
 
     return results_acc
+
+
+def _cross_validation_train(
+    model: torch.nn.Module,
+    device: torch.device,
+    train_loader: torch.utils.data.DataLoader,
+    loss_fn: torch.nn.Module,
+    optimizer: torch.optim.Optimizer
+) -> tuple[float, float]:
+
+    model.train()
+
+    train_loss, train_acc = 0, 0
+
+    for data, target in train_loader:
+        data, target = data.to(device), target.to(device)
+        output = model(data)
+
+        loss = loss_fn(output, target)
+        train_loss += loss.item()
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        pred_class = output.argmax(dim=1)
+        train_acc += (pred_class == target).sum().item() / len(pred_class)
+
+    train_loss = train_loss / len(train_loader)
+    train_acc = train_acc / len(train_loader)
+
+    return train_loss, train_acc
+
+
+def _cross_validation_test(
+    model: torch.nn.Module,
+    device: torch.device,
+    test_loader: torch.utils.data.DataLoader,
+    loss_fn: torch.nn.Module,
+    batch_size: int,
+) -> tuple[float, float]:
+
+    model.eval()
+
+    test_loss = 0
+    correct = 0
+
+    with torch.inference_mode():
+        for data, target in test_loader:
+            data, target = data.to(device), target.to(device)
+            output = model(data)
+
+            test_loss += loss_fn(output, target).item()
+
+            pred = output.argmax(dim=1)
+            correct += (pred == target).sum().item()
+
+    test_loss = test_loss / len(test_loader)
+    test_acc = correct / (len(test_loader) * batch_size)
+
+    return test_loss, test_acc
+
+
+def _get_model(
+    model_name: str,
+    hidden_units: int
+) -> torch.nn.Module:
+    if model_name == "tiny_vgg":
+        model = TinyVGG(
+            input_shape=3,
+            hidden_units=hidden_units,
+            output_shape=2
+        )
+    else:
+        raise ValueError(
+            f"Model name {model_name} is not supported. "
+            "Please choose between 'tiny_vgg'."
+        )
+
+    return model
+
+
+def _get_optimizer(
+    model: torch.nn.Module,
+    optimizer_name: str,
+    learning_rate: float = 1e-3,
+) -> torch.optim.Optimizer:
+    # Initialize the optimizer
+    if optimizer_name == "adam":
+        optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+    elif optimizer_name == "SGD":
+        optimizer = optim.SGD(model.parameters(), lr=learning_rate)
+    else:
+        raise ValueError(
+            f"Optimizer name {optimizer_name} is not supported. "
+            "Please choose between 'adam and SGD'."
+        )
+
+    return optimizer
+
+
+def k_fold_cross_validation(
+    model_name: str,
+    train_dataset: torchvision.datasets.ImageFolder,
+    loss_fn: torch.nn.Module,
+    hidden_units: int,
+    device: torch.device,
+    num_epochs: int,
+    root_dir: Path,
+    batch_size: int = 32,
+    learning_rate: float = 1e-3,
+    optimizer_name: str = "adam",
+    num_folds: int = 1,
+    save_models: bool = False,
+    writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
+):
+    # Loss function
+    kf = KFold(n_splits=num_folds, shuffle=True)
+
+    # Loop through each fold
+    results = {}
+
+    train_indices = np.arange(len(train_dataset))
+
+    for fold, (train_idx, test_idx) in enumerate(kf.split(train_indices)):
+        print(f"Fold {fold + 1}")
+        print("-------")
+
+        # Define the data loaders for the current fold
+        train_loader = DataLoader(
+            dataset=train_dataset,
+            batch_size=batch_size,
+            sampler=SubsetRandomSampler(train_idx.tolist()),
+        )
+        test_loader = DataLoader(
+            dataset=train_dataset,
+            batch_size=batch_size,
+            sampler=SubsetRandomSampler(test_idx.tolist()),
+        )
+
+        # Initialize the model
+        model = _get_model(
+            model_name=model_name,
+            hidden_units=hidden_units
+        ).to(device)
+
+        # Initialize the optimizer
+        optimizer = _get_optimizer(
+            model=model,
+            optimizer_name=optimizer_name,
+            learning_rate=learning_rate,
+        )
+
+        # Train the model on the current fold
+        for epoch in tqdm(range(num_epochs)):
+            train_loss, train_acc = _cross_validation_train(
+                model=model,
+                device=device,
+                train_loader=train_loader,
+                loss_fn=loss_fn,
+                optimizer=optimizer
+            )
+
+            print(
+                f"Epoch: {epoch+1} | "
+                f"train_loss: {train_loss:.4f} | "
+                f"train_acc: {train_acc * 100:.2f}%"
+            )
+
+            if writer:
+                writer.add_scalars(
+                    main_tag="train_loss",
+                    tag_scalar_dict={
+                        f"{fold}_f": train_loss,
+                    },
+                    global_step=epoch
+                )
+                writer.add_scalars(
+                    main_tag="train_accuracy",
+                    tag_scalar_dict={
+                        f"{fold}_f": train_acc,
+                    },
+                    global_step=epoch
+                )
+                writer.close()
+
+        # Save the model for the current fold
+        if save_models:
+            models_path = root_dir / "models"
+
+            infos = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+            model_save_name = f"{model_name}-{infos}.pth"
+
+            save_model(
+                model=model,
+                MODELS_PATH=models_path,
+                MODEL_NAME=model_save_name,
+            )
+
+        # Evaluate the model on the test set
+        test_loss, test_acc = _cross_validation_test(
+            model=model,
+            device=device,
+            test_loader=test_loader,
+            loss_fn=loss_fn,
+            batch_size=batch_size
+        )
+
+        results[fold] = test_acc
+
+        # Print the results for the current fold
+        print(f"Results: test_loss: {test_loss:.4f}, test_acc: {test_acc * 100:.2f}%\n")
+
+        if writer:
+            writer.add_scalars(
+                main_tag="test_loss",
+                tag_scalar_dict={
+                    f"{num_folds}_f_total": test_loss,
+                },
+                global_step=fold
+            )
+            writer.add_scalars(
+                main_tag="test_accuracy",
+                tag_scalar_dict={
+                    f"{num_folds}_f_total": test_acc,
+                },
+                global_step=fold
+            )
+            writer.close()
+
+    # Print fold results
+    print(f'K-Fold Cross Validation Results for {num_folds} Folds')
+    print('--------------------------------------------')
+
+    test_acc_sum = 0.0
+
+    for key, value in results.items():
+        print(f'Fold {key + 1}: {value * 100:.2f} %')
+        test_acc_sum += value
+
+    print(f'\nAverage: {test_acc_sum/len(results.items()) * 100:.2f}%')
