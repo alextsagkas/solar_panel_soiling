@@ -12,6 +12,7 @@ from sklearn.model_selection import KFold
 from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data import DataLoader
 from torch import optim
+from torchmetrics.classification import MulticlassAccuracy, MulticlassPrecision, MulticlassRecall, MulticlassFBetaScore
 
 from packages.models.tiny_vgg import TinyVGG
 from packages.utils.storage import save_model
@@ -241,11 +242,17 @@ def _cross_validation_train(
     train_loader: torch.utils.data.DataLoader,
     loss_fn: torch.nn.Module,
     optimizer: torch.optim.Optimizer
-) -> tuple[float, float]:
+) -> tuple[float, float, float, float, float]:
 
     model.train()
 
     train_loss, train_acc = 0, 0
+
+    # Classification metrics
+    accuracy_fn = MulticlassAccuracy(num_classes=2).to(device)
+    precision_fn = MulticlassPrecision(num_classes=2).to(device)
+    recall_fn = MulticlassRecall(num_classes=2).to(device)
+    f_score_fn = MulticlassFBetaScore(num_classes=2, beta=2.0).to(device)
 
     for data, target in train_loader:
         data, target = data.to(device), target.to(device)
@@ -259,12 +266,20 @@ def _cross_validation_train(
         optimizer.step()
 
         pred_class = output.argmax(dim=1)
-        train_acc += (pred_class == target).sum().item() / len(pred_class)
+
+        accuracy_fn.update(pred_class, target)
+        precision_fn.update(pred_class, target)
+        recall_fn.update(pred_class, target)
+        f_score_fn.update(pred_class, target)
 
     train_loss = train_loss / len(train_loader)
-    train_acc = train_acc / len(train_loader)
 
-    return train_loss, train_acc
+    train_acc = accuracy_fn.compute().item()
+    train_pr = precision_fn.compute().item()
+    train_rc = recall_fn.compute().item()
+    train_fscore = f_score_fn.compute().item()
+
+    return train_loss, train_acc, train_pr, train_rc, train_fscore
 
 
 def _cross_validation_test(
@@ -272,13 +287,17 @@ def _cross_validation_test(
     device: torch.device,
     test_loader: torch.utils.data.DataLoader,
     loss_fn: torch.nn.Module,
-    batch_size: int,
-) -> tuple[float, float]:
+) -> tuple[float, float, float, float, float]:
 
     model.eval()
 
     test_loss = 0
-    correct = 0
+
+    # Classification metrics
+    accuracy_fn = MulticlassAccuracy(num_classes=2).to(device)
+    precision_fn = MulticlassPrecision(num_classes=2).to(device)
+    recall_fn = MulticlassRecall(num_classes=2).to(device)
+    f_score_fn = MulticlassFBetaScore(num_classes=2, beta=2.0).to(device)
 
     with torch.inference_mode():
         for data, target in test_loader:
@@ -288,12 +307,20 @@ def _cross_validation_test(
             test_loss += loss_fn(output, target).item()
 
             pred = output.argmax(dim=1)
-            correct += (pred == target).sum().item()
+
+            accuracy_fn.update(pred, target)
+            precision_fn.update(pred, target)
+            recall_fn.update(pred, target)
+            f_score_fn.update(pred, target)
 
     test_loss = test_loss / len(test_loader)
-    test_acc = correct / (len(test_loader) * batch_size)
 
-    return test_loss, test_acc
+    test_acc = accuracy_fn.compute().item()
+    test_pr = precision_fn.compute().item()
+    test_rc = recall_fn.compute().item()
+    test_fscore = f_score_fn.compute().item()
+
+    return test_loss, test_acc, test_pr, test_rc, test_fscore
 
 
 def _get_model(
@@ -388,7 +415,7 @@ def k_fold_cross_validation(
 
         # Train the model on the current fold
         for epoch in tqdm(range(num_epochs)):
-            train_loss, train_acc = _cross_validation_train(
+            train_loss, train_acc, train_pr, train_rc, train_fscore = _cross_validation_train(
                 model=model,
                 device=device,
                 train_loader=train_loader,
@@ -398,8 +425,11 @@ def k_fold_cross_validation(
 
             print(
                 f"Epoch: {epoch+1} | "
-                f"train_loss: {train_loss:.4f} | "
-                f"train_acc: {train_acc * 100:.2f}%"
+                f"Loss: {train_loss:.4f} | "
+                f"Accuracy: {train_acc * 100:.2f}% | "
+                f"Precession: {train_pr * 100:.2f}% | "
+                f"Recall: {train_rc * 100:.2f}% | "
+                f"F-Score: {train_fscore * 100:.2f}% | "
             )
 
             if writer:
@@ -414,6 +444,27 @@ def k_fold_cross_validation(
                     main_tag="train_accuracy",
                     tag_scalar_dict={
                         f"{fold}_f": train_acc,
+                    },
+                    global_step=epoch
+                )
+                writer.add_scalars(
+                    main_tag="train_precession",
+                    tag_scalar_dict={
+                        f"{fold}_f": train_pr,
+                    },
+                    global_step=epoch
+                )
+                writer.add_scalars(
+                    main_tag="train_recall",
+                    tag_scalar_dict={
+                        f"{fold}_f": train_rc,
+                    },
+                    global_step=epoch
+                )
+                writer.add_scalars(
+                    main_tag="train_fscore",
+                    tag_scalar_dict={
+                        f"{fold}_f": train_fscore,
                     },
                     global_step=epoch
                 )
@@ -433,18 +484,29 @@ def k_fold_cross_validation(
             )
 
         # Evaluate the model on the test set
-        test_loss, test_acc = _cross_validation_test(
+        test_loss, test_acc, test_pr, test_rc, test_fscore = _cross_validation_test(
             model=model,
             device=device,
             test_loader=test_loader,
             loss_fn=loss_fn,
-            batch_size=batch_size
         )
 
-        results[fold] = test_acc
+        results[fold] = {
+            "Accuracy": test_acc,
+            "Precession": test_pr,
+            "Recall": test_rc,
+            "F-Score": test_fscore
+        }
 
         # Print the results for the current fold
-        print(f"Results: test_loss: {test_loss:.4f}, test_acc: {test_acc * 100:.2f}%\n")
+        print(
+            "Validation Results: "
+            f"Loss: {test_loss:.4f} | "
+            f"Accuracy: {test_acc * 100:.2f}% | "
+            f"Precession: {test_pr * 100:.2f}% | "
+            f"Recall: {test_rc * 100:.2f}% | "
+            f"F-Score: {test_fscore * 100:.2f}% |\n"
+        )
 
         if writer:
             writer.add_scalars(
@@ -461,16 +523,49 @@ def k_fold_cross_validation(
                 },
                 global_step=fold
             )
+            writer.add_scalars(
+                main_tag="test_precession",
+                tag_scalar_dict={
+                    f"{num_folds}_f_total": test_pr,
+                },
+                global_step=fold
+            )
+            writer.add_scalars(
+                main_tag="test_recall",
+                tag_scalar_dict={
+                    f"{num_folds}_f_total": test_rc,
+                },
+                global_step=fold
+            )
+            writer.add_scalars(
+                main_tag="test_fscore",
+                tag_scalar_dict={
+                    f"{num_folds}_f_total": test_fscore,
+                },
+                global_step=fold
+            )
             writer.close()
 
     # Print fold results
     print(f'K-Fold Cross Validation Results for {num_folds} Folds')
     print('--------------------------------------------')
 
-    test_acc_sum = 0.0
+    metrics_sum = {
+        "Accuracy": 0.0,
+        "Precession": 0.0,
+        "Recall": 0.0,
+        "F-Score": 0.0
+    }
 
-    for key, value in results.items():
-        print(f'Fold {key + 1}: {value * 100:.2f} %')
-        test_acc_sum += value
+    for key, metrics_dict in results.items():
+        print(f"Fold {key + 1}: ", end="")
+        for key, metric in metrics_dict.items():
+            print(f"{key}: {metric * 100:.2f}% | ", end="")
+            metrics_sum[key] += metric
+        print()
 
-    print(f'\nAverage: {test_acc_sum/len(results.items()) * 100:.2f}%')
+    print("\nAverage: ", end="")
+
+    for key, metric_sum in metrics_sum.items():
+        metric_sum = metric_sum / num_folds
+        print(f"{key}: {metric_sum * 100:.2f}% | ", end="")
