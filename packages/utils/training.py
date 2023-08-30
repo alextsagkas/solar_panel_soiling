@@ -361,9 +361,103 @@ def _get_optimizer(
     return optimizer
 
 
+def _display_metrics(
+    phase: str,
+    fold: int,
+    epoch: Union[int, None],
+    loss: float,
+    acc: float,
+    pr: float,
+    rc: float,
+    fscore: float,
+    writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None,
+    global_step: Union[int, None] = None,
+) -> None:
+    """Receives data about the fold and epoch and prints out the classification metrics associated with them. Optionally, it can also save the metrics' evolution throughout training/testing to a tensorboard writer.
+
+    Args:
+        phase (str): The current phase of 'train', 'validation' or 'test'.
+        fold (int): The current fold on 'train' phase, or the total number of folds on 
+            'test' phase.
+        epoch (Union[int, None]): The current epoch on 'train' phase or None on 'test' phase.
+        loss (float): The loss value.
+        acc (float): The accuracy value.
+        pr (float): The precession value.
+        rc (float): The recall value.
+        fscore (float): The f-score value.
+        writer (Union[torch.utils.tensorboard.writer.SummaryWriter, None], optional): Tensorboard
+            SummaryWriter object. Defaults to None.
+        global_step (Union[int, None], optional): Global step that the tensorboard writer uses. 
+            If either this or writer is None, it will not save the metrics on tensorboard SummaryWriter. Defaults to None.
+
+    Raises:
+        ValueError: If the phase is not one of 'train', 'validation' or 'test'.
+    """
+    # Print Metrics
+    if phase == "train":
+        phase_text = "Train"
+    elif phase == "validation":
+        phase_text = "Validation"
+    elif phase == "test":
+        phase_text = "Test"
+    else:
+        raise ValueError(f"Phase {phase} not supported. Please choose between 'train', 'validation' and 'test'")
+
+    print(
+        f"{phase_text} || " +
+        f"Epoch: {epoch} | " if epoch is not None else "" +
+        f"Loss: {loss:.4f} | " +
+        f"Accuracy: {acc * 100:.2f}% | " +
+        f"Precession: {pr * 100:.2f}% | " +
+        f"Recall: {rc * 100:.2f}% | " +
+        f"F-Score: {fscore * 100:.2f}% | "
+    )
+
+    # Save Metrics to Tensorboard
+    if writer is not None and global_step is not None:
+
+        writer.add_scalars(
+            main_tag=f"{phase}_loss",
+            tag_scalar_dict={
+                f"{fold}_f": loss,
+            },
+            global_step=global_step
+        )
+        writer.add_scalars(
+            main_tag=f"{phase}_accuracy",
+            tag_scalar_dict={
+                f"{fold}_f": acc,
+            },
+            global_step=global_step
+        )
+        writer.add_scalars(
+            main_tag=f"{phase}_precession",
+            tag_scalar_dict={
+                f"{fold}_f": pr,
+            },
+            global_step=global_step
+        )
+        writer.add_scalars(
+            main_tag=f"{phase}_recall",
+            tag_scalar_dict={
+                f"{fold}_f": rc,
+            },
+            global_step=global_step
+        )
+        writer.add_scalars(
+            main_tag=f"{phase}_fscore",
+            tag_scalar_dict={
+                f"{fold}_f": fscore,
+            },
+            global_step=global_step
+        )
+        writer.close()
+
+
 def k_fold_cross_validation(
     model_name: str,
     train_dataset: torchvision.datasets.ImageFolder,
+    test_dataset: torchvision.datasets.ImageFolder,
     loss_fn: torch.nn.Module,
     hidden_units: int,
     device: torch.device,
@@ -376,16 +470,20 @@ def k_fold_cross_validation(
     save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
 ):
-    # Loss function
     kf = KFold(n_splits=num_folds, shuffle=True)
 
-    # Loop through each fold
     results = {}
 
     train_indices = np.arange(len(train_dataset))
 
-    for fold, (train_idx, test_idx) in enumerate(kf.split(train_indices)):
-        print(f"Fold {fold + 1}")
+    # Define the data loader for the test set
+    test_loader = DataLoader(
+        dataset=test_dataset,
+        batch_size=batch_size,
+    )
+
+    for fold, (train_idx, validation_idx) in enumerate(kf.split(train_indices)):
+        print(f"\nFold {fold}")
         print("-------")
 
         # Define the data loaders for the current fold
@@ -394,10 +492,10 @@ def k_fold_cross_validation(
             batch_size=batch_size,
             sampler=SubsetRandomSampler(train_idx.tolist()),
         )
-        test_loader = DataLoader(
+        validation_loader = DataLoader(
             dataset=train_dataset,
             batch_size=batch_size,
-            sampler=SubsetRandomSampler(test_idx.tolist()),
+            sampler=SubsetRandomSampler(validation_idx.tolist()),
         )
 
         # Initialize the model
@@ -413,8 +511,8 @@ def k_fold_cross_validation(
             learning_rate=learning_rate,
         )
 
-        # Train the model on the current fold
         for epoch in tqdm(range(num_epochs)):
+            # Train the model on the current fold
             train_loss, train_acc, train_pr, train_rc, train_fscore = _cross_validation_train(
                 model=model,
                 device=device,
@@ -423,52 +521,39 @@ def k_fold_cross_validation(
                 optimizer=optimizer
             )
 
-            print(
-                f"Epoch: {epoch+1} | "
-                f"Loss: {train_loss:.4f} | "
-                f"Accuracy: {train_acc * 100:.2f}% | "
-                f"Precession: {train_pr * 100:.2f}% | "
-                f"Recall: {train_rc * 100:.2f}% | "
-                f"F-Score: {train_fscore * 100:.2f}% | "
+            _display_metrics(
+                fold=fold,
+                epoch=epoch,
+                loss=train_loss,
+                acc=train_acc,
+                pr=train_pr,
+                rc=train_rc,
+                fscore=train_fscore,
+                phase="train",
+                global_step=epoch,
+                writer=writer,
             )
 
-            if writer:
-                writer.add_scalars(
-                    main_tag="train_loss",
-                    tag_scalar_dict={
-                        f"{fold}_f": train_loss,
-                    },
-                    global_step=epoch
-                )
-                writer.add_scalars(
-                    main_tag="train_accuracy",
-                    tag_scalar_dict={
-                        f"{fold}_f": train_acc,
-                    },
-                    global_step=epoch
-                )
-                writer.add_scalars(
-                    main_tag="train_precession",
-                    tag_scalar_dict={
-                        f"{fold}_f": train_pr,
-                    },
-                    global_step=epoch
-                )
-                writer.add_scalars(
-                    main_tag="train_recall",
-                    tag_scalar_dict={
-                        f"{fold}_f": train_rc,
-                    },
-                    global_step=epoch
-                )
-                writer.add_scalars(
-                    main_tag="train_fscore",
-                    tag_scalar_dict={
-                        f"{fold}_f": train_fscore,
-                    },
-                    global_step=epoch
-                )
-                writer.close()
+            # Evaluate the model on the validation set
+            val_loss, val_acc, val_pr, val_rc, val_fscore = _cross_validation_test(
+                model=model,
+                device=device,
+                test_loader=validation_loader,
+                loss_fn=loss_fn,
+            )
+
+            _display_metrics(
+                fold=fold,
+                epoch=epoch,
+                loss=val_loss,
+                acc=val_acc,
+                pr=val_pr,
+                rc=val_rc,
+                fscore=val_fscore,
+                phase="validation",
+                global_step=epoch,
+                writer=writer,
+            )
 
         # Save the model for the current fold
         if save_models:
@@ -491,6 +576,19 @@ def k_fold_cross_validation(
             loss_fn=loss_fn,
         )
 
+        _display_metrics(
+            fold=num_folds,
+            epoch=None,
+            loss=test_loss,
+            acc=test_acc,
+            pr=test_pr,
+            rc=test_rc,
+            fscore=test_fscore,
+            phase="test",
+            global_step=fold,
+            writer=writer,
+        )
+
         results[fold] = {
             "Accuracy": test_acc,
             "Precession": test_pr,
@@ -498,57 +596,9 @@ def k_fold_cross_validation(
             "F-Score": test_fscore
         }
 
-        # Print the results for the current fold
-        print(
-            "Validation Results: "
-            f"Loss: {test_loss:.4f} | "
-            f"Accuracy: {test_acc * 100:.2f}% | "
-            f"Precession: {test_pr * 100:.2f}% | "
-            f"Recall: {test_rc * 100:.2f}% | "
-            f"F-Score: {test_fscore * 100:.2f}% |\n"
-        )
-
-        if writer:
-            writer.add_scalars(
-                main_tag="test_loss",
-                tag_scalar_dict={
-                    f"{num_folds}_f_total": test_loss,
-                },
-                global_step=fold
-            )
-            writer.add_scalars(
-                main_tag="test_accuracy",
-                tag_scalar_dict={
-                    f"{num_folds}_f_total": test_acc,
-                },
-                global_step=fold
-            )
-            writer.add_scalars(
-                main_tag="test_precession",
-                tag_scalar_dict={
-                    f"{num_folds}_f_total": test_pr,
-                },
-                global_step=fold
-            )
-            writer.add_scalars(
-                main_tag="test_recall",
-                tag_scalar_dict={
-                    f"{num_folds}_f_total": test_rc,
-                },
-                global_step=fold
-            )
-            writer.add_scalars(
-                main_tag="test_fscore",
-                tag_scalar_dict={
-                    f"{num_folds}_f_total": test_fscore,
-                },
-                global_step=fold
-            )
-            writer.close()
-
-    # Print fold results
-    print(f'K-Fold Cross Validation Results for {num_folds} Folds')
-    print('--------------------------------------------')
+    # Print k-fold cross validation results
+    print(f"\nK-Fold Cross Validation Results for {num_folds} Folds")
+    print("--------------------------------------------")
 
     metrics_sum = {
         "Accuracy": 0.0,

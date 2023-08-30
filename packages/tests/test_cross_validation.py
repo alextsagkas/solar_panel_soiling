@@ -6,7 +6,7 @@ from pathlib import Path
 from torchvision import datasets
 
 from packages.utils.tensorboard import create_writer
-from packages.utils.transforms import train_data_transform
+from packages.utils.transforms import train_data_transform, test_data_transform
 from packages.utils.training import k_fold_cross_validation
 
 if __name__ == "__main__":
@@ -62,9 +62,11 @@ if __name__ == "__main__":
     root_dir = Path("/Users/alextsagkas/Document/Office/solar_panels")
 
     train_dir = root_dir / "data" / "train"
+    test_dir = root_dir / "data" / "test"
     models_path = root_dir / "models"
 
-    print(f"[INFO] Training data file: {train_dir}")
+    print(f"[INFO] Training data folder: {train_dir}")
+    print(f"[INFO] Testing data folder: {test_dir}")
 
     # Setup device-agnostic code
     if torch.cuda.is_available():
@@ -94,6 +96,7 @@ if __name__ == "__main__":
 
     # Custom Dataset
     train_data_transform = train_data_transform
+    test_data_transform = train_data_transform
 
     train_dataset = datasets.ImageFolder(
         root=str(train_dir),
@@ -101,9 +104,16 @@ if __name__ == "__main__":
         target_transform=None
     )
 
+    test_dataset = datasets.ImageFolder(
+        root=str(test_dir),
+        transform=test_data_transform,
+        target_transform=None
+    )
+
     k_fold_cross_validation(
         model_name="tiny_vgg",
         train_dataset=train_dataset,
+        test_dataset=test_dataset,
         loss_fn=loss_fn,
         hidden_units=HIDDEN_UNITS,
         device=device,
