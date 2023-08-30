@@ -403,9 +403,11 @@ def _display_metrics(
     else:
         raise ValueError(f"Phase {phase} not supported. Please choose between 'train', 'validation' and 'test'")
 
+    epoch_text = f"Epoch: {epoch} | " if epoch is not None else ""
+
     print(
         f"{phase_text} || " +
-        f"Epoch: {epoch} | " if epoch is not None else "" +
+        epoch_text +
         f"Loss: {loss:.4f} | " +
         f"Accuracy: {acc * 100:.2f}% | " +
         f"Precession: {pr * 100:.2f}% | " +
