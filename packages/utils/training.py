@@ -13,9 +13,11 @@ from torch.utils.data.sampler import SubsetRandomSampler
 from torch.utils.data import DataLoader
 from torch import optim
 from torchmetrics.classification import MulticlassAccuracy, MulticlassPrecision, MulticlassRecall, MulticlassFBetaScore
+from timeit import default_timer as timer
 
 from packages.models.tiny_vgg import TinyVGG
 from packages.utils.storage import save_model
+from packages.utils.time import get_time
 
 
 def _train_step(model: torch.nn.Module,
@@ -488,6 +490,8 @@ def k_fold_cross_validation(
         print(f"\nFold {fold}")
         print("-------")
 
+        start_fold_time = timer()
+
         # Define the data loaders for the current fold
         train_loader = DataLoader(
             dataset=train_dataset,
@@ -591,33 +595,49 @@ def k_fold_cross_validation(
             writer=writer,
         )
 
+        end_fold_time = timer()
+
         results[fold] = {
             "Accuracy": test_acc,
             "Precession": test_pr,
             "Recall": test_rc,
-            "F-Score": test_fscore
+            "F-Score": test_fscore,
+            "Time": end_fold_time - start_fold_time
         }
 
     # Print k-fold cross validation results
     print(f"\nK-Fold Cross Validation Results for {num_folds} Folds")
     print("--------------------------------------------")
 
-    metrics_sum = {
+    metrics_avg = {
         "Accuracy": 0.0,
         "Precession": 0.0,
         "Recall": 0.0,
-        "F-Score": 0.0
+        "F-Score": 0.0,
+        "Time": 0.0
     }
 
     for key, metrics_dict in results.items():
+
         print(f"Fold {key + 1}: ", end="")
+
         for key, metric in metrics_dict.items():
-            print(f"{key}: {metric * 100:.2f}% | ", end="")
-            metrics_sum[key] += metric
+
+            if key == "Time":
+                print(f"{key}: {get_time(metric)} | ", end="")
+            else:
+                print(f"{key}: {metric * 100:.2f}% | ", end="")
+
+            metrics_avg[key] += metric
         print()
 
     print("\nAverage: ", end="")
 
-    for key, metric_sum in metrics_sum.items():
-        metric_sum = metric_sum / num_folds
-        print(f"{key}: {metric_sum * 100:.2f}% | ", end="")
+    for key, metric_sum in metrics_avg.items():
+
+        metrics_avg[key] = metric_sum / num_folds
+
+        if key == "Time":
+            print(f"{key}: {get_time(metrics_avg[key])} | ", end="")
+        else:
+            print(f"{key}: {metrics_avg[key] * 100:.2f}% | ", end="")
