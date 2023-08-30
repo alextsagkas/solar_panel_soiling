@@ -14,6 +14,7 @@ from torch.utils.data import DataLoader
 from torch import optim
 from torchmetrics.classification import MulticlassAccuracy, MulticlassPrecision, MulticlassRecall, MulticlassFBetaScore
 from timeit import default_timer as timer
+from typing import Dict
 
 from packages.models.tiny_vgg import TinyVGG
 from packages.utils.storage import save_model
@@ -458,6 +459,67 @@ def _display_metrics(
         writer.close()
 
 
+def _average_metrics(
+    results: Dict[int, Dict[str, float]],
+    num_folds: int
+) -> Dict[str, float]:
+    """Receives a dictionary of results produced by each fold and produces another, which contains the average of each metric.
+
+    Args:
+        results (Dict[int, Dict[str, float]]): The dictionary of results produced by each fold. 
+            Example of experiment with 2 folds containing 5 classification metrics and duration:
+                results = {
+                    0: {
+                        "Accuracy": 0.92,
+                        "Precession": 0.84,
+                        "Recall": 0.61,
+                        "F-Score": 0.78,
+                        "Time": 115, 
+                    },
+                    1: {
+                        "Accuracy": 0.90,
+                        "Precession": 0.83,
+                        "Recall": 0.62,
+                        "F-Score": 0.79,
+                        "Time": 117,
+                    },
+                }
+        num_folds (int): The number of folds used in the experiment.
+
+    Returns:
+        Dict[str, float]: The dictionary of average metrics. Example of experiment with 2 folds containing 5 classification metrics and duration:
+            metrics_avg = {
+                "Accuracy": 0.91,
+                "Precession": 0.84,
+                "Recall": 0.62,
+                "F-Score": 0.79,
+                "Time": 116,   
+            }
+    """
+    metrics_avg = {key: 0.0 for key in results[0]}
+
+    for key, metrics_dict in results.items():
+        print(f"Fold {key + 1}: ", end="")
+        for key, metric in metrics_dict.items():
+            if key == "Time":
+                print(f"{key}: {get_time(metric)} | ", end="")
+            else:
+                print(f"{key}: {metric * 100:.2f}% | ", end="")
+            metrics_avg[key] += metric
+        print()
+
+    print("\nAverage: ", end="")
+
+    for key, metric_sum in metrics_avg.items():
+        metrics_avg[key] = metric_sum / num_folds
+        if key == "Time":
+            print(f"{key}: {get_time(metrics_avg[key])} | ", end="")
+        else:
+            print(f"{key}: {metrics_avg[key] * 100:.2f}% | ", end="")
+
+    return metrics_avg
+
+
 def k_fold_cross_validation(
     model_name: str,
     train_dataset: torchvision.datasets.ImageFolder,
@@ -473,7 +535,7 @@ def k_fold_cross_validation(
     num_folds: int = 1,
     save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
-):
+) -> Dict[str, float]:
     kf = KFold(n_splits=num_folds, shuffle=True)
 
     results = {}
@@ -609,35 +671,9 @@ def k_fold_cross_validation(
     print(f"\nK-Fold Cross Validation Results for {num_folds} Folds")
     print("--------------------------------------------")
 
-    metrics_avg = {
-        "Accuracy": 0.0,
-        "Precession": 0.0,
-        "Recall": 0.0,
-        "F-Score": 0.0,
-        "Time": 0.0
-    }
+    metrics_avg = _average_metrics(
+        results=results,
+        num_folds=num_folds
+    )
 
-    for key, metrics_dict in results.items():
-
-        print(f"Fold {key + 1}: ", end="")
-
-        for key, metric in metrics_dict.items():
-
-            if key == "Time":
-                print(f"{key}: {get_time(metric)} | ", end="")
-            else:
-                print(f"{key}: {metric * 100:.2f}% | ", end="")
-
-            metrics_avg[key] += metric
-        print()
-
-    print("\nAverage: ", end="")
-
-    for key, metric_sum in metrics_avg.items():
-
-        metrics_avg[key] = metric_sum / num_folds
-
-        if key == "Time":
-            print(f"{key}: {get_time(metrics_avg[key])} | ", end="")
-        else:
-            print(f"{key}: {metrics_avg[key] * 100:.2f}% | ", end="")
+    return metrics_avg

@@ -8,6 +8,7 @@ from torchvision import datasets
 from packages.utils.tensorboard import create_writer
 from packages.utils.transforms import train_data_transform, test_data_transform
 from packages.utils.training import k_fold_cross_validation
+from packages.utils.time import get_time
 
 if __name__ == "__main__":
 
@@ -80,10 +81,11 @@ if __name__ == "__main__":
 
     # Instantiate the writer
     EXTRA = f"{NUM_FOLDS}_f_{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
+    MODEL_NAME = "tiny_vgg"
 
     writer = create_writer(
         experiment_name="test_kfold_tiny_vgg",
-        model_name="tiny_vgg",
+        model_name=MODEL_NAME,
         extra=EXTRA
     )
 
@@ -110,8 +112,9 @@ if __name__ == "__main__":
         target_transform=None
     )
 
-    k_fold_cross_validation(
-        model_name="tiny_vgg",
+    # Train and evaluate the model
+    metrics_avg = k_fold_cross_validation(
+        model_name=MODEL_NAME,
         train_dataset=train_dataset,
         test_dataset=test_dataset,
         loss_fn=loss_fn,
@@ -126,3 +129,15 @@ if __name__ == "__main__":
         save_models=True,
         writer=writer
     )
+
+    # Save Results to file
+    metrics_dir = root_dir / "debug" / "metrics" / MODEL_NAME
+    metrics_dir.mkdir(exist_ok=True, parents=True)
+
+    metrics_file = metrics_dir / f"{EXTRA}.txt"
+    with open(metrics_file, "w") as f:
+        for key, metric in metrics_avg.items():
+            if key == "Time":
+                f.write(f"{key}: {get_time(metric)}\n")
+            else:
+                f.write(f"{key}: {metric * 100:.2f}%\n")
