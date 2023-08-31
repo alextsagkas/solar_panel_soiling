@@ -23,7 +23,26 @@ def _cross_validation_train(
     loss_fn: torch.nn.Module,
     optimizer: torch.optim.Optimizer
 ) -> Dict[str, float]:
+    """Trains the model on the train_loader data using loss_fn as a loss function and optimizer to update model's weights.
 
+    Args:
+        model (torch.nn.Module): Model to be trained (must have 2 output units).
+        device (torch.device): Device on which the calculations will be performed "cpu", "cuda" 
+            or "mps".
+        train_loader (torch.utils.data.DataLoader): DataLoader object containing the training data.
+        loss_fn (torch.nn.Module): Loss function to be used.
+        optimizer (torch.optim.Optimizer): Optimizer to be used.
+
+    Returns:
+        Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
+            metrics = {
+                "accuracy": 0.92,
+                "precession": 0.84,
+                "recall": 0.61,
+                "fscore": 0.78,
+                "loss": 0.12,
+            }
+    """
     model.train()
 
     train_loss = 0
@@ -65,6 +84,25 @@ def _cross_validation_test(
     test_loader: torch.utils.data.DataLoader,
     loss_fn: torch.nn.Module,
 ) -> Dict[str, float]:
+    """Evaluate the model on the test_loader data suing the loss_fn as the loss function. It can be used on every set that does not result updating the model's parameters (e.g. validation and test data sets).
+
+    Args:
+        model (torch.nn.Module): Model to be evaluated (must have 2 output units).
+        device (torch.device): Device on which the calculations will be performed "cpu", "cuda" 
+            or "mps".
+        train_loader (torch.utils.data.DataLoader): DataLoader object containing the data.
+        loss_fn (torch.nn.Module): Loss function to be used.
+
+    Returns:
+        Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
+            metrics = {
+                "accuracy": 0.95,
+                "precession": 0.83,
+                "recall": 0.68,
+                "fscore": 0.74,
+                "loss": 0.10,
+            }
+    """
 
     model.eval()
 
@@ -101,6 +139,18 @@ def _get_model(
     model_name: str,
     hidden_units: int
 ) -> torch.nn.Module:
+    """Returns a model based on the model_name and hidden_units parameters. The list of available models is: "tiny_vgg".
+
+    Args:
+        model_name (str): String that identifies the model to be used.
+        hidden_units (int): Number of hidden units to be used in the model.
+
+    Raises:
+        ValueError: If the model_name is not one of "tiny_vgg".
+
+    Returns:
+        torch.nn.Module: The model to be used.
+    """
     if model_name == "tiny_vgg":
         model = TinyVGG(
             input_shape=3,
@@ -121,6 +171,19 @@ def _get_optimizer(
     optimizer_name: str,
     learning_rate: float = 1e-3,
 ) -> torch.optim.Optimizer:
+    """Returns an optimizer based on the optimizer_name and learning_rate parameters. The list of available optimizers is: "adam", "sgd".
+
+    Args:
+        model (torch.nn.Module): Model to be optimized (the parameters of it are needed).
+        optimizer_name (str): String that identifies the optimizer to be used.
+        learning_rate (float, optional): Learning rate to be used in updates. Defaults to 1e-3.
+
+    Raises:
+        ValueError: If the optimizer_name is not one of "adam", "sgd".
+
+    Returns:
+        torch.optim.Optimizer: The optimizer to be used.
+    """
     if optimizer_name == "adam":
         optimizer = optim.Adam(
             params=model.parameters(),
@@ -148,31 +211,34 @@ def _display_metrics(
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None,
     global_step: Union[int, None] = None,
 ) -> None:
-    # TODO: Correct docstring
-    """Receives data about the fold and epoch and prints out the classification metrics associated with them. Optionally, it can also save the metrics' evolution throughout training/testing to a tensorboard writer.
+    """Receives data about the phase, fold and epoch and prints out the metrics associated with them. Optionally, it can also save the metrics" evolution throughout training/testing to a tensorboard writer.
 
     Args:
-        phase (str): The current phase of 'train', 'validation' or 'test'.
-        fold (int): The current fold on 'train' phase, or the total number of folds on 
-            'test' phase.
-        epoch (Union[int, None]): The current epoch on 'train' phase or None on 'test' phase.
-        loss (float): The loss value.
-        acc (float): The accuracy value.
-        pr (float): The precession value.
-        rc (float): The recall value.
-        fscore (float): The f-score value.
+        phase (str): The current phase of "train", "validation" or "test".
+        fold (int): The current fold on "train" phase, or the total number of folds on 
+            "test" phase.
+        epoch (Union[int, None]): The current epoch on "train" phase or None on "test" phase.
+        metrics (Dict[str, float]): Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
+            metrics = {
+                "accuracy": 0.94,
+                "precession": 0.80,
+                "recall": 0.69,
+                "fscore": 0.76,
+                "loss": 0.18,
+            }
         writer (Union[torch.utils.tensorboard.writer.SummaryWriter, None], optional): Tensorboard
-            SummaryWriter object. Defaults to None.
+            SummaryWriter object. If it is None then metrics will not be saved to tensorboard
+            Defaults to None.
         global_step (Union[int, None], optional): Global step that the tensorboard writer uses. 
             If either this or writer is None, it will not save the metrics on tensorboard SummaryWriter. Defaults to None.
 
     Raises:
-        ValueError: If the phase is not one of 'train', 'validation' or 'test'.
+        ValueError: If the phase is not one of "train", "validation" or "test".
     """
-    # Print Metrics
     if phase not in ["train", "validation", "test"]:
         raise ValueError(f"Phase {phase} not supported. Please choose between 'train', 'validation' and 'test'")
 
+    # Print Metrics
     epoch_text = f"epoch: {epoch} | " if epoch is not None else ""
 
     print(f"{phase} || {epoch_text}", end="")
@@ -198,39 +264,39 @@ def _average_metrics(
     results: Dict[int, Dict[str, float]],
     num_folds: int
 ) -> Dict[str, float]:
-    # TODO: Correct docstring
-    """Receives a dictionary of results produced by each fold and produces another, which contains the average of each metric.
+    """Receives a dictionary of test results produced in each fold and produces another, which contains the average of each metric.
 
     Args:
         results (Dict[int, Dict[str, float]]): The dictionary of results produced by each fold. 
-            Example of experiment with 2 folds containing 5 classification metrics and duration:
+            Example of experiment with 2 folds containing 5 classification metrics (accuracy, precession, recall, f-score) and duration (time):
                 results = {
                     0: {
-                        "Accuracy": 0.92,
-                        "Precession": 0.84,
-                        "Recall": 0.61,
-                        "F-Score": 0.78,
+                        "accuracy": 0.92,
+                        "precession": 0.84,
+                        "recall": 0.61,
+                        "f-score": 0.78,
                         "time": 115, 
                     },
                     1: {
-                        "Accuracy": 0.90,
-                        "Precession": 0.83,
-                        "Recall": 0.62,
-                        "F-Score": 0.79,
+                        "accuracy": 0.90,
+                        "precession": 0.83,
+                        "recall": 0.62,
+                        "f-score": 0.79,
                         "time": 117,
-                    },
+                    }
                 }
         num_folds (int): The number of folds used in the experiment.
 
     Returns:
-        Dict[str, float]: The dictionary of average metrics. Example of experiment with 2 folds containing 5 classification metrics and duration:
-            metrics_avg = {
-                "Accuracy": 0.91,
-                "Precession": 0.84,
-                "Recall": 0.62,
-                "F-Score": 0.79,
-                "time": 116,   
-            }
+        Dict[str, float]: The dictionary of average metrics. Example of experiment with 2 folds
+            containing 5 classification metrics (accuracy, precession, recall, f-score) and duration (time):
+                metrics_avg = {
+                    "Accuracy": 0.91,
+                    "Precession": 0.84,
+                    "Recall": 0.62,
+                    "F-Score": 0.79,
+                    "time": 116,   
+                }
     """
     metrics_avg = {key: 0.0 for key in results[0]}
 
@@ -262,10 +328,49 @@ def k_fold_cross_validation(
     batch_size: int = 32,
     learning_rate: float = 1e-3,
     optimizer_name: str = "Adam",
-    num_folds: int = 1,
+    num_folds: int = 2,
     save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
 ) -> Dict[str, float]:
+    """Performs k-fold cross validation. The train_dataset is split into k folds. The k-1 folds are
+    used to train the model (update parameters) and the k-th fold for validation (test the model),
+    in each epoch. This process is repeated k times, so that each fold is used for validation once 
+    (resulting in different train process each time). At the end of each fold, the model is 
+    tested on the test_dataset. In the end, the average of the metrics produced on test_dataset is 
+    returned.
+
+    Args:
+        model_name (str): Model to be used. The list of available models is: "tiny_vgg".
+        train_dataset (torchvision.datasets.ImageFolder): The training dataset.
+        test_dataset (torchvision.datasets.ImageFolder): The test dataset.
+        loss_fn (torch.nn.Module): Loss function to be used.
+        hidden_units (int): Number of hidden units to be used in the model.
+        device (torch.device): Device on which the calculations will be performed ("cpu", "cuda", 
+            "mps")
+        num_epochs (int): Number of epochs to train the model.
+        root_dir (Path): Root directory of the project.
+        batch_size (int, optional): Batch size used to load the data. Defaults to 32.
+        learning_rate (float, optional): Learning rate used to update the data. Defaults to 1e-3.
+        optimizer_name (str, optional): Optimizer used to update the data. The list of available 
+            optimizers is: "adam", "sgd". Defaults to "Adam".
+        num_folds (int, optional): Number of folds to split the data into. Defaults to 2 
+            (minimum number that can be used).
+        save_models (bool, optional): Controls if the model's parameters are saved in each fold.
+            Defaults to False.
+        writer (Union[torch.utils.tensorboard.writer.SummaryWriter, None], optional): The 
+            SummaryWriter object used to save metrics to tensorboard. If it is None nothing is 
+            saved to tensorboard Defaults to None.
+
+    Returns:
+        Dict[str, float]: Dictionary containing the average of the classification metrics on the test_dataset. Example:
+            metrics_avg = {
+                "accuracy": 0.90,
+                "precession": 0.88,
+                "recall": 0.60,
+                "fscore": 0.75,
+                "time": 119,
+            } 
+    """
     kf = KFold(n_splits=num_folds, shuffle=True)
 
     results = {}

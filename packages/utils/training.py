@@ -8,11 +8,25 @@ from pathlib import Path
 from typing import Dict
 
 
-def _train_step(model: torch.nn.Module,
-                dataloader: torch.utils.data.DataLoader,
-                loss_fn: torch.nn.Module,
-                optimizer: torch.optim.Optimizer,
-                device: torch.device) -> tuple[float, float]:
+def _train_step(
+    model: torch.nn.Module,
+    dataloader: torch.utils.data.DataLoader,
+    loss_fn: torch.nn.Module,
+    optimizer: torch.optim.Optimizer,
+    device: torch.device
+) -> tuple[float, float]:
+    """Trains a PyTorch model for one epoch.
+
+    Args:
+        model (torch.nn.Module): Model to be trained.
+        dataloader (torch.utils.data.DataLoader): Train DataLoader.
+        loss_fn (torch.nn.Module): Loss function to be used.
+        optimizer (torch.optim.Optimizer): Optimizer to be used.
+        device (torch.device): Device to be used ("cpu", "cuda", "mps").
+
+    Returns:
+        tuple[float, float]: Train loss and train accuracy.
+    """
     model.train()
 
     train_loss, train_acc = 0, 0
@@ -40,10 +54,23 @@ def _train_step(model: torch.nn.Module,
     return train_loss, train_acc
 
 
-def _test_step(model: torch.nn.Module,
-               dataloader: torch.utils.data.DataLoader,
-               loss_fn: torch.nn.Module,
-               device: torch.device) -> tuple[float, float]:
+def _test_step(
+    model: torch.nn.Module,
+    dataloader: torch.utils.data.DataLoader,
+    loss_fn: torch.nn.Module,
+    device: torch.device
+) -> tuple[float, float]:
+    """Tests a PyTorch model for one epoch.
+
+    Args:
+        model (torch.nn.Module): Model to be tested.
+        dataloader (torch.utils.data.DataLoader): Test DataLoader.
+        loss_fn (torch.nn.Module): Loss function to be used.
+        device (torch.device): Device to be used ("cpu", "cuda", "mps").
+
+    Returns:
+        tuple[float, float]: Test loss and test accuracy.
+    """
     model.eval()
 
     test_loss, test_acc = 0, 0
@@ -66,15 +93,16 @@ def _test_step(model: torch.nn.Module,
     return test_loss, test_acc
 
 
-def train(model: torch.nn.Module,
-          train_dataloader: torch.utils.data.DataLoader,
-          test_dataloader: torch.utils.data.DataLoader,
-          optimizer: torch.optim.Optimizer,
-          loss_fn: torch.nn.Module,
-          epochs: int,
-          device: torch.device,
-          writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
-          ) -> Dict[str, List]:
+def train(
+    model: torch.nn.Module,
+    train_dataloader: torch.utils.data.DataLoader,
+    test_dataloader: torch.utils.data.DataLoader,
+    optimizer: torch.optim.Optimizer,
+    loss_fn: torch.nn.Module,
+    epochs: int,
+    device: torch.device,
+    writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
+) -> Dict[str, List]:
     """Trains and tests a PyTorch model.
 
     Passes a target PyTorch models through _train_step() and _test_step()
@@ -92,22 +120,29 @@ def train(model: torch.nn.Module,
       optimizer: A PyTorch optimizer to help minimize the loss function.
       loss_fn: A PyTorch loss function to calculate loss on both datasets.
       epochs: An integer indicating how many epochs to train for.
-      device: A target device to compute on (e.g. "cuda" or "cpu").
+      device: A target device to compute on ("cuda", "cpu", "cuda").
       writer: A SummaryWriter() instance to log model results to.
 
     Returns:
       A dictionary of training and testing loss as well as training and
       testing accuracy metrics. Each metric has a value in a list for 
       each epoch.
-      In the form: {train_loss: [...],
-                train_acc: [...],
-                test_loss: [...],
-                test_acc: [...]} 
+
+      In the form: 
+        {
+            train_loss: [...],
+            train_acc: [...],
+            test_loss: [...],
+            test_acc: [...]
+        } 
+
       For example if training for epochs=2: 
-              {train_loss: [2.0616, 1.0537],
-                train_acc: [0.3945, 0.3945],
-                test_loss: [1.2641, 1.5706],
-                test_acc: [0.3400, 0.2973]} 
+        {
+            train_loss: [2.0616, 1.0537],
+            train_acc: [0.3945, 0.3945],
+            test_loss: [1.2641, 1.5706],
+            test_acc: [0.3400, 0.2973]
+        } 
     """
     results = {
         "train_loss": [],
@@ -169,13 +204,15 @@ def inference(
     class_names: list[str],
     save_folder: Path,
     model_name: str,
+    extra: str,
     device: torch.device,
 ) -> float:
-    """Tests model in data found from the internet and some samples from the dataset.
+    """Tests model in data from the test_dataloader.
 
     Evaluates the prediction probabilities for the classes the data are separated to. 
-    Saves every image in the save_folder/model_name folder and provides information
+    Saves every image in the save_folder/model_name/extra folder and provides information
     about the classification on the title of the image.
+
     It also returns the overall accuracy of the model on the test_dataloader.
 
     Args:
@@ -184,12 +221,14 @@ def inference(
       class_names: A list of the classes the model is trained on.
       save_folder: A Path instance to save the image.
       model_name: The model's name to use it as a subfolder where the images will be saved.
-      device: A target device to compute on (e.g. "cuda" or "cpu").
+      extra: An extra string to add to the subfolder where the images will be saved. It provides
+        further information about the model and the training process.
+      device: A target device to compute on ("cuda", "cpu", "mps").
 
     Returns:
       results_acc: The overall accuracy of the model on the test_dataloader.
     """
-    save_folder = save_folder / model_name
+    save_folder = save_folder / model_name / extra
     save_folder.mkdir(exist_ok=True, parents=True)
 
     results_acc = 0

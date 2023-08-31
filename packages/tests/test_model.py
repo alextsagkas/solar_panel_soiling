@@ -23,12 +23,21 @@ if __name__ == "__main__":
     test_dir = root_dir / "data" / "results"
 
     # Instantiate the model
+    NUM_FOLD = 0
+    NUM_EPOCHS = 3
+    BATCH_SIZE = 32
+    HIDDEN_UNITS = 10
+    LEARNING_RATE = 0.001
+
+    EXTRA = f"{NUM_FOLD}_f_{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
+    MODEL_NAME = "tiny_vgg" + "-" + EXTRA + ".pth"
+
     model = TinyVGG(
         input_shape=3,
-        hidden_units=32,
+        hidden_units=HIDDEN_UNITS,
         output_shape=2
     ).to(device)
-    model.load_state_dict(torch.load(f=root_dir / "models" / "tiny_vgg.pth"))
+    model.load_state_dict(torch.load(f=str(root_dir / "models" / MODEL_NAME)))
 
     # Load data
     BATCH_SIZE = 1
@@ -53,6 +62,7 @@ if __name__ == "__main__":
         class_names=class_names,
         save_folder=save_folder,
         model_name="tiny_vgg",
+        extra=EXTRA,
         device=device
     )
 
