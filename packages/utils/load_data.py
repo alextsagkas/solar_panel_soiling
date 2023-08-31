@@ -1,14 +1,14 @@
 import os
 import random
-import torch
 from pathlib import Path
-from PIL import Image
 from typing import Union
-from pathlib import PosixPath
+
 import matplotlib.pyplot as plt
-from torchvision import transforms, datasets
-from torch.utils.data import DataLoader
+import torch
 import torch.utils.data
+from PIL import Image
+from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
 
 def plot_transformed_images(
@@ -60,8 +60,8 @@ def plot_transformed_images(
 def get_dataloader(
     dir: str,
     data_transform: transforms.transforms.Compose,
-    BATCH_SIZE: int,
-    NUM_WORKERS: int = 1,
+    batch_size: int,
+    num_workers: int = 1,
     shuffle: bool = False,
 ) -> tuple[torch.utils.data.DataLoader, list[str]]:
     """Creates a dataset and passes it ot a dataloader, which is return in addition to class names.
@@ -69,8 +69,8 @@ def get_dataloader(
     Args:
         dir (str): Directory of the data.
         data_transform (transforms.transforms.Compose): Transforms to apply to the data.
-        BATCH_SIZE (int): Batch size.
-        NUM_WORKERS (int, optional): The number workers that load the data (usually equals 
+        batch_size (int): Batch size.
+        num_workers (int, optional): The number workers that load the data (usually equals 
             to the cpu cores). Defaults to 1.
         shuffle (bool, optional): Shuffle the data or not (usually shuffle only the training
             data). Defaults to False.
@@ -91,8 +91,8 @@ def get_dataloader(
 
     dataloader = DataLoader(
         dataset=data,
-        batch_size=BATCH_SIZE,
-        num_workers=NUM_WORKERS,
+        batch_size=batch_size,
+        num_workers=num_workers,
         shuffle=shuffle
     )
 
@@ -104,8 +104,8 @@ def get_dataloaders(
     train_transform: transforms.transforms.Compose,
     test_dir: str,
     test_transform: transforms.transforms.Compose,
-    BATCH_SIZE: int,
-    NUM_WORKERS: int = 1,
+    batch_size: int,
+    num_workers: int = 1,
 ) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
     """Returns iterables (Dataloaders) on train and test data.
 
@@ -114,8 +114,8 @@ def get_dataloaders(
         train_transform (transforms.transforms.Compose): Train data transforms.
         test_dir (str): Test data directory.
         test_transform (transforms.transforms.Compose): Test data transforms.
-        BATCH_SIZE (int): Batch size.
-        NUM_WORKERS (int, optional): Workers used to load the data (usually same 
+        batch_size (int): Batch size.
+        num_workers (int, optional): Workers used to load the data (usually same 
             as the number of CPU cores). Defaults to 1.
 
     Returns:
@@ -124,16 +124,16 @@ def get_dataloaders(
     train_dataloader, _ = get_dataloader(
         dir=train_dir,
         data_transform=train_transform,
-        BATCH_SIZE=BATCH_SIZE,
-        NUM_WORKERS=NUM_WORKERS,
+        batch_size=batch_size,
+        num_workers=num_workers,
         shuffle=True
     )
 
     test_dataloader, _ = get_dataloader(
         dir=test_dir,
         data_transform=test_transform,
-        BATCH_SIZE=BATCH_SIZE,
-        NUM_WORKERS=NUM_WORKERS,
+        batch_size=batch_size,
+        num_workers=num_workers,
         shuffle=False
     )
 

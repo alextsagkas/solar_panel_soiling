@@ -1,16 +1,22 @@
+from pathlib import Path
+from timeit import default_timer as timer
+from typing import Dict, Union
+
+import numpy as np
 import torch.utils.data
 import torch.utils.tensorboard
-from tqdm import tqdm
-from typing import Dict, Union
-from pathlib import Path
 import torchvision.datasets
-import numpy as np
 from sklearn.model_selection import KFold
-from torch.utils.data.sampler import SubsetRandomSampler
-from torch.utils.data import DataLoader
 from torch import optim
-from torchmetrics.classification import MulticlassAccuracy, MulticlassPrecision, MulticlassRecall, MulticlassFBetaScore
-from timeit import default_timer as timer
+from torch.utils.data import DataLoader
+from torch.utils.data.sampler import SubsetRandomSampler
+from torchmetrics.classification import (
+    MulticlassAccuracy,
+    MulticlassFBetaScore,
+    MulticlassPrecision,
+    MulticlassRecall,
+)
+from tqdm import tqdm
 
 from packages.models.tiny_vgg import TinyVGG
 from packages.utils.storage import save_model
@@ -324,7 +330,8 @@ def k_fold_cross_validation(
     hidden_units: int,
     device: torch.device,
     num_epochs: int,
-    root_dir: Path,
+    models_path: Path,
+    experiment_name: str,
     batch_size: int = 32,
     learning_rate: float = 1e-3,
     optimizer_name: str = "Adam",
@@ -332,6 +339,7 @@ def k_fold_cross_validation(
     save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
 ) -> Dict[str, float]:
+    # TODO: Add docstring
     """Performs k-fold cross validation. The train_dataset is split into k folds. The k-1 folds are
     used to train the model (update parameters) and the k-th fold for validation (test the model),
     in each epoch. This process is repeated k times, so that each fold is used for validation once 
@@ -452,15 +460,14 @@ def k_fold_cross_validation(
 
         # Save the model for the current fold
         if save_models:
-            models_path = root_dir / "models"
-
-            infos = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
-            model_save_name = f"{model_name}-{infos}.pth"
+            EXTRA = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
 
             save_model(
                 model=model,
-                MODELS_PATH=models_path,
-                MODEL_NAME=model_save_name,
+                models_path=models_path,
+                model_name=model_name,
+                experiment_name=experiment_name,
+                extra=EXTRA
             )
 
         # Evaluate the model on the test set

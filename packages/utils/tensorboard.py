@@ -1,10 +1,11 @@
 import os
+from datetime import datetime
+from pathlib import Path
+from typing import Union
+
 import torch
 import torch.utils.tensorboard
-from pathlib import Path
-from datetime import datetime
 from torch.utils.tensorboard.writer import SummaryWriter
-from typing import Union
 
 
 def create_writer(
@@ -43,9 +44,9 @@ def create_writer(
 
     if extra:
         # Create log directory path
-        log_dir = os.path.join(path, timestamp, experiment_name, model_name, extra)
+        log_dir = os.path.join(path, timestamp, model_name, experiment_name, extra)
     else:
-        log_dir = os.path.join(path, timestamp, experiment_name, model_name)
+        log_dir = os.path.join(path, timestamp, model_name, experiment_name)
 
     print(f"[INFO] Created SummaryWriter, saving to: {log_dir}")
 

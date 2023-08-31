@@ -48,8 +48,8 @@ if __name__ == "__main__":
     test_dataloader, class_names = get_dataloader(
         dir=str(test_dir),
         data_transform=test_data_transform,
-        BATCH_SIZE=BATCH_SIZE,
-        NUM_WORKERS=NUM_WORKERS if NUM_WORKERS else 1,
+        batch_size=BATCH_SIZE,
+        num_workers=NUM_WORKERS if NUM_WORKERS else 1,
         shuffle=False
     )
 

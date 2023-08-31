@@ -1,11 +1,16 @@
+from timeit import default_timer as timer
+from typing import Dict, Union
+
 import torch
 import torch.utils.data
 import torch.utils.tensorboard
+from torchmetrics.classification import (
+    MulticlassAccuracy,
+    MulticlassFBetaScore,
+    MulticlassPrecision,
+    MulticlassRecall,
+)
 from tqdm import tqdm
-from typing import Dict, List, Union
-import matplotlib.pyplot as plt
-from pathlib import Path
-from typing import Dict
 
 
 def _train_step(
@@ -14,7 +19,7 @@ def _train_step(
     loss_fn: torch.nn.Module,
     optimizer: torch.optim.Optimizer,
     device: torch.device
-) -> tuple[float, float]:
+) -> Dict[str, float]:
     """Trains a PyTorch model for one epoch.
 
     Args:
@@ -25,11 +30,24 @@ def _train_step(
         device (torch.device): Device to be used ("cpu", "cuda", "mps").
 
     Returns:
-        tuple[float, float]: Train loss and train accuracy.
+        Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
+            metrics = {
+                "accuracy": 0.94,
+                "precession": 0.80,
+                "recall": 0.69,
+                "fscore": 0.76,
+                "loss": 0.18,
+            }
     """
     model.train()
 
-    train_loss, train_acc = 0, 0
+    train_loss = 0
+    train_metrics = {
+        "accuracy": MulticlassAccuracy(num_classes=2).to(device),
+        "precession": MulticlassPrecision(num_classes=2).to(device),
+        "recall": MulticlassRecall(num_classes=2).to(device),
+        "fscore": MulticlassFBetaScore(num_classes=2, beta=2.0).to(device),
+    }
 
     for X, y in dataloader:
         X, y = X.to(device), y.to(device)
@@ -40,18 +58,21 @@ def _train_step(
         train_loss += loss.item()
 
         optimizer.zero_grad()
-
         loss.backward()
-
         optimizer.step()
 
         y_pred_class = y_pred.argmax(dim=1)
-        train_acc += (y_pred_class == y).sum().item() / len(y_pred)
+
+        for key, _ in train_metrics.items():
+            train_metrics[key].update(y_pred_class, y)
 
     train_loss = train_loss / len(dataloader)
-    train_acc = train_acc / len(dataloader)
 
-    return train_loss, train_acc
+    for key, _ in train_metrics.items():
+        train_metrics[key] = train_metrics[key].compute().item()
+    train_metrics["loss"] = train_loss
+
+    return train_metrics
 
 
 def _test_step(
@@ -59,7 +80,7 @@ def _test_step(
     dataloader: torch.utils.data.DataLoader,
     loss_fn: torch.nn.Module,
     device: torch.device
-) -> tuple[float, float]:
+) -> Dict[str, float]:
     """Tests a PyTorch model for one epoch.
 
     Args:
@@ -69,11 +90,24 @@ def _test_step(
         device (torch.device): Device to be used ("cpu", "cuda", "mps").
 
     Returns:
-        tuple[float, float]: Test loss and test accuracy.
+        Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
+            metrics = {
+                "accuracy": 0.94,
+                "precession": 0.80,
+                "recall": 0.69,
+                "fscore": 0.76,
+                "loss": 0.18,
+            }
     """
     model.eval()
 
-    test_loss, test_acc = 0, 0
+    test_loss = 0
+    test_metrics = {
+        "accuracy": MulticlassAccuracy(num_classes=2).to(device),
+        "precession": MulticlassPrecision(num_classes=2).to(device),
+        "recall": MulticlassRecall(num_classes=2).to(device),
+        "fscore": MulticlassFBetaScore(num_classes=2, beta=2.0).to(device),
+    }
 
     with torch.inference_mode():
         for X, y in dataloader:
@@ -81,16 +115,63 @@ def _test_step(
 
             test_pred_logits = model(X)
 
-            loss = loss_fn(test_pred_logits, y)
-            test_loss += loss.item()
+            test_loss += loss_fn(test_pred_logits, y)
 
             test_pred_labels = test_pred_logits.argmax(dim=1)
-            test_acc += ((test_pred_labels == y).sum().item() / len(test_pred_labels))
+
+            for key, _ in test_metrics.items():
+                test_metrics[key].update(test_pred_labels, y)
 
     test_loss = test_loss / len(dataloader)
-    test_acc = test_acc / len(dataloader)
 
-    return test_loss, test_acc
+    for key, _ in test_metrics.items():
+        test_metrics[key] = test_metrics[key].compute().item()
+    test_metrics["loss"] = test_loss
+
+    return test_metrics
+
+
+def _display_metrics(
+    phase: str,
+    epoch: int,
+    metrics: Dict[str, float],
+    writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None,
+) -> None:
+    """Receives data about the phase and epoch and prints out the metrics associated with them. Optionally, it can also save the metrics" evolution throughout training/testing to a tensorboard writer.
+
+    Args:
+        phase (str): The current phase of "train" or "test".
+        epoch (int): The current epoch on "train" phase or total number of epochs on "test" phase.
+        metrics (Dict[str, float]): Dictionary containing the classification metrics and loss.
+        writer (Union[torch.utils.tensorboard.writer.SummaryWriter, None], optional): Tensorboard
+            SummaryWriter object. If it is None then metrics will not be saved to tensorboard
+            Defaults to None.
+
+    Raises:
+        ValueError: If the phase is not one of "train" or "test".
+    """
+    supported_phases = ["train", "test"]
+    if phase not in supported_phases:
+        raise ValueError(f"Phase {phase} not supported. Please choose between {supported_phases}")
+
+    # Print Metrics
+    print(f"{phase} || epoch: {epoch} | ", end="")
+
+    for key, metric in metrics.items():
+        print(f"{key}: {metric:.4f} | ", end="")
+    print()
+
+    # Save Metrics to Tensorboard
+    if writer is not None:
+        for key, metric in metrics.items():
+            writer.add_scalars(
+                main_tag=f"{phase}",
+                tag_scalar_dict={
+                    f"{key}": metric,
+                },
+                global_step=epoch
+            )
+        writer.close()
 
 
 def train(
@@ -102,12 +183,12 @@ def train(
     epochs: int,
     device: torch.device,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
-) -> Dict[str, List]:
+) -> Dict[str, float]:
     """Trains and tests a PyTorch model.
 
-    Passes a target PyTorch models through _train_step() and _test_step()
-    functions for a number of epochs, training and testing the model
-    in the same epoch loop.
+    Passes a target PyTorch models through _train_step() function for a number of epochs. 
+    When the training is done, passes the same updated model through _test_step() function,
+    to evaluate the model's performance on the test dataset.
 
     Calculates, prints and stores evaluation metrics throughout.
 
@@ -124,142 +205,51 @@ def train(
       writer: A SummaryWriter() instance to log model results to.
 
     Returns:
-      A dictionary of training and testing loss as well as training and
-      testing accuracy metrics. Each metric has a value in a list for 
-      each epoch.
-
-      In the form: 
-        {
-            train_loss: [...],
-            train_acc: [...],
-            test_loss: [...],
-            test_acc: [...]
-        } 
-
-      For example if training for epochs=2: 
-        {
-            train_loss: [2.0616, 1.0537],
-            train_acc: [0.3945, 0.3945],
-            test_loss: [1.2641, 1.5706],
-            test_acc: [0.3400, 0.2973]
-        } 
+      Dict[str, float]: A dictionary containing the classification metrics, the loss for the test 
+      dataset, and the time taken to train it. Example:
+            metrics = {
+                "accuracy": 0.94,
+                "precession": 0.80,
+                "recall": 0.69,
+                "fscore": 0.76,
+                "loss": 0.18,
+                "time": 0.18,
+            }
     """
-    results = {
-        "train_loss": [],
-        "train_acc": [],
-        "test_loss": [],
-        "test_acc": []
-    }
+    start_time = timer()
 
     for epoch in tqdm(range(epochs)):
-        train_loss, train_acc = _train_step(model=model,
-                                            dataloader=train_dataloader,
-                                            loss_fn=loss_fn,
-                                            optimizer=optimizer,
-                                            device=device)
-        test_loss, test_acc = _test_step(model=model,
-                                         dataloader=test_dataloader,
-                                         loss_fn=loss_fn,
-                                         device=device)
-
-        print(
-            f"Epoch: {epoch+1} | "
-            f"train_loss: {train_loss:.4f} | "
-            f"train_acc: {train_acc:.4f} | "
-            f"test_loss: {test_loss:.4f} | "
-            f"test_acc: {test_acc:.4f}"
+        train_metrics = _train_step(
+            model=model,
+            dataloader=train_dataloader,
+            loss_fn=loss_fn,
+            optimizer=optimizer,
+            device=device
+        )
+        _display_metrics(
+            phase="train",
+            epoch=epoch,
+            metrics=train_metrics,
+            writer=writer
         )
 
-        results["train_loss"].append(train_loss)
-        results["train_acc"].append(train_acc)
-        results["test_loss"].append(test_loss)
-        results["test_acc"].append(test_acc)
+    test_metrics = _test_step(
+        model=model,
+        dataloader=test_dataloader,
+        loss_fn=loss_fn,
+        device=device
+    )
 
-        if writer:
-            writer.add_scalars(
-                main_tag="Loss",
-                tag_scalar_dict={
-                    "train_loss": train_loss,
-                    "test_loss": test_loss
-                },
-                global_step=epoch
-            )
-            writer.add_scalars(
-                main_tag="Accuracy",
-                tag_scalar_dict={
-                    "train_acc": train_acc,
-                    "test_acc": test_acc
-                },
-                global_step=epoch
-            )
+    _display_metrics(
+        phase="test",
+        epoch=epochs,
+        metrics=test_metrics,
+        writer=writer
+    )
 
-            writer.close()
+    end_time = timer()
 
-    return results
+    metrics = test_metrics
+    metrics["time"] = end_time - start_time
 
-
-def inference(
-    model: torch.nn.Module,
-    test_dataloader: torch.utils.data.DataLoader,
-    class_names: list[str],
-    save_folder: Path,
-    model_name: str,
-    extra: str,
-    device: torch.device,
-) -> float:
-    """Tests model in data from the test_dataloader.
-
-    Evaluates the prediction probabilities for the classes the data are separated to. 
-    Saves every image in the save_folder/model_name/extra folder and provides information
-    about the classification on the title of the image.
-
-    It also returns the overall accuracy of the model on the test_dataloader.
-
-    Args:
-      model: A PyTorch model to be trained and tested.
-      test_dataloader: A DataLoader instance for the model to be tested on (NUM_BATCHES = 1).
-      class_names: A list of the classes the model is trained on.
-      save_folder: A Path instance to save the image.
-      model_name: The model's name to use it as a subfolder where the images will be saved.
-      extra: An extra string to add to the subfolder where the images will be saved. It provides
-        further information about the model and the training process.
-      device: A target device to compute on ("cuda", "cpu", "mps").
-
-    Returns:
-      results_acc: The overall accuracy of the model on the test_dataloader.
-    """
-    save_folder = save_folder / model_name / extra
-    save_folder.mkdir(exist_ok=True, parents=True)
-
-    results_acc = 0
-
-    model.eval()
-    with torch.inference_mode():
-        for i, (imgs, labels) in enumerate(test_dataloader):
-            imgs, labels = imgs.to(device), labels.to(device)
-
-            preds_logits = model(imgs)
-
-            preds = torch.softmax(preds_logits, dim=1).max()
-            preds_class = preds_logits.argmax(dim=1)
-
-            prob = f"{preds.item():.4f}"
-            preds_class = class_names[preds_class.item()]
-            truth = class_names[labels.item()]
-
-            plt.imshow(imgs.squeeze().to("cpu").permute(1, 2, 0))
-            plt.axis(False)
-
-            title_text = f"Truth: {truth} | Preds: {preds_class} | Prob: {prob}"
-            if preds_class == truth:
-                results_acc += 1
-                plt.title(title_text, color="green")
-            else:
-                plt.title(title_text, color="red")
-
-            plt.savefig(save_folder / f"{truth}_{preds_class}_{prob}_{i}.png")
-            plt.close()
-
-        results_acc = results_acc / len(test_dataloader)
-
-    return results_acc
+    return metrics

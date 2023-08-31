@@ -1,70 +1,143 @@
-import os
-import torch
-import torch.backends.mps
 import argparse
+import os
 from pathlib import Path
 
-from packages.models.tiny_vgg import TinyVGG
-from packages.utils.load_data import get_dataloaders
-from packages.utils.storage import save_model
-from packages.utils.tensorboard import create_writer
-from packages.utils.training import train
-from packages.utils.transforms import train_data_transform, test_data_transform
+import torch
+import torch.backends.mps
+
+from packages.tests.test_cross_validation import test_cross_validation
+from packages.tests.test_train import test_train
+from packages.utils.storage import save_results
 
 if __name__ == "__main__":
 
+    # * Setup Parser
     parser = argparse.ArgumentParser(description="Get hyper-parameters")
 
-    # Get an arg for num_epochs
-    parser.add_argument("--num_epochs",
+    # Get an arg for the test called
+    parser.add_argument("--tn",
+                        default="train",
+                        type=str,
+                        help="the test to run")
+
+    # Get an arg for model name
+    parser.add_argument("--mn",
+                        default="tiny_vgg",
+                        type=str,
+                        help="the name of the model")
+
+    # Get an arg for number of folds
+    parser.add_argument("--f",
+                        default=-1,
+                        type=int,
+                        help="the number of folds to use in k-fold cross validation")
+
+    # Get an arg for number of epochs
+    parser.add_argument("--e",
                         default=5,
                         type=int,
                         help="the number of epochs to train for")
 
-    # Get an arg for batch_size
-    parser.add_argument("--batch_size",
+    # Get an arg for batch size
+    parser.add_argument("--bs",
                         default=32,
                         type=int,
                         help="number of samples per batch")
 
-    # Get an arg for hidden_units
-    parser.add_argument("--hidden_units",
+    # Get an arg for hidden units
+    parser.add_argument("--hu",
                         default=10,
                         type=int,
                         help="number of hidden units in hidden layers")
 
-    # Get an arg for learning_rate
-    parser.add_argument("--learning_rate",
-                        default=0.001,
+    # Get an arg for optimizer name
+    parser.add_argument("--on",
+                        default="adam",
+                        type=str,
+                        help="optimizer to update the model")
+
+    # Get an arg for learning rate
+    parser.add_argument("--lr",
+                        default=1e-3,
                         type=float,
                         help="learning rate to use for model")
 
-    # Get our arguments from the parser
     args = parser.parse_args()
-    # Write them on config.txt file
+
+    # Write arguments on config.txt file
     with open("config.txt", "w") as f:
         f.write(args.__str__())
 
-    # Setup hyper-parameters
-    NUM_EPOCHS = args.num_epochs
-    BATCH_SIZE = args.batch_size
-    HIDDEN_UNITS = args.hidden_units
-    LEARNING_RATE = args.learning_rate
+    # * Setup hyper-parameters
+    test_names = ["train", "model", "data", "cross_validation"]
+    if args.tn not in test_names:
+        raise ValueError(f"Test name must be one of {test_names}")
+    else:
+        TEST_NAME = args.tn
+
+    model_names = ["tiny_vgg"]
+    if args.mn not in model_names:
+        raise ValueError(f"Model name must be one of {model_names}")
+    else:
+        MODEL_NAME = args.mn
+
+    if args.f < 2 and args.tn in ["cross_validation", "model"]:
+        raise ValueError("Number of folds must be greater than 1")
+    elif args.f == -1 or args.tn in ["train"]:
+        folds_text = ""
+        NUM_FOLDS = -1
+    else:
+        NUM_FOLDS = args.f
+        folds_text = f" {NUM_FOLDS} folds and"
+
+    if args.e < 1:
+        raise ValueError("Number of epochs must be greater than 0")
+    else:
+        NUM_EPOCHS = args.e
+
+    if (args.bs & (args.bs - 1)) != 0 or args.bs < 1:
+        raise ValueError("Batch size must be a positive power of two")
+    else:
+        BATCH_SIZE = args.bs
+
+    if args.hu < 1:
+        raise ValueError("Number of hidden units must be greater than 0")
+    else:
+        HIDDEN_UNITS = args.hu
+
+    optimizer_names = ["adam", "sgd"]
+    if args.on not in optimizer_names:
+        raise ValueError(f"Optimizer name must be one of {optimizer_names}")
+    else:
+        OPTIMIZER_NAME = args.on
+
+    if args.lr < 0 or args.lr > 1:
+        raise ValueError("Learning rate must be between 0 and 1")
+    else:
+        LEARNING_RATE = args.lr
 
     print(
-        f"[INFO] Training a model for {NUM_EPOCHS} epochs with batch size {BATCH_SIZE} using {HIDDEN_UNITS} hidden units and a learning rate of {LEARNING_RATE}")
+        f"[INFO] Using the {MODEL_NAME} model{folds_text} for {NUM_EPOCHS} epochs, with batch size {BATCH_SIZE}, using {HIDDEN_UNITS} hidden units and a learning rate of {LEARNING_RATE}"
+    )
 
-    # Setup directories
+    # * Setup directories
     root_dir = Path("/Users/alextsagkas/Document/Office/solar_panels")
 
+    # Data
     train_dir = root_dir / "data" / "train"
     test_dir = root_dir / "data" / "test"
-    models_path = root_dir / "models"
+    results_dir = root_dir / "data" / "results"
 
     print(f"[INFO] Training data file: {train_dir}")
     print(f"[INFO] Testing data file: {test_dir}")
+    print(f"[INFO] Results data file: {results_dir}")
 
-    # Setup device-agnostic code
+    # Models
+    models_path = root_dir / "models"
+
+    print(f"[INFO] Models path: {models_path}")
+
+    # * Setup device-agnostic code
     if torch.cuda.is_available():
         device = torch.device("cuda")  # NVIDIA GPU
     elif torch.backends.mps.is_available():
@@ -75,58 +148,53 @@ if __name__ == "__main__":
     print(f"[INFO] Using {device} device")
 
     # Setup data loaders
-    NUM_WORKERS = os.cpu_count()
+    if os.cpu_count() is None:
+        raise ValueError("Number of workers must be greater than 0")
+    else:
+        NUM_WORKERS = os.cpu_count()
 
-    train_dataloader, test_dataloader = get_dataloaders(
-        train_dir=str(train_dir),
-        train_transform=train_data_transform,
-        test_dir=str(test_dir),
-        test_transform=test_data_transform,
-        BATCH_SIZE=BATCH_SIZE,
-        NUM_WORKERS=NUM_WORKERS if NUM_WORKERS is not None else 1
-    )
+    print(f"[INFO] Using {NUM_WORKERS} workers to load data")
 
-    # Instantiate the model
-    model = TinyVGG(
-        input_shape=3,
-        hidden_units=32,
-        output_shape=2
-    ).to(device)
+    # * Run tests
 
-    # Instantiate the writer
-    EXTRA = f"{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
+    metrics, infos, experiment_name = {}, "", ""  # ! Remember to erase them when done
 
-    writer = create_writer(
-        experiment_name="initial_test_tiny_vgg",
-        model_name="tiny_vgg",
-        extra=EXTRA
-    )
+    print(f"[INFO] Running {TEST_NAME} test")
+    if TEST_NAME == "train":
+        metrics, infos, experiment_name = test_train(
+            model_name=MODEL_NAME,
+            train_dir=train_dir,
+            test_dir=test_dir,
+            batch_size=BATCH_SIZE,
+            num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
+            num_epochs=NUM_EPOCHS,
+            hidden_units=HIDDEN_UNITS,
+            optimizer_name=OPTIMIZER_NAME,
+            learning_rate=LEARNING_RATE,
+            device=device,
+            models_path=models_path
+        )
+    elif TEST_NAME == "cross_validation" and NUM_FOLDS != -1:
+        metrics, infos, experiment_name = test_cross_validation(
+            root_dir=root_dir,
+            models_path=models_path,
+            train_dir=train_dir,
+            test_dir=test_dir,
+            device=device,
+            num_folds=NUM_FOLDS,
+            num_epochs=NUM_EPOCHS,
+            batch_size=BATCH_SIZE,
+            hidden_units=HIDDEN_UNITS,
+            learning_rate=LEARNING_RATE,
+            model_name=MODEL_NAME,
+            optimizer_name=OPTIMIZER_NAME,
+            save_models=True
+        )
 
-    # Set Seeds
-    torch.manual_seed(42)
-    torch.cuda.manual_seed_all(42)
-
-    # Setup loss and optimizer
-    loss_fn = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=LEARNING_RATE)
-
-    # Train the model
-    results = train(
-        model=model,
-        train_dataloader=train_dataloader,
-        test_dataloader=test_dataloader,
-        optimizer=optimizer,
-        loss_fn=loss_fn,
-        epochs=NUM_EPOCHS,
-        device=device,
-        writer=writer
-    )
-
-    # Save the model
-    MODEL_NAME = f"tiny_vgg-{EXTRA}.pth"
-
-    save_model(
-        model=model,
-        MODELS_PATH=models_path,
-        MODEL_NAME=MODEL_NAME,
+    save_results(
+        root_dir=root_dir,
+        models_name=MODEL_NAME,
+        experiment_name=experiment_name,
+        extra=infos,
+        metrics=metrics
     )
