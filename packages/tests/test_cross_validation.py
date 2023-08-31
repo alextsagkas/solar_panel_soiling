@@ -7,7 +7,7 @@ from torchvision import datasets
 
 from packages.utils.tensorboard import create_writer
 from packages.utils.transforms import train_data_transform, test_data_transform
-from packages.utils.training import k_fold_cross_validation
+from packages.utils.k_fold_cross_val import k_fold_cross_validation
 from packages.utils.time import get_time
 
 if __name__ == "__main__":
@@ -137,7 +137,9 @@ if __name__ == "__main__":
     metrics_file = metrics_dir / f"{EXTRA}.txt"
     with open(metrics_file, "w") as f:
         for key, metric in metrics_avg.items():
-            if key == "Time":
+            if key == "time":
                 f.write(f"{key}: {get_time(metric)}\n")
+            elif key == "loss":
+                f.write(f"{key}: {metric:.4f}\n")
             else:
                 f.write(f"{key}: {metric * 100:.2f}%\n")
