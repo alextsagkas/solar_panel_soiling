@@ -339,7 +339,6 @@ def k_fold_cross_validation(
     save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
 ) -> Dict[str, float]:
-    # TODO: Add docstring
     """Performs k-fold cross validation. The train_dataset is split into k folds. The k-1 folds are
     used to train the model (update parameters) and the k-th fold for validation (test the model),
     in each epoch. This process is repeated k times, so that each fold is used for validation once 
@@ -356,7 +355,8 @@ def k_fold_cross_validation(
         device (torch.device): Device on which the calculations will be performed ("cpu", "cuda", 
             "mps")
         num_epochs (int): Number of epochs to train the model.
-        root_dir (Path): Root directory of the project.
+        models_path (Path): Path to the directory where the models will be saved.
+        experiment_name (str): Name of the experiment. Used to create a directory inside models_path
         batch_size (int, optional): Batch size used to load the data. Defaults to 32.
         learning_rate (float, optional): Learning rate used to update the data. Defaults to 1e-3.
         optimizer_name (str, optional): Optimizer used to update the data. The list of available 
