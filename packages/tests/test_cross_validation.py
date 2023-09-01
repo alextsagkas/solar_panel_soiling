@@ -6,22 +6,21 @@ import torch.backends.mps
 import torch.utils.tensorboard.summary
 from torchvision import datasets
 
+from packages.utils.configuration import GetModel
 from packages.utils.k_fold_cross_val import k_fold_cross_validation
 from packages.utils.tensorboard import create_writer
 from packages.utils.transforms import GetTransforms
 
 
 def test_cross_validation(
+    model_obj: GetModel,
     models_path: Path,
     train_dir: Path,
     test_dir: Path,
-    device: torch.device,
     num_folds: int,
     num_epochs: int,
     batch_size: int,
-    hidden_units: int,
     learning_rate: float,
-    model_name: str,
     optimizer_name: str,
     experiment_name: str,
     transform_obj: GetTransforms,
@@ -29,16 +28,14 @@ def test_cross_validation(
     """Trains and tests a model using k-fold cross validation.
 
     Args:
+        model_obj (GetModel): The model object to use for the training.
         models_path (Path): The directory where the models will be saved.
         train_dir (Path): The directory where the training data are located.
         test_dir (Path): The directory where the testing data are located.
-        device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
         num_folds (int): The number of folds to use in k-fold cross validation (>=1).
         num_epochs (int): The number of epochs to train for, in each fold (>=0). 
         batch_size (int): The number of samples per batch (power of 2).
-        hidden_units (int): The number of hidden units in hidden layers (>=0).
         learning_rate (float): The learning rate (>=0 and <=1).
-        model_name (str): The model's name.
         optimizer_name (str): The optimizer's name to pick the optimizer.
         experiment_name (str): The experiment's name to use it as a subfolder where the images will
         transform_obj (GetTransforms): The transform object to use for the data. It has the
@@ -49,11 +46,11 @@ def test_cross_validation(
             test and a string with the extra information concerning the training.
     """
     # Instantiate the writer
-    EXTRA = f"{num_folds}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+    EXTRA = f"{num_folds}_f_{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
 
     writer = create_writer(
         experiment_name=experiment_name,
-        model_name=model_name,
+        model_name=model_obj.model_name,
         transform_name=transform_obj.transform_name,
         extra=EXTRA,
     )
@@ -76,12 +73,11 @@ def test_cross_validation(
 
     # Train and evaluate the model
     metrics_avg = k_fold_cross_validation(
-        model_name=model_name,
+        model_obj=model_obj,
         train_dataset=train_dataset,
         test_dataset=test_dataset,
         loss_fn=loss_fn,
-        hidden_units=hidden_units,
-        device=device,
+        hidden_units=model_obj.hidden_units,
         batch_size=batch_size,
         learning_rate=learning_rate,
         num_epochs=num_epochs,

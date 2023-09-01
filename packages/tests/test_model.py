@@ -5,26 +5,25 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
-from packages.models.tiny_vgg import TinyVGG
+from packages.utils.configuration import GetModel
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
 from packages.utils.transforms import GetTransforms
 
 
 def test_model(
+    model_obj: GetModel,
     test_dir: Path,
     num_fold: int,
     num_epochs: int,
     batch_size: int,
-    hidden_units: int,
     learning_rate: float,
-    device: torch.device,
-    model_name: str,
     models_path: Path,
     num_workers: int,
     test_model_path: Path,
     transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str, str]:
+    # TODO: add docstring
     """Tests a model on the test set.
 
     Args:
@@ -49,19 +48,15 @@ def test_model(
     """
     # Load model
     if num_fold == -1:
-        EXTRA = f"{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
         EXPERIMENT_DONE = "test_train"
     else:
-        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
         EXPERIMENT_DONE = "test_kfold"
-    MODEL_SAVE_DIR = models_path / model_name / EXPERIMENT_DONE / transform_obj.transform_name
+    MODEL_SAVE_DIR = models_path / model_obj.model_name / EXPERIMENT_DONE / transform_obj.transform_name
     MODEL_SAVE_NAME = EXTRA + ".pth"
 
-    model = TinyVGG(
-        input_shape=3,
-        hidden_units=hidden_units,
-        output_shape=2
-    ).to(device)
+    model = model_obj.get_model()
     model.load_state_dict(torch.load(f=str(MODEL_SAVE_DIR / MODEL_SAVE_NAME)))
 
     print(f"[INFO] Model loaded from {MODEL_SAVE_DIR / MODEL_SAVE_NAME}")
@@ -83,11 +78,11 @@ def test_model(
         test_dataloader=test_dataloader,
         class_names=class_names,
         test_model_path=test_model_path,
-        model_name=model_name,
+        model_name=model_obj.model_name,
         experiment_name=EXPERIMENT_DONE,
         transform_name=transform_obj.transform_name,
         extra=EXTRA,
-        device=device
+        device=model_obj.device,
     )
 
     return results_metrics, EXTRA, EXPERIMENT_DONE

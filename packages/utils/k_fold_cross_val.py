@@ -19,6 +19,7 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 
 from packages.models.tiny_vgg import TinyVGG
+from packages.utils.configuration import GetModel
 from packages.utils.storage import save_model
 
 
@@ -324,12 +325,10 @@ def _average_metrics(
 
 
 def k_fold_cross_validation(
-    model_name: str,
+    model_obj: GetModel,
     train_dataset: torchvision.datasets.ImageFolder,
     test_dataset: torchvision.datasets.ImageFolder,
     loss_fn: torch.nn.Module,
-    hidden_units: int,
-    device: torch.device,
     num_epochs: int,
     models_path: Path,
     experiment_name: str,
@@ -348,11 +347,10 @@ def k_fold_cross_validation(
     returned.
 
     Args:
-        model_name (str): Model to be used. The list of available models is: "tiny_vgg".
+        model_obj (GetModel): GetModel object that contains the model to be used.
         train_dataset (torchvision.datasets.ImageFolder): The training dataset.
         test_dataset (torchvision.datasets.ImageFolder): The test dataset.
         loss_fn (torch.nn.Module): Loss function to be used.
-        hidden_units (int): Number of hidden units to be used in the model.
         device (torch.device): Device on which the calculations will be performed ("cpu", "cuda", 
             "mps")
         num_epochs (int): Number of epochs to train the model.
@@ -410,10 +408,7 @@ def k_fold_cross_validation(
         )
 
         # Initialize the model
-        model = _get_model(
-            model_name=model_name,
-            hidden_units=hidden_units
-        ).to(device)
+        model = model_obj.get_model()
 
         # Initialize the optimizer
         optimizer = _get_optimizer(
@@ -426,7 +421,7 @@ def k_fold_cross_validation(
             # Train the model on the current fold
             train_metrics = _cross_validation_train(
                 model=model,
-                device=device,
+                device=model_obj.device,
                 train_loader=train_loader,
                 loss_fn=loss_fn,
                 optimizer=optimizer
@@ -444,7 +439,7 @@ def k_fold_cross_validation(
             # Evaluate the model on the validation set
             validation_metrics = _cross_validation_test(
                 model=model,
-                device=device,
+                device=model_obj.device,
                 test_loader=validation_loader,
                 loss_fn=loss_fn,
             )
@@ -459,12 +454,12 @@ def k_fold_cross_validation(
             )
 
         # Save the model for the current fold
-        EXTRA = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
 
         save_model(
             model=model,
             models_path=models_path,
-            model_name=model_name,
+            model_name=model_obj.model_name,
             experiment_name=experiment_name,
             transform_name=transform_name,
             extra=EXTRA,
@@ -473,7 +468,7 @@ def k_fold_cross_validation(
         # Evaluate the model on the test set
         test_metrics = _cross_validation_test(
             model=model,
-            device=device,
+            device=model_obj.device,
             test_loader=test_loader,
             loss_fn=loss_fn,
         )

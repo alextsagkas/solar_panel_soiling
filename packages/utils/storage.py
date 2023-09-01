@@ -62,7 +62,7 @@ def save_results(
 
     metrics_file = metrics_dir / f"{extra}.txt"
 
-    print(f"[INFO] Saving metrics to: {metrics_file}")
+    print(f"\n[INFO] Saving metrics to: {metrics_file}")
 
     with open(metrics_file, "w") as f:
         for key, metric in metrics.items():

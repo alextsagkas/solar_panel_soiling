@@ -9,6 +9,7 @@ from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_train import test_train
+from packages.utils.configuration import GetModel, GetOptimizer
 from packages.utils.storage import save_results
 from packages.utils.transforms import GetTransforms
 
@@ -76,6 +77,16 @@ if __name__ == "__main__":
     with open("config.txt", "w") as f:
         f.write(args.__str__())
 
+    # * Setup device-agnostic code
+    if torch.cuda.is_available():
+        device = torch.device("cuda")  # NVIDIA GPU
+    elif torch.backends.mps.is_available():
+        device = torch.device("mps")  # Apple GPU
+    else:
+        device = torch.device("cpu")  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
+
+    print(f"[INFO] Using {device} device")
+
     # * Setup hyper-parameters
 
     test_names = ["train", "evaluate", "transform", "kfold"]
@@ -84,11 +95,11 @@ if __name__ == "__main__":
     else:
         TEST_NAME = args.tn
 
-    model_names = ["tiny_vgg"]
-    if args.mn not in model_names:
-        raise ValueError(f"Model name must be one of {model_names}")
-    else:
-        MODEL_NAME = args.mn
+    model_obj = GetModel(
+        model_name=args.mn,
+        hidden_units=args.hu,
+        device=device,
+    )
 
     if args.f < 2 and args.tn in ["kfold"]:
         raise ValueError("Number of folds must be greater than 1")
@@ -109,11 +120,7 @@ if __name__ == "__main__":
     else:
         BATCH_SIZE = args.bs
 
-    if args.hu < 1:
-        raise ValueError("Number of hidden units must be greater than 0")
-    else:
-        HIDDEN_UNITS = args.hu
-
+    # TODO: deleted them when you're done with configuration
     optimizer_names = ["adam", "sgd"]
     if args.on not in optimizer_names:
         raise ValueError(f"Optimizer name must be one of {optimizer_names}")
@@ -128,7 +135,7 @@ if __name__ == "__main__":
     transform_obj = GetTransforms(transform_name=args.tr)
 
     print(
-        f"[INFO] Using the {MODEL_NAME} model{folds_text} for {NUM_EPOCHS} epochs, with batch size {BATCH_SIZE}, using {HIDDEN_UNITS} hidden units and a learning rate of {LEARNING_RATE}"
+        f"[INFO] {folds_text} for {NUM_EPOCHS} epochs, with batch size {BATCH_SIZE} and a learning rate of {LEARNING_RATE}"
     )
 
     # * Setup directories
@@ -150,16 +157,6 @@ if __name__ == "__main__":
 
     # Test Model Path
     test_model_path = root_dir / "debug" / "test_model"
-
-    # * Setup device-agnostic code
-    if torch.cuda.is_available():
-        device = torch.device("cuda")  # NVIDIA GPU
-    elif torch.backends.mps.is_available():
-        device = torch.device("mps")  # Apple GPU
-    else:
-        device = torch.device("cpu")  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
-
-    print(f"[INFO] Using {device} device")
 
     # Setup data loaders
     if os.cpu_count() is None:
@@ -184,16 +181,14 @@ if __name__ == "__main__":
         experiment_name = experiment_names[TEST_NAME]
 
         metrics, infos = test_train(
-            model_name=MODEL_NAME,
+            model_obj=model_obj,
             train_dir=train_dir,
             test_dir=test_dir,
             batch_size=BATCH_SIZE,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             num_epochs=NUM_EPOCHS,
-            hidden_units=HIDDEN_UNITS,
             optimizer_name=OPTIMIZER_NAME,
             learning_rate=LEARNING_RATE,
-            device=device,
             models_path=models_path,
             experiment_name=experiment_name,
             transform_obj=transform_obj,
@@ -201,7 +196,7 @@ if __name__ == "__main__":
 
         save_results(
             root_dir=root_dir,
-            models_name=MODEL_NAME,
+            models_name=model_obj.model_name,
             experiment_name=experiment_name,
             transform_name=transform_obj.transform_name,
             extra=infos,
@@ -211,16 +206,14 @@ if __name__ == "__main__":
         experiment_name = experiment_names[TEST_NAME]
 
         metrics, infos = test_cross_validation(
+            model_obj=model_obj,
             models_path=models_path,
             train_dir=train_dir,
             test_dir=test_dir,
-            device=device,
             num_folds=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
-            hidden_units=HIDDEN_UNITS,
             learning_rate=LEARNING_RATE,
-            model_name=MODEL_NAME,
             optimizer_name=OPTIMIZER_NAME,
             experiment_name=experiment_name,
             transform_obj=transform_obj,
@@ -228,7 +221,7 @@ if __name__ == "__main__":
 
         save_results(
             root_dir=root_dir,
-            models_name=MODEL_NAME,
+            models_name=model_obj.model_name,
             experiment_name=experiment_name,
             transform_name=transform_obj.transform_name,
             extra=infos,
@@ -238,14 +231,12 @@ if __name__ == "__main__":
         experiment_name = experiment_names[TEST_NAME]
 
         metrics, infos, experiment_done = test_model(
-            model_name=MODEL_NAME,
+            model_obj=model_obj,
             test_dir=results_dir,
             num_fold=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
-            hidden_units=HIDDEN_UNITS,
             learning_rate=LEARNING_RATE,
-            device=device,
             models_path=models_path,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             test_model_path=test_model_path,
@@ -254,7 +245,7 @@ if __name__ == "__main__":
 
         save_results(
             root_dir=root_dir,
-            models_name=MODEL_NAME,
+            models_name=model_obj.model_name,
             experiment_name=experiment_name,
             transform_name=transform_obj.transform_name,
             extra=infos,

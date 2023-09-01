@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import _get_model, _get_optimizer
+from packages.utils.configuration import GetModel, _get_optimizer
 from packages.utils.load_data import get_dataloaders
 from packages.utils.storage import save_model
 from packages.utils.tensorboard import create_writer
@@ -13,16 +13,14 @@ from packages.utils.transforms import GetTransforms
 
 
 def test_train(
-    model_name: str,
+    model_obj: GetModel,
     train_dir: Path,
     test_dir: Path,
     batch_size: int,
     num_workers: int,
     num_epochs: int,
-    hidden_units: int,
     optimizer_name: str,
     learning_rate: float,
-    device: torch.device,
     models_path: Path,
     experiment_name: str,
     transform_obj: GetTransforms,
@@ -39,17 +37,14 @@ def test_train(
     )
 
     # Instantiate the model
-    model = _get_model(
-        model_name=model_name,
-        hidden_units=hidden_units
-    ).to(device)
+    model = model_obj.get_model()
 
     # Instantiate the writer
-    EXTRA = f"{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+    EXTRA = f"{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
 
     writer = create_writer(
         experiment_name=experiment_name,
-        model_name=model_name,
+        model_name=model_obj.model_name,
         transform_name=transform_obj.transform_name,
         extra=EXTRA
     )
@@ -70,7 +65,7 @@ def test_train(
         optimizer=optimizer,
         loss_fn=loss_fn,
         epochs=num_epochs,
-        device=device,
+        device=model_obj.device,
         writer=writer
     )
 
@@ -78,7 +73,7 @@ def test_train(
     save_model(
         model=model,
         models_path=models_path,
-        model_name=model_name,
+        model_name=model_obj.model_name,
         experiment_name=experiment_name,
         transform_name=transform_obj.transform_name,
         extra=EXTRA
