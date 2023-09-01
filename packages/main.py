@@ -195,7 +195,8 @@ if __name__ == "__main__":
             learning_rate=LEARNING_RATE,
             device=device,
             models_path=models_path,
-            experiment_name=experiment_name
+            experiment_name=experiment_name,
+            transform_obj=transform_obj,
         )
 
         save_results(
@@ -220,7 +221,8 @@ if __name__ == "__main__":
             learning_rate=LEARNING_RATE,
             model_name=MODEL_NAME,
             optimizer_name=OPTIMIZER_NAME,
-            experiment_name=experiment_name
+            experiment_name=experiment_name,
+            transform_obj=transform_obj,
         )
 
         save_results(

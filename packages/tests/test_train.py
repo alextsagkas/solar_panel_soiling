@@ -9,7 +9,7 @@ from packages.utils.load_data import get_dataloaders
 from packages.utils.storage import save_model
 from packages.utils.tensorboard import create_writer
 from packages.utils.training import train
-from packages.utils.transforms import test_data_transform, train_data_transform
+from packages.utils.transforms import GetTransforms
 
 
 def test_train(
@@ -25,14 +25,15 @@ def test_train(
     device: torch.device,
     models_path: Path,
     experiment_name: str,
+    transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str]:
     # TODO: Add docstring
     # Get the dataloaders
     train_dataloader, test_dataloader = get_dataloaders(
         train_dir=str(train_dir),
-        train_transform=train_data_transform,
+        train_transform=transform_obj.get_train_transform(),
         test_dir=str(test_dir),
-        test_transform=test_data_transform,
+        test_transform=transform_obj.get_test_transform(),
         batch_size=batch_size,
         num_workers=num_workers
     )

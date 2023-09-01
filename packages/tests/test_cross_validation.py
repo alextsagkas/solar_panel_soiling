@@ -8,7 +8,7 @@ from torchvision import datasets
 
 from packages.utils.k_fold_cross_val import k_fold_cross_validation
 from packages.utils.tensorboard import create_writer
-from packages.utils.transforms import test_data_transform, train_data_transform
+from packages.utils.transforms import GetTransforms
 
 
 def test_cross_validation(
@@ -24,6 +24,7 @@ def test_cross_validation(
     model_name: str,
     optimizer_name: str,
     experiment_name: str,
+    transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str]:
     """Trains and tests a model using k-fold cross validation.
 
@@ -40,6 +41,8 @@ def test_cross_validation(
         model_name (str): The model's name.
         optimizer_name (str): The optimizer's name to pick the optimizer.
         experiment_name (str): The experiment's name to use it as a subfolder where the images will
+        transform_obj (GetTransforms): The transform object to use for the data. It has the
+            functionality to return the train and test transforms based on its initialization.
 
     Returns:
         Tuple[Dict[str, float], str]: Returns a dictionary with the classification metrics of the 
@@ -60,13 +63,13 @@ def test_cross_validation(
     # Train and Test Datasets
     train_dataset = datasets.ImageFolder(
         root=str(train_dir),
-        transform=train_data_transform,
+        transform=transform_obj.get_train_transform(),
         target_transform=None
     )
 
     test_dataset = datasets.ImageFolder(
         root=str(test_dir),
-        transform=test_data_transform,
+        transform=transform_obj.get_test_transform(),
         target_transform=None
     )
 

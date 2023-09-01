@@ -1,18 +1,5 @@
 from torchvision import transforms
 
-# FIXME: Remove those and correct all function that use them instead of GetTransforms
-train_data_transform = transforms.Compose([
-    transforms.Resize(size=(64, 64)),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.ToTensor()
-])
-
-test_data_transform = transforms.Compose([
-    transforms.Resize(size=(64, 64)),
-    transforms.RandomHorizontalFlip(p=0.5),
-    transforms.ToTensor()
-])
-
 
 class GetTransforms:
     """Get the transforms for the data. The experimentation is done on the train data,
