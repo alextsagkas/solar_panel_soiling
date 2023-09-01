@@ -9,7 +9,7 @@ from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_train import test_train
-from packages.utils.configuration import GetModel, GetOptimizer
+from packages.utils.solver import Solver
 from packages.utils.storage import save_results
 from packages.utils.transforms import GetTransforms
 
@@ -95,7 +95,7 @@ if __name__ == "__main__":
     else:
         TEST_NAME = args.tn
 
-    model_obj = GetModel(
+    model_obj = Solver(
         model_name=args.mn,
         hidden_units=args.hu,
         device=device,

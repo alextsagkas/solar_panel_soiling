@@ -6,14 +6,14 @@ import torch.backends.mps
 import torch.utils.tensorboard.summary
 from torchvision import datasets
 
-from packages.utils.configuration import GetModel
 from packages.utils.k_fold_cross_val import k_fold_cross_validation
+from packages.utils.solver import Solver
 from packages.utils.tensorboard import create_writer
 from packages.utils.transforms import GetTransforms
 
 
 def test_cross_validation(
-    model_obj: GetModel,
+    model_obj: Solver,
     models_path: Path,
     train_dir: Path,
     test_dir: Path,
@@ -28,7 +28,7 @@ def test_cross_validation(
     """Trains and tests a model using k-fold cross validation.
 
     Args:
-        model_obj (GetModel): The model object to use for the training.
+        model_obj (Solver): The model object to use for the training.
         models_path (Path): The directory where the models will be saved.
         train_dir (Path): The directory where the training data are located.
         test_dir (Path): The directory where the testing data are located.

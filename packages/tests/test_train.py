@@ -4,8 +4,9 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import GetModel, GetOptimizer
+from packages.utils.configuration import GetOptimizer
 from packages.utils.load_data import get_dataloaders
+from packages.utils.solver import Solver
 from packages.utils.storage import save_model
 from packages.utils.tensorboard import create_writer
 from packages.utils.training import train
@@ -13,7 +14,7 @@ from packages.utils.transforms import GetTransforms
 
 
 def test_train(
-    model_obj: GetModel,
+    model_obj: Solver,
     train_dir: Path,
     test_dir: Path,
     batch_size: int,
@@ -30,7 +31,7 @@ def test_train(
     models_path directory after the two actions are done.
 
     Args:
-        model_obj (GetModel): Model object to use.
+        model_obj (Solver): Model object to use.
         train_dir (Path): Train set directory.
         test_dir (Path): Test set directory.
         batch_size (int): Batch size.

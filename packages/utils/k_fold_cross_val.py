@@ -7,7 +7,6 @@ import torch.utils.data
 import torch.utils.tensorboard
 import torchvision.datasets
 from sklearn.model_selection import KFold
-from torch import optim
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
 from torchmetrics.classification import (
@@ -18,8 +17,8 @@ from torchmetrics.classification import (
 )
 from tqdm import tqdm
 
-from packages.models.tiny_vgg import TinyVGG
-from packages.utils.configuration import GetModel, GetOptimizer
+from packages.utils.configuration import GetOptimizer
+from packages.utils.solver import Solver
 from packages.utils.storage import save_model
 
 
@@ -142,37 +141,6 @@ def _cross_validation_test(
     return test_metrics
 
 
-def _get_model(
-    model_name: str,
-    hidden_units: int
-) -> torch.nn.Module:
-    """Returns a model based on the model_name and hidden_units parameters. The list of available models is: "tiny_vgg".
-
-    Args:
-        model_name (str): String that identifies the model to be used.
-        hidden_units (int): Number of hidden units to be used in the model.
-
-    Raises:
-        ValueError: If the model_name is not one of "tiny_vgg".
-
-    Returns:
-        torch.nn.Module: The model to be used.
-    """
-    if model_name == "tiny_vgg":
-        model = TinyVGG(
-            input_shape=3,
-            hidden_units=hidden_units,
-            output_shape=2
-        )
-    else:
-        raise ValueError(
-            f"Model name {model_name} is not supported. "
-            "Please choose between 'tiny_vgg'."
-        )
-
-    return model
-
-
 def _display_metrics(
     phase: str,
     fold: int,
@@ -288,7 +256,7 @@ def _average_metrics(
 
 
 def k_fold_cross_validation(
-    model_obj: GetModel,
+    model_obj: Solver,
     train_dataset: torchvision.datasets.ImageFolder,
     test_dataset: torchvision.datasets.ImageFolder,
     loss_fn: torch.nn.Module,
@@ -310,7 +278,7 @@ def k_fold_cross_validation(
     returned.
 
     Args:
-        model_obj (GetModel): GetModel object that contains the model to be used.
+        model_obj (Solver): Solver object that contains the model to be used.
         train_dataset (torchvision.datasets.ImageFolder): The training dataset.
         test_dataset (torchvision.datasets.ImageFolder): The test dataset.
         loss_fn (torch.nn.Module): Loss function to be used.
