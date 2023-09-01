@@ -12,7 +12,6 @@ from packages.utils.transforms import test_data_transform, train_data_transform
 
 
 def test_cross_validation(
-    root_dir: Path,
     models_path: Path,
     train_dir: Path,
     test_dir: Path,
@@ -24,14 +23,33 @@ def test_cross_validation(
     learning_rate: float,
     model_name: str,
     optimizer_name: str,
-    save_models: bool,
-) -> Tuple[Dict[str, float], str, str]:
+    experiment_name: str,
+) -> Tuple[Dict[str, float], str]:
+    """Trains and tests a model using k-fold cross validation.
+
+    Args:
+        models_path (Path): The directory where the models will be saved.
+        train_dir (Path): The directory where the training data are located.
+        test_dir (Path): The directory where the testing data are located.
+        device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
+        num_folds (int): The number of folds to use in k-fold cross validation (>=1).
+        num_epochs (int): The number of epochs to train for, in each fold (>=0). 
+        batch_size (int): The number of samples per batch (power of 2).
+        hidden_units (int): The number of hidden units in hidden layers (>=0).
+        learning_rate (float): The learning rate (>=0 and <=1).
+        model_name (str): The model's name.
+        optimizer_name (str): The optimizer's name to pick the optimizer.
+        experiment_name (str): The experiment's name to use it as a subfolder where the images will
+
+    Returns:
+        Tuple[Dict[str, float], str]: Returns a dictionary with the classification metrics of the 
+            test and a string with the extra information concerning the training.
+    """
     # Instantiate the writer
-    EXPERIMENT_NAME = "test_kfold"
     EXTRA = f"{num_folds}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
 
     writer = create_writer(
-        experiment_name=EXPERIMENT_NAME,
+        experiment_name=experiment_name,
         model_name=model_name,
         extra=EXTRA
     )
@@ -64,11 +82,10 @@ def test_cross_validation(
         learning_rate=learning_rate,
         num_epochs=num_epochs,
         models_path=models_path,
-        experiment_name=EXPERIMENT_NAME,
+        experiment_name=experiment_name,
         optimizer_name=optimizer_name,
         num_folds=num_folds,
-        save_models=save_models,
         writer=writer
     )
 
-    return metrics_avg, EXTRA, EXPERIMENT_NAME
+    return metrics_avg, EXTRA

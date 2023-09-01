@@ -70,7 +70,8 @@ if __name__ == "__main__":
         f.write(args.__str__())
 
     # * Setup hyper-parameters
-    test_names = ["train", "model", "data", "cross_validation"]
+
+    test_names = ["train", "evaluate", "transform", "kfold"]
     if args.tn not in test_names:
         raise ValueError(f"Test name must be one of {test_names}")
     else:
@@ -82,7 +83,7 @@ if __name__ == "__main__":
     else:
         MODEL_NAME = args.mn
 
-    if args.f < 2 and args.tn in ["cross_validation"]:
+    if args.f < 2 and args.tn in ["kfold"]:
         raise ValueError("Number of folds must be greater than 1")
     elif args.f == -1 or args.tn in ["train"]:
         folds_text = ""
@@ -160,10 +161,19 @@ if __name__ == "__main__":
 
     # * Run tests
 
+    experiment_names = {
+        "train": "test_train",
+        "evaluate": "test_model",
+        "transform": "test_data",
+        "kfold": "test_kfold"
+    }
+
     print(f"[INFO] Running {TEST_NAME} test")
 
     if TEST_NAME == "train":
-        metrics, infos, experiment_name = test_train(
+        experiment_name = experiment_names[TEST_NAME]
+
+        metrics, infos = test_train(
             model_name=MODEL_NAME,
             train_dir=train_dir,
             test_dir=test_dir,
@@ -174,7 +184,8 @@ if __name__ == "__main__":
             optimizer_name=OPTIMIZER_NAME,
             learning_rate=LEARNING_RATE,
             device=device,
-            models_path=models_path
+            models_path=models_path,
+            experiment_name=experiment_name
         )
 
         save_results(
@@ -184,9 +195,10 @@ if __name__ == "__main__":
             extra=infos,
             metrics=metrics
         )
-    elif TEST_NAME == "cross_validation" and NUM_FOLDS != -1:
-        metrics, infos, experiment_name = test_cross_validation(
-            root_dir=root_dir,
+    elif TEST_NAME == "kfold" and NUM_FOLDS != -1:
+        experiment_name = experiment_names[TEST_NAME]
+
+        metrics, infos = test_cross_validation(
             models_path=models_path,
             train_dir=train_dir,
             test_dir=test_dir,
@@ -198,7 +210,7 @@ if __name__ == "__main__":
             learning_rate=LEARNING_RATE,
             model_name=MODEL_NAME,
             optimizer_name=OPTIMIZER_NAME,
-            save_models=True
+            experiment_name=experiment_name
         )
 
         save_results(
@@ -208,8 +220,10 @@ if __name__ == "__main__":
             extra=infos,
             metrics=metrics
         )
-    elif TEST_NAME == "model":
-        metrics, infos, experiment_name = test_model(
+    elif TEST_NAME == "evaluate":
+        experiment_name = experiment_names[TEST_NAME]
+
+        metrics, infos, experiment_done = test_model(
             model_name=MODEL_NAME,
             test_dir=results_dir,
             num_fold=NUM_FOLDS,
@@ -220,7 +234,7 @@ if __name__ == "__main__":
             device=device,
             models_path=models_path,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
-            test_model_path=test_model_path
+            test_model_path=test_model_path,
         )
 
         save_results(

@@ -42,16 +42,15 @@ def test_model(
     Returns:
         Tuple[Dict[str, float], str, str]: Dictionary with the classification metrics of the   
           experiment (accuracy, precision, recall, f1-score, loss), the extra information 
-          concerning the training and the experiment name
+          concerning the training and the experiment's name done (test_train or test_kfold) 
+          so as to produce the model that was loaded to evaluate the data.
     """
-    EXPERIMENT_NAME = "test_model"
-
     # Load model
     if num_fold == -1:
         EXTRA = f"{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
         EXPERIMENT_DONE = "test_train"
     else:
-        EXTRA = f"{num_fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
         EXPERIMENT_DONE = "test_kfold"
     MODEL_SAVE_DIR = models_path / model_name / EXPERIMENT_DONE
     MODEL_SAVE_NAME = EXTRA + ".pth"
@@ -83,9 +82,9 @@ def test_model(
         class_names=class_names,
         test_model_path=test_model_path,
         model_name=model_name,
-        experiment_name=EXPERIMENT_NAME,
+        experiment_name=EXPERIMENT_DONE,
         extra=EXTRA,
         device=device
     )
 
-    return results_metrics, EXTRA, EXPERIMENT_NAME
+    return results_metrics, EXTRA, EXPERIMENT_DONE

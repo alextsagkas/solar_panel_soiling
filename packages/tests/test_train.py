@@ -23,10 +23,10 @@ def test_train(
     optimizer_name: str,
     learning_rate: float,
     device: torch.device,
-    models_path: Path
-) -> Tuple[Dict[str, float], str, str]:
-    EXPERIMENT_NAME = "test_train"
-
+    models_path: Path,
+    experiment_name: str,
+) -> Tuple[Dict[str, float], str]:
+    # TODO: Add docstring
     # Get the dataloaders
     train_dataloader, test_dataloader = get_dataloaders(
         train_dir=str(train_dir),
@@ -47,7 +47,7 @@ def test_train(
     EXTRA = f"{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
 
     writer = create_writer(
-        experiment_name=EXPERIMENT_NAME,
+        experiment_name=experiment_name,
         model_name=model_name,
         extra=EXTRA
     )
@@ -77,8 +77,8 @@ def test_train(
         model=model,
         models_path=models_path,
         model_name=model_name,
-        experiment_name=EXPERIMENT_NAME,
+        experiment_name=experiment_name,
         extra=EXTRA
     )
 
-    return metrics, EXTRA, EXPERIMENT_NAME
+    return metrics, EXTRA

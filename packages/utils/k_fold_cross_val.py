@@ -336,7 +336,6 @@ def k_fold_cross_validation(
     learning_rate: float = 1e-3,
     optimizer_name: str = "Adam",
     num_folds: int = 2,
-    save_models: bool = False,
     writer: Union[torch.utils.tensorboard.writer.SummaryWriter, None] = None
 ) -> Dict[str, float]:
     """Performs k-fold cross validation. The train_dataset is split into k folds. The k-1 folds are
@@ -363,8 +362,6 @@ def k_fold_cross_validation(
             optimizers is: "adam", "sgd". Defaults to "Adam".
         num_folds (int, optional): Number of folds to split the data into. Defaults to 2 
             (minimum number that can be used).
-        save_models (bool, optional): Controls if the model's parameters are saved in each fold.
-            Defaults to False.
         writer (Union[torch.utils.tensorboard.writer.SummaryWriter, None], optional): The 
             SummaryWriter object used to save metrics to tensorboard. If it is None nothing is 
             saved to tensorboard Defaults to None.
@@ -459,16 +456,15 @@ def k_fold_cross_validation(
             )
 
         # Save the model for the current fold
-        if save_models:
-            EXTRA = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
 
-            save_model(
-                model=model,
-                models_path=models_path,
-                model_name=model_name,
-                experiment_name=experiment_name,
-                extra=EXTRA
-            )
+        save_model(
+            model=model,
+            models_path=models_path,
+            model_name=model_name,
+            experiment_name=experiment_name,
+            extra=EXTRA
+        )
 
         # Evaluate the model on the test set
         test_metrics = _cross_validation_test(

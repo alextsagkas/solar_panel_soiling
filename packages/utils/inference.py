@@ -37,6 +37,8 @@ def inference(
       class_names (List[int]): A list of the classes the model is trained on.
       test_model_path: (Path): The directory where the images will be saved.
       model_name (str): The model's name to use it as a subfolder where the images will be saved.
+      experiment_name (str): The experiment's name to use it as a subfolder where the images will 
+        be saved.
       extra (str): A string used as a subfolder where the images will be saved. It 
         provides further information about the model and the training process.
       device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
@@ -46,6 +48,8 @@ def inference(
     """
     save_folder = test_model_path / model_name / experiment_name / extra
     save_folder.mkdir(exist_ok=True, parents=True)
+
+    print(f"[INFO] Saving images in {save_folder}")
 
     model.eval()
 
