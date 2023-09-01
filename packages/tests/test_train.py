@@ -50,6 +50,7 @@ def test_train(
     writer = create_writer(
         experiment_name=experiment_name,
         model_name=model_name,
+        transform_name=transform_obj.transform_name,
         extra=EXTRA
     )
 
@@ -79,6 +80,7 @@ def test_train(
         models_path=models_path,
         model_name=model_name,
         experiment_name=experiment_name,
+        transform_name=transform_obj.transform_name,
         extra=EXTRA
     )
 

@@ -318,6 +318,7 @@ def _average_metrics(
     for key, metric_sum in metrics_avg.items():
         metrics_avg[key] = metric_sum / num_folds
         print(f"{key}: {metrics_avg[key]:.4f} | ", end="")
+    print()
 
     return metrics_avg
 
@@ -332,6 +333,7 @@ def k_fold_cross_validation(
     num_epochs: int,
     models_path: Path,
     experiment_name: str,
+    transform_name: str,
     batch_size: int = 32,
     learning_rate: float = 1e-3,
     optimizer_name: str = "Adam",
@@ -356,6 +358,7 @@ def k_fold_cross_validation(
         num_epochs (int): Number of epochs to train the model.
         models_path (Path): Path to the directory where the models will be saved.
         experiment_name (str): Name of the experiment. Used to create a directory inside models_path
+        transform_name (str): Name of the transform used to create the train and test datasets.
         batch_size (int, optional): Batch size used to load the data. Defaults to 32.
         learning_rate (float, optional): Learning rate used to update the data. Defaults to 1e-3.
         optimizer_name (str, optional): Optimizer used to update the data. The list of available 
@@ -463,7 +466,8 @@ def k_fold_cross_validation(
             models_path=models_path,
             model_name=model_name,
             experiment_name=experiment_name,
-            extra=EXTRA
+            transform_name=transform_name,
+            extra=EXTRA,
         )
 
         # Evaluate the model on the test set

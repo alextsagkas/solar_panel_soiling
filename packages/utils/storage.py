@@ -11,18 +11,20 @@ def save_model(
     models_path: Path,
     model_name: str,
     experiment_name: str,
+    transform_name: str,
     extra: str,
 ) -> None:
-    """Saves the state dict of model in models_path/model_name/experiment_name/extra.pth.
+    """Saves the state dict of model in models_path/model_name/experiment_name/transform_name/extra.pth.
 
     Args:
         model (torch.nn.Module): Model to save.
         models_path (PosixPath): Path the models are saved to.
         models_name (str): Name of the model to save.
         experiment_name (str): Name of the experiment to save (used as a subfolder).
+        transform_name (str): The name of the transform.
         extra (str): Extra information concerning the training (used as name of file saved).
     """
-    models_dir = models_path / model_name / experiment_name
+    models_dir = models_path / model_name / experiment_name / transform_name
     models_dir.mkdir(exist_ok=True, parents=True)
 
     MODEL_NAME = f"{extra}.pth"
@@ -40,20 +42,22 @@ def save_results(
     root_dir: Path,
     models_name: str,
     experiment_name: str,
+    transform_name: str,
     extra: str,
     metrics: Dict[str, float],
 ) -> None:
-    """Saves the metrics of the experiment in root_dir/debug/metrics/models_name/experiment_name.
+    """Saves the metrics of the experiment in root_dir/debug/metrics/models_name/experiment_name/transform_name/extra.txt.
 
     Args:
         root_dir (Path): The root directory of the project.
         models_name (str): The name of the model.
         experiment_name (str): The name of the experiment.
+        transform_name (str): The name of the transform.
         extra (str): Extra information concerning the training (used as name of file saved).
         metrics (Dict[str, float]): The metrics of the experiment (classification metrics, loss,
             duration).
     """
-    metrics_dir = root_dir / "debug" / "metrics" / models_name / experiment_name
+    metrics_dir = root_dir / "debug" / "metrics" / models_name / experiment_name / transform_name
     metrics_dir.mkdir(exist_ok=True, parents=True)
 
     metrics_file = metrics_dir / f"{extra}.txt"

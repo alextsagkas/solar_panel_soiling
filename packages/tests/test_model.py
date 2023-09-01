@@ -8,7 +8,7 @@ import torch.backends.mps
 from packages.models.tiny_vgg import TinyVGG
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
-from packages.utils.transforms import test_data_transform
+from packages.utils.transforms import GetTransforms
 
 
 def test_model(
@@ -23,6 +23,7 @@ def test_model(
     models_path: Path,
     num_workers: int,
     test_model_path: Path,
+    transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str, str]:
     """Tests a model on the test set.
 
@@ -38,6 +39,7 @@ def test_model(
         models_path (Path): Path to the models.
         num_workers (int): Number of workers.
         test_model_path (Path): Path where to save the results of the test.
+        transform_obj (GetTransforms): Transform object to use for the data.
 
     Returns:
         Tuple[Dict[str, float], str, str]: Dictionary with the classification metrics of the   
@@ -52,7 +54,7 @@ def test_model(
     else:
         EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
         EXPERIMENT_DONE = "test_kfold"
-    MODEL_SAVE_DIR = models_path / model_name / EXPERIMENT_DONE
+    MODEL_SAVE_DIR = models_path / model_name / EXPERIMENT_DONE / transform_obj.transform_name
     MODEL_SAVE_NAME = EXTRA + ".pth"
 
     model = TinyVGG(
@@ -69,7 +71,7 @@ def test_model(
 
     test_dataloader, class_names = get_dataloader(
         dir=str(test_dir),
-        data_transform=test_data_transform,
+        data_transform=transform_obj.get_test_transform(),
         batch_size=BATCH_SIZE,
         num_workers=num_workers,
         shuffle=False
@@ -83,6 +85,7 @@ def test_model(
         test_model_path=test_model_path,
         model_name=model_name,
         experiment_name=EXPERIMENT_DONE,
+        transform_name=transform_obj.transform_name,
         extra=EXTRA,
         device=device
     )

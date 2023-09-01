@@ -54,7 +54,8 @@ def test_cross_validation(
     writer = create_writer(
         experiment_name=experiment_name,
         model_name=model_name,
-        extra=EXTRA
+        transform_name=transform_obj.transform_name,
+        extra=EXTRA,
     )
 
     # Setup loss and optimizer
@@ -86,6 +87,7 @@ def test_cross_validation(
         num_epochs=num_epochs,
         models_path=models_path,
         experiment_name=experiment_name,
+        transform_name=transform_obj.transform_name,
         optimizer_name=optimizer_name,
         num_folds=num_folds,
         writer=writer

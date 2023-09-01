@@ -203,6 +203,7 @@ if __name__ == "__main__":
             root_dir=root_dir,
             models_name=MODEL_NAME,
             experiment_name=experiment_name,
+            transform_name=transform_obj.transform_name,
             extra=infos,
             metrics=metrics
         )
@@ -229,6 +230,7 @@ if __name__ == "__main__":
             root_dir=root_dir,
             models_name=MODEL_NAME,
             experiment_name=experiment_name,
+            transform_name=transform_obj.transform_name,
             extra=infos,
             metrics=metrics
         )
@@ -247,12 +249,14 @@ if __name__ == "__main__":
             models_path=models_path,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             test_model_path=test_model_path,
+            transform_obj=transform_obj,
         )
 
         save_results(
             root_dir=root_dir,
             models_name=MODEL_NAME,
             experiment_name=experiment_name,
+            transform_name=transform_obj.transform_name,
             extra=infos,
             metrics=metrics
         )

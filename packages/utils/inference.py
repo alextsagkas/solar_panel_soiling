@@ -19,14 +19,15 @@ def inference(
     test_model_path: Path,
     model_name: str,
     experiment_name: str,
+    transform_name: str,
     extra: str,
     device: torch.device,
 ) -> Dict[str, float]:
     """Tests model in data from the test_dataloader.
 
     Evaluates the prediction probabilities for the classes the data are separated to. 
-    Saves every image in the test_model_path/model_name/experiment_name/extra/ folder and
-    provides information about the classification on the title of the image.
+    Saves every image in the test_model_path/model_name/experiment_name/transform_name/extra/
+    folder and provides information about the classification on the title of the image.
 
     It also returns a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score).
 
@@ -39,6 +40,7 @@ def inference(
       model_name (str): The model's name to use it as a subfolder where the images will be saved.
       experiment_name (str): The experiment's name to use it as a subfolder where the images will 
         be saved.
+      transform_name (str): The transform's name to use it as a subfolder where the images will be.
       extra (str): A string used as a subfolder where the images will be saved. It 
         provides further information about the model and the training process.
       device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
@@ -46,7 +48,7 @@ def inference(
     Returns:
       Dict[str, float]: A dictionary containing the classification metrics (accuracy, precession, recall, f-beta score).
     """
-    save_folder = test_model_path / model_name / experiment_name / extra
+    save_folder = test_model_path / model_name / experiment_name / transform_name / extra
     save_folder.mkdir(exist_ok=True, parents=True)
 
     print(f"[INFO] Saving images in {save_folder}")
