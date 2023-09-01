@@ -14,18 +14,22 @@ from torchvision import datasets, transforms
 def plot_transformed_images(
         image_paths: list[Path],
         transform: transforms.transforms.Compose,
+        transform_name: str,
         n: int = 3,
-        seed: Union[int, None] = None) -> None:
+        seed: Union[int, None] = None
+) -> None:
     """Saves a series of random images from image_paths to the debug/data_transforms folder.
 
     Will open n image paths from image_paths, transform them
     with transform and save them one by one.
 
     Args:
-        image_paths (list[str] | list[pathlib.PosixPath]): List of target image paths. 
+        image_paths (list[Path]): List of target image paths. 
         transform (PyTorch Transforms): Transforms to apply to images.
+        transform_name (str): Name of the transform to use as a subfolder for 
+            saving the transformed images.
         n (int, optional): Number of images to plot. Defaults to 3.
-        seed (int, optional): Random seed for the random generator. Defaults to None.
+        seed (int, optional): Random seed for the random generator. Defaults to None.k
     """
     # Set seed
     if seed != None:
@@ -35,8 +39,10 @@ def plot_transformed_images(
     random_image_paths = random.sample(image_paths, k=n)
 
     # Create folder to store results
-    debug_folder = image_paths[0].parents[3] / "debug" / "data_transforms"
+    debug_folder = image_paths[0].parents[3] / "debug" / "data_transforms" / transform_name
     os.makedirs(debug_folder, exist_ok=True)
+
+    print(f"[INFO] Saving transformed images to {debug_folder} folder")
 
     for image_path in random_image_paths:
         with Image.open(image_path) as f:
@@ -48,7 +54,7 @@ def plot_transformed_images(
             ax[0].axis("off")
 
             # Transform and plot image
-            transformed_image = torch.tensor(transform(f)).permute(1, 2, 0)
+            transformed_image = transform(f).permute(1, 2, 0)  # type: ignore
             ax[1].imshow(transformed_image)
             ax[1].set_title(f"Transformed \nSize: {transformed_image.shape}")
             ax[1].axis("off")

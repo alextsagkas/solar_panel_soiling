@@ -6,9 +6,11 @@ import torch
 import torch.backends.mps
 
 from packages.tests.test_cross_validation import test_cross_validation
+from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_train import test_train
 from packages.utils.storage import save_results
+from packages.utils.transforms import GetTransforms
 
 if __name__ == "__main__":
 
@@ -62,6 +64,11 @@ if __name__ == "__main__":
                         default=1e-3,
                         type=float,
                         help="learning rate to use for model")
+
+    parser.add_argument("--tr",
+                        default="simple",
+                        type=str,
+                        help="the transform to use for the data")
 
     args = parser.parse_args()
 
@@ -118,6 +125,8 @@ if __name__ == "__main__":
     else:
         LEARNING_RATE = args.lr
 
+    transform_obj = GetTransforms(transform_name=args.tr)
+
     print(
         f"[INFO] Using the {MODEL_NAME} model{folds_text} for {NUM_EPOCHS} epochs, with batch size {BATCH_SIZE}, using {HIDDEN_UNITS} hidden units and a learning rate of {LEARNING_RATE}"
     )
@@ -126,9 +135,10 @@ if __name__ == "__main__":
     root_dir = Path("/Users/alextsagkas/Document/Office/solar_panels")
 
     # Data
-    train_dir = root_dir / "data" / "train"
-    test_dir = root_dir / "data" / "test"
-    results_dir = root_dir / "data" / "results"
+    data_dir = root_dir / "data"
+    train_dir = data_dir / "train"
+    test_dir = data_dir / "test"
+    results_dir = data_dir / "results"
 
     print(f"[INFO] Training data file: {train_dir}")
     print(f"[INFO] Testing data file: {test_dir}")
@@ -243,4 +253,9 @@ if __name__ == "__main__":
             experiment_name=experiment_name,
             extra=infos,
             metrics=metrics
+        )
+    elif TEST_NAME == "transform":
+        test_transform(
+            data_dir=data_dir,
+            transform_obj=transform_obj
         )

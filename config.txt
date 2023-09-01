@@ -1,1 +1,1 @@
-Namespace(tn='evaluate', mn='tiny_vgg', f=2, e=1, bs=32, hu=10, on='adam', lr=0.001)
+Namespace(tn='transform', mn='tiny_vgg', f=-1, e=5, bs=32, hu=10, on='adam', lr=0.001, tr='simple')
