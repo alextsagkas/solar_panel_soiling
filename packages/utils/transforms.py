@@ -1,4 +1,5 @@
 from torchvision import transforms
+from typing_extensions import Self
 
 
 class GetTransforms:
@@ -25,7 +26,7 @@ class GetTransforms:
     """
 
     def __init__(
-        self,
+        self: Self,
         transform_name: str = "simple",
     ) -> None:
         """Initialize the transform object.
