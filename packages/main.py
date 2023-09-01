@@ -120,23 +120,7 @@ if __name__ == "__main__":
     else:
         BATCH_SIZE = args.bs
 
-    # TODO: deleted them when you're done with configuration
-    optimizer_names = ["adam", "sgd"]
-    if args.on not in optimizer_names:
-        raise ValueError(f"Optimizer name must be one of {optimizer_names}")
-    else:
-        OPTIMIZER_NAME = args.on
-
-    if args.lr < 0 or args.lr > 1:
-        raise ValueError("Learning rate must be between 0 and 1")
-    else:
-        LEARNING_RATE = args.lr
-
     transform_obj = GetTransforms(transform_name=args.tr)
-
-    print(
-        f"[INFO] {folds_text} for {NUM_EPOCHS} epochs, with batch size {BATCH_SIZE} and a learning rate of {LEARNING_RATE}"
-    )
 
     # * Setup directories
     root_dir = Path("/Users/alextsagkas/Document/Office/solar_panels")
@@ -187,8 +171,8 @@ if __name__ == "__main__":
             batch_size=BATCH_SIZE,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             num_epochs=NUM_EPOCHS,
-            optimizer_name=OPTIMIZER_NAME,
-            learning_rate=LEARNING_RATE,
+            optimizer_name=args.on,
+            learning_rate=args.lr,
             models_path=models_path,
             experiment_name=experiment_name,
             transform_obj=transform_obj,
@@ -213,8 +197,8 @@ if __name__ == "__main__":
             num_folds=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
-            learning_rate=LEARNING_RATE,
-            optimizer_name=OPTIMIZER_NAME,
+            learning_rate=args.lr,
+            optimizer_name=args.on,
             experiment_name=experiment_name,
             transform_obj=transform_obj,
         )
@@ -236,7 +220,7 @@ if __name__ == "__main__":
             num_fold=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
-            learning_rate=LEARNING_RATE,
+            learning_rate=args.lr,
             models_path=models_path,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             test_model_path=test_model_path,

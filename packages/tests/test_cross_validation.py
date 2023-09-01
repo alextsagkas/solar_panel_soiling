@@ -77,7 +77,6 @@ def test_cross_validation(
         train_dataset=train_dataset,
         test_dataset=test_dataset,
         loss_fn=loss_fn,
-        hidden_units=model_obj.hidden_units,
         batch_size=batch_size,
         learning_rate=learning_rate,
         num_epochs=num_epochs,

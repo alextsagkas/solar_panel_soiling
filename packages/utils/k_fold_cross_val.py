@@ -19,7 +19,7 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 
 from packages.models.tiny_vgg import TinyVGG
-from packages.utils.configuration import GetModel
+from packages.utils.configuration import GetModel, GetOptimizer
 from packages.utils.storage import save_model
 
 
@@ -171,43 +171,6 @@ def _get_model(
         )
 
     return model
-
-
-def _get_optimizer(
-    model: torch.nn.Module,
-    optimizer_name: str,
-    learning_rate: float = 1e-3,
-) -> torch.optim.Optimizer:
-    """Returns an optimizer based on the optimizer_name and learning_rate parameters. The list of available optimizers is: "adam", "sgd".
-
-    Args:
-        model (torch.nn.Module): Model to be optimized (the parameters of it are needed).
-        optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float, optional): Learning rate to be used in updates. Defaults to 1e-3.
-
-    Raises:
-        ValueError: If the optimizer_name is not one of "adam", "sgd".
-
-    Returns:
-        torch.optim.Optimizer: The optimizer to be used.
-    """
-    if optimizer_name == "adam":
-        optimizer = optim.Adam(
-            params=model.parameters(),
-            lr=learning_rate
-        )
-    elif optimizer_name == "sgd":
-        optimizer = optim.SGD(
-            params=model.parameters(),
-            lr=learning_rate
-        )
-    else:
-        raise ValueError(
-            f"Optimizer name {optimizer_name} is not supported. "
-            "Please choose between 'adam' and 'sgd'."
-        )
-
-    return optimizer
 
 
 def _display_metrics(
@@ -411,11 +374,11 @@ def k_fold_cross_validation(
         model = model_obj.get_model()
 
         # Initialize the optimizer
-        optimizer = _get_optimizer(
+        optimizer = GetOptimizer(
             model=model,
             optimizer_name=optimizer_name,
             learning_rate=learning_rate,
-        )
+        ).get_optimizer()
 
         for epoch in tqdm(range(num_epochs)):
             # Train the model on the current fold

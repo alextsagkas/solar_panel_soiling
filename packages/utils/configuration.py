@@ -98,77 +98,82 @@ class GetModel:
         return models_dict[self.model_name].to(self.device)
 
 
-def _get_optimizer(
-    model: torch.nn.Module,
-    optimizer_name: str,
-    learning_rate: float = 1e-3,
-) -> torch.optim.Optimizer:
-    """Returns an optimizer based on the optimizer_name and learning_rate parameters. The list of available optimizers is: "adam", "sgd".
+class GetOptimizer:
+    """Class that returns an optimizer based on the optimizer_name parameter. The list of available
+    optimizers is: ["adam", "sgd"].
 
     Args:
-        model (torch.nn.Module): Model to be optimized (the parameters of it are needed).
+        model (torch.nn.Module): The model to be optimized.
         optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float, optional): Learning rate to be used in updates. Defaults to 1e-3.
+        learning_rate (float): Learning rate to be used by the optimizer.
 
-    Raises:
-        ValueError: If the optimizer_name is not one of "adam", "sgd".
+    Attributes:
+        optimizer_name_list (List[str]): List of available optimizers.
+        optimizer_name (str): String that identifies the optimizer to be used.
+        model_params (List[torch.nn.Parameter]): List of parameters of the model to be optimized.
+        learning_rate (float): Learning rate to be used by the optimizer.
 
-    Returns:
-        torch.optim.Optimizer: The optimizer to be used.
+    Methods:
+        get_optimizer: Returns the optimizer based on the optimizer_name parameter.
     """
-    if optimizer_name == "adam":
-        optimizer = optim.Adam(
-            params=model.parameters(),
-            lr=learning_rate
-        )
-    elif optimizer_name == "sgd":
-        optimizer = optim.SGD(
-            params=model.parameters(),
-            lr=learning_rate
-        )
-    else:
-        raise ValueError(
-            f"Optimizer name {optimizer_name} is not supported. "
-            "Please choose between 'adam' and 'sgd'."
-        )
 
-    return optimizer
-
-
-class GetOptimizer:
-    # TODO: add docstring
     def __init__(
-        # TODO: add docstring
         self: Self,
         model: torch.nn.Module,
         optimizer_name: str,
-        learning_rate: float = 1e-3,
+        learning_rate: float,
     ) -> None:
+        """Initializes the GetOptimizer class.
+
+        Args:
+            self (Self): GetOptimizer instance.
+            model (torch.nn.Module): The model to be optimized.
+            optimizer_name (str): String that identifies the optimizer to be used.
+            learning_rate (float): Learning rate to be used by the optimizer.
+
+        Raises:
+            ValueError: When the optimizer_name is not one of the available optimizers.
+            ValueError: When the learning_rate is not between 0 and 1.
+        """
         self.optimizer_name_list = ["adam", "sgd"]
         if optimizer_name not in self.optimizer_name_list:
             raise ValueError(f"optimizer_name must be one of {self.optimizer_name_list}")
         else:
             self.optimizer_name = optimizer_name
 
-        self.model_params = model.parameters()
+        # list is used to be able to instantiate the optimizers in the get_optimizer method
+        self.model_params = list(model.parameters())
 
         if learning_rate < 0 or learning_rate > 1:
             raise ValueError("Learning rate must be between 0 and 1")
         else:
             self.learning_rate = learning_rate
 
+        print(
+            f"[INFO] Using {self.optimizer_name} optimizer, "
+            f"with {self.learning_rate} learning rate "
+            f"on {model.model_name} model."
+        )
+
     def get_optimizer(
         self: Self,
     ) -> torch.optim.Optimizer:
-        # TODO: add docstring
+        """Returns the optimizer based on the optimizer_name parameter.
+
+        Args:
+            self (Self): GetOptimizer instance.
+
+        Returns:
+            torch.optim.Optimizer: The optimizer to be used.
+        """
         optimizer_dict = {
             "adam": optim.Adam(
                 params=self.model_params,
-                lr=self.learning_rate
+                lr=self.learning_rate,
             ),
             "sgd": optim.SGD(
                 params=self.model_params,
-                lr=self.learning_rate
+                lr=self.learning_rate,
             )
         }
 

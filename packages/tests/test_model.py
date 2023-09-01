@@ -23,18 +23,15 @@ def test_model(
     test_model_path: Path,
     transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str, str]:
-    # TODO: add docstring
     """Tests a model on the test set.
 
     Args:
+        model_obj (GetModel): Model object to use.j
         test_dir (Path): Test set directory.
         num_fold (int): Number of the fold (-1 if not k-fold).
         num_epochs (int): Number of epochs.
         batch_size (int): Batch size.
-        hidden_units (int): Number of hidden units.
         learning_rate (float): Learning rate.
-        device (torch.device): Device to use ("cpu", "cuda", "mps").
-        model_name (str): Name of the model.
         models_path (Path): Path to the models.
         num_workers (int): Number of workers.
         test_model_path (Path): Path where to save the results of the test.

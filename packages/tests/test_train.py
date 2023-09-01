@@ -4,7 +4,7 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import GetModel, _get_optimizer
+from packages.utils.configuration import GetModel, GetOptimizer
 from packages.utils.load_data import get_dataloaders
 from packages.utils.storage import save_model
 from packages.utils.tensorboard import create_writer
@@ -25,7 +25,31 @@ def test_train(
     experiment_name: str,
     transform_obj: GetTransforms,
 ) -> Tuple[Dict[str, float], str]:
-    # TODO: Add docstring
+    """Trains a model by using the train dataset to update its parameters and
+    the test dataset to evaluate its performance. The model is saved in the
+    models_path directory after the two actions are done.
+
+    Args:
+        model_obj (GetModel): Model object to use.
+        train_dir (Path): Train set directory.
+        test_dir (Path): Test set directory.
+        batch_size (int): Batch size.
+        num_workers (int): Number of workers (used to load the data).
+        num_epochs (int): Number of epochs.
+        optimizer_name (str): Name of the optimizer to use.
+        learning_rate (float): Learning rate to update the data with the
+            optimizer.
+        models_path (Path): Path to save the model.
+        experiment_name (str): The name of the experiment taking place (used as a
+            subfolder).
+        transform_obj (GetTransforms): Transform object to use for the data (get the
+            specified transform from training and test datasets).
+
+    Returns:
+        Tuple[Dict[str, float], str]: Dictionary with the classification metrics of the
+            experiment (accuracy, precision, recall, f1-score, loss) and the extra information
+            as string.
+    """
     # Get the dataloaders
     train_dataloader, test_dataloader = get_dataloaders(
         train_dir=str(train_dir),
@@ -51,11 +75,11 @@ def test_train(
 
     # Setup loss and optimizer
     loss_fn = torch.nn.CrossEntropyLoss()
-    optimizer = _get_optimizer(
-        optimizer_name=optimizer_name,
+    optimizer = GetOptimizer(
         model=model,
-        learning_rate=learning_rate
-    )
+        optimizer_name=optimizer_name,
+        learning_rate=learning_rate,
+    ).get_optimizer()
 
     # Train the model
     metrics = train(
