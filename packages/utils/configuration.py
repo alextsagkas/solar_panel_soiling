@@ -56,8 +56,7 @@ class GetOptimizer:
 
         print(
             f"[INFO] Using {self.optimizer_name} optimizer, "
-            f"with {self.learning_rate} learning rate "
-            f"on {model.model_name} model."
+            f"with {self.learning_rate} learning rate."
         )
 
     def get_optimizer(
