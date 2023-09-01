@@ -57,6 +57,9 @@ def save_results(
     metrics_dir.mkdir(exist_ok=True, parents=True)
 
     metrics_file = metrics_dir / f"{extra}.txt"
+
+    print(f"[INFO] Saving metrics to: {metrics_file}")
+
     with open(metrics_file, "w") as f:
         for key, metric in metrics.items():
             if key == "time":

@@ -1,6 +1,7 @@
 from pathlib import Path
-from torchvision import transforms, datasets
+
 from torch.utils.data import DataLoader
+from torchvision import datasets, transforms
 
 from packages.utils.load_data import plot_transformed_images
 

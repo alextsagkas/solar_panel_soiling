@@ -1,46 +1,61 @@
 from pathlib import Path
+from typing import Dict, List
 
 import matplotlib.pyplot as plt
 import torch.nn
 import torch.utils.data
+from torchmetrics.classification import (
+    MulticlassAccuracy,
+    MulticlassFBetaScore,
+    MulticlassPrecision,
+    MulticlassRecall,
+)
 
 
 def inference(
     model: torch.nn.Module,
     test_dataloader: torch.utils.data.DataLoader,
-    class_names: list[str],
-    save_folder: Path,
+    class_names: List[str],
+    test_model_path: Path,
     model_name: str,
+    experiment_name: str,
     extra: str,
     device: torch.device,
-) -> float:
+) -> Dict[str, float]:
     """Tests model in data from the test_dataloader.
 
     Evaluates the prediction probabilities for the classes the data are separated to. 
-    Saves every image in the save_folder/model_name/extra folder and provides information
-    about the classification on the title of the image.
+    Saves every image in the test_model_path/model_name/experiment_name/extra/ folder and
+    provides information about the classification on the title of the image.
 
-    It also returns the overall accuracy of the model on the test_dataloader.
+    It also returns a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score).
 
     Args:
-      model: A PyTorch model to be trained and tested.
-      test_dataloader: A DataLoader instance for the model to be tested on (NUM_BATCHES = 1).
-      class_names: A list of the classes the model is trained on.
-      save_folder: A Path instance to save the image.
-      model_name: The model's name to use it as a subfolder where the images will be saved.
-      extra: An extra string to add to the subfolder where the images will be saved. It provides
-        further information about the model and the training process.
-      device: A target device to compute on ("cuda", "cpu", "mps").
+      model (torch.nn.Module): A PyTorch model to be trained and tested.
+      test_dataloader (torch.utils.data.DataLoader): A DataLoader instance for the model to be 
+        tested on (using size of batches = 1).
+      class_names (List[int]): A list of the classes the model is trained on.
+      test_model_path: (Path): The directory where the images will be saved.
+      model_name (str): The model's name to use it as a subfolder where the images will be saved.
+      extra (str): A string used as a subfolder where the images will be saved. It 
+        provides further information about the model and the training process.
+      device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
 
     Returns:
-      results_acc: The overall accuracy of the model on the test_dataloader.
+      Dict[str, float]: A dictionary containing the classification metrics (accuracy, precession, recall, f-beta score).
     """
-    save_folder = save_folder / model_name / extra
+    save_folder = test_model_path / model_name / experiment_name / extra
     save_folder.mkdir(exist_ok=True, parents=True)
 
-    results_acc = 0
-
     model.eval()
+
+    results_metrics = {
+        "accuracy": MulticlassAccuracy(num_classes=2).to(device),
+        "precession": MulticlassPrecision(num_classes=2).to(device),
+        "recall": MulticlassRecall(num_classes=2).to(device),
+        "fscore": MulticlassFBetaScore(num_classes=2, beta=2.0).to(device),
+    }
+
     with torch.inference_mode():
         for i, (imgs, labels) in enumerate(test_dataloader):
             imgs, labels = imgs.to(device), labels.to(device)
@@ -49,6 +64,9 @@ def inference(
 
             preds = torch.softmax(preds_logits, dim=1).max()
             preds_class = preds_logits.argmax(dim=1)
+
+            for key, _ in results_metrics.items():
+                results_metrics[key].update(preds_class, labels)
 
             prob = f"{preds.item():.4f}"
             preds_class = class_names[preds_class.item()]
@@ -59,7 +77,6 @@ def inference(
 
             title_text = f"Truth: {truth} | Preds: {preds_class} | Prob: {prob}"
             if preds_class == truth:
-                results_acc += 1
                 plt.title(title_text, color="green")
             else:
                 plt.title(title_text, color="red")
@@ -67,6 +84,7 @@ def inference(
             plt.savefig(save_folder / f"{truth}_{preds_class}_{prob}_{i}.png")
             plt.close()
 
-        results_acc = results_acc / len(test_dataloader)
+    for key, _ in results_metrics.items():
+        results_metrics[key] = results_metrics[key].compute().item()
 
-    return results_acc
+    return results_metrics

@@ -1,69 +1,91 @@
+import os
+from pathlib import Path
+from typing import Dict, Tuple
+
 import torch
 import torch.backends.mps
-from pathlib import Path
-import os
 
 from packages.models.tiny_vgg import TinyVGG
-from packages.utils.transforms import test_data_transform
+from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
-from packages.utils.training import inference
+from packages.utils.transforms import test_data_transform
 
-if __name__ == "__main__":
 
-    # Setup device-agnostic code
-    if torch.cuda.is_available():
-        device = torch.device("cuda")  # NVIDIA GPU
-    elif torch.backends.mps.is_available():
-        device = torch.device("mps")  # Apple GPU
+def test_model(
+    test_dir: Path,
+    num_fold: int,
+    num_epochs: int,
+    batch_size: int,
+    hidden_units: int,
+    learning_rate: float,
+    device: torch.device,
+    model_name: str,
+    models_path: Path,
+    num_workers: int,
+    test_model_path: Path,
+) -> Tuple[Dict[str, float], str, str]:
+    """Tests a model on the test set.
+
+    Args:
+        test_dir (Path): Test set directory.
+        num_fold (int): Number of the fold (-1 if not k-fold).
+        num_epochs (int): Number of epochs.
+        batch_size (int): Batch size.
+        hidden_units (int): Number of hidden units.
+        learning_rate (float): Learning rate.
+        device (torch.device): Device to use ("cpu", "cuda", "mps").
+        model_name (str): Name of the model.
+        models_path (Path): Path to the models.
+        num_workers (int): Number of workers.
+        test_model_path (Path): Path where to save the results of the test.
+
+    Returns:
+        Tuple[Dict[str, float], str, str]: Dictionary with the classification metrics of the   
+          experiment (accuracy, precision, recall, f1-score, loss), the extra information 
+          concerning the training and the experiment name
+    """
+    EXPERIMENT_NAME = "test_model"
+
+    # Load model
+    if num_fold == -1:
+        EXTRA = f"{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXPERIMENT_DONE = "test_train"
     else:
-        device = torch.device("cpu")  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
-
-    # Paths
-    root_dir = Path("/Users/alextsagkas/Document/Office/solar_panels")
-    test_dir = root_dir / "data" / "results"
-
-    # Instantiate the model
-    NUM_FOLD = 0
-    NUM_EPOCHS = 3
-    BATCH_SIZE = 32
-    HIDDEN_UNITS = 10
-    LEARNING_RATE = 0.001
-
-    EXTRA = f"{NUM_FOLD}_f_{NUM_EPOCHS}_e_{BATCH_SIZE}_bs_{HIDDEN_UNITS}_hu_{LEARNING_RATE}_lr"
-    MODEL_NAME = "tiny_vgg" + "-" + EXTRA + ".pth"
+        EXTRA = f"{num_fold}_f_{num_epochs}_e_{batch_size}_bs_{hidden_units}_hu_{learning_rate}_lr"
+        EXPERIMENT_DONE = "test_kfold"
+    MODEL_SAVE_DIR = models_path / model_name / EXPERIMENT_DONE
+    MODEL_SAVE_NAME = EXTRA + ".pth"
 
     model = TinyVGG(
         input_shape=3,
-        hidden_units=HIDDEN_UNITS,
+        hidden_units=hidden_units,
         output_shape=2
     ).to(device)
-    model.load_state_dict(torch.load(f=str(root_dir / "models" / MODEL_NAME)))
+    model.load_state_dict(torch.load(f=str(MODEL_SAVE_DIR / MODEL_SAVE_NAME)))
+
+    print(f"[INFO] Model loaded from {MODEL_SAVE_DIR / MODEL_SAVE_NAME}")
 
     # Load data
     BATCH_SIZE = 1
-    NUM_WORKERS = os.cpu_count()
-
-    test_data_transform = test_data_transform
 
     test_dataloader, class_names = get_dataloader(
         dir=str(test_dir),
         data_transform=test_data_transform,
         batch_size=BATCH_SIZE,
-        num_workers=NUM_WORKERS if NUM_WORKERS else 1,
+        num_workers=num_workers,
         shuffle=False
     )
 
     # Inference
-    save_folder = root_dir / "debug" / "test_model"
-
-    test_acc = inference(
+    results_metrics = inference(
         model=model,
         test_dataloader=test_dataloader,
         class_names=class_names,
-        save_folder=save_folder,
-        model_name="tiny_vgg",
+        test_model_path=test_model_path,
+        model_name=model_name,
+        experiment_name=EXPERIMENT_NAME,
         extra=EXTRA,
         device=device
     )
 
-    print(f"Test accuracy: {test_acc:.4f}")
+    return results_metrics, EXTRA, EXPERIMENT_NAME

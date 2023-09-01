@@ -6,6 +6,7 @@ import torch
 import torch.backends.mps
 
 from packages.tests.test_cross_validation import test_cross_validation
+from packages.tests.test_model import test_model
 from packages.tests.test_train import test_train
 from packages.utils.storage import save_results
 
@@ -81,7 +82,7 @@ if __name__ == "__main__":
     else:
         MODEL_NAME = args.mn
 
-    if args.f < 2 and args.tn in ["cross_validation", "model"]:
+    if args.f < 2 and args.tn in ["cross_validation"]:
         raise ValueError("Number of folds must be greater than 1")
     elif args.f == -1 or args.tn in ["train"]:
         folds_text = ""
@@ -134,8 +135,10 @@ if __name__ == "__main__":
 
     # Models
     models_path = root_dir / "models"
-
     print(f"[INFO] Models path: {models_path}")
+
+    # Test Model Path
+    test_model_path = root_dir / "debug" / "test_model"
 
     # * Setup device-agnostic code
     if torch.cuda.is_available():
@@ -157,9 +160,8 @@ if __name__ == "__main__":
 
     # * Run tests
 
-    metrics, infos, experiment_name = {}, "", ""  # ! Remember to erase them when done
-
     print(f"[INFO] Running {TEST_NAME} test")
+
     if TEST_NAME == "train":
         metrics, infos, experiment_name = test_train(
             model_name=MODEL_NAME,
@@ -173,6 +175,14 @@ if __name__ == "__main__":
             learning_rate=LEARNING_RATE,
             device=device,
             models_path=models_path
+        )
+
+        save_results(
+            root_dir=root_dir,
+            models_name=MODEL_NAME,
+            experiment_name=experiment_name,
+            extra=infos,
+            metrics=metrics
         )
     elif TEST_NAME == "cross_validation" and NUM_FOLDS != -1:
         metrics, infos, experiment_name = test_cross_validation(
@@ -191,10 +201,32 @@ if __name__ == "__main__":
             save_models=True
         )
 
-    save_results(
-        root_dir=root_dir,
-        models_name=MODEL_NAME,
-        experiment_name=experiment_name,
-        extra=infos,
-        metrics=metrics
-    )
+        save_results(
+            root_dir=root_dir,
+            models_name=MODEL_NAME,
+            experiment_name=experiment_name,
+            extra=infos,
+            metrics=metrics
+        )
+    elif TEST_NAME == "model":
+        metrics, infos, experiment_name = test_model(
+            model_name=MODEL_NAME,
+            test_dir=results_dir,
+            num_fold=NUM_FOLDS,
+            num_epochs=NUM_EPOCHS,
+            batch_size=BATCH_SIZE,
+            hidden_units=HIDDEN_UNITS,
+            learning_rate=LEARNING_RATE,
+            device=device,
+            models_path=models_path,
+            num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
+            test_model_path=test_model_path
+        )
+
+        save_results(
+            root_dir=root_dir,
+            models_name=MODEL_NAME,
+            experiment_name=experiment_name,
+            extra=infos,
+            metrics=metrics
+        )
