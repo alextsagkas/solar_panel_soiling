@@ -7,14 +7,8 @@ import torch.backends.mps
 
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
-from packages.tests.test_solvers import test_kfold_solver, test_solver
-from packages.utils.configuration import (
-    config_dir,
-    data_dir,
-    root_dir,
-    test_dir,
-    train_dir,
-)
+from packages.tests.test_solver import test_kfold_solver, test_solver
+from packages.utils.configuration import config_dir, data_dir, test_dir, train_dir
 from packages.utils.models import GetModel
 from packages.utils.transforms import GetTransforms
 
@@ -76,7 +70,6 @@ if __name__ == "__main__":
             train_dir=train_dir,
             test_dir=test_dir,
             transform_obj=transform_obj,
-            root_dir=root_dir,
             timestamp_list=hyperparameters["timestamp_list"]
         )
     elif hyperparameters["test_name"] == "test_solvers-kfold":
@@ -90,7 +83,6 @@ if __name__ == "__main__":
             train_dir=train_dir,
             test_dir=test_dir,
             transform_obj=transform_obj,
-            root_dir=root_dir,
             timestamp_list=hyperparameters["timestamp_list"]
         )
     # elif TEST_NAME == "evaluate":

@@ -1,6 +1,4 @@
 import os
-from datetime import datetime
-from pathlib import Path
 from timeit import default_timer as timer
 from typing import Dict, List, Union
 
@@ -12,7 +10,6 @@ import torchvision
 from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
-from torch.utils.tensorboard.writer import SummaryWriter
 from torchmetrics.classification import (
     MulticlassAccuracy,
     MulticlassFBetaScore,
@@ -22,7 +19,6 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 from typing_extensions import Self
 
-from packages.utils.configuration import models_dir
 from packages.utils.models import GetModel
 from packages.utils.optim import GetOptimizer
 from packages.utils.storage import save_metrics, save_model
@@ -30,7 +26,21 @@ from packages.utils.tensorboard import create_writer
 
 
 class Solver:
-    """Class that trains and tests a Pytorch model
+    """Class that trains and tests a Pytorch model. It provides functionality for a simple train 
+    function and a k-fold cross validation train function. 
+
+    In the first case, the model is trained on the train dataset for num_epochs and evaluated on 
+    the test dataset in the end. The results on the test dataset are saved in the debug/metrics and
+    on tensorboard in debug/runs.
+
+    In the second case, the train dataset is split into num_folds folds and the model is trained on 
+    the 1 - mun_folds folds for num_epochs, whereas it is evaluated in the 1 fold remaining
+    (validation set), for every epoch. The process is repeated until every single fold has been 
+    used as a validation set. In the end of each fold the model is also evaluated on the test set. 
+    The results on the test set are averaged out and saved in the debug/metrics and on tensorboard 
+    in debug/runs.
+
+    Also, any model that is trained is saved in the models/ folder.
 
     Args:
         model_obj (GetModel): The model object to be trained and tested.
@@ -43,9 +53,12 @@ class Solver:
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
         timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
             Used for storage path.
+        num_folds (Union[int, None], optional): Number of folds to be used in k-fold cross  
+            validation.
 
     Attributes:
         model_obj (GetModel): The model object to be trained and tested.
+        num_folds (int): Number of folds to be used in k-fold cross validation.
         num_epochs (int): Number of epochs to train the model.
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
@@ -63,328 +76,14 @@ class Solver:
         _display_metrics: Receives data about the phase and epoch and prints out the metrics while
             saving them to a tensorboard writer.
         train_model: Trains and tests a PyTorch model.
-    """
-
-    def __init__(
-        self: Self,
-        model_obj: GetModel,
-        num_epochs: int,
-        batch_size: int,
-        loss_fn: torch.nn.Module,
-        optimizer_name: str,
-        device: torch.device,
-        train_dataset: torchvision.datasets.ImageFolder,
-        test_dataset: torchvision.datasets.ImageFolder,
-        timestamp_list: List[str],
-    ) -> None:
-        """Initializes the Solver class."""
-        self.model_obj = model_obj
-        self.num_epochs = num_epochs
-        self.batch_size = batch_size
-        self.loss_fn = loss_fn
-        self.optimizer_name = optimizer_name
-        self.device = device
-        # Datasets
-        self.train_dataset = train_dataset
-        self.test_dataset = test_dataset
-        # Extra
-        self.timestamp_list = timestamp_list
-
-    def _train_step(
-        self: Self,
-        model: torch.nn.Module,
-        optimizer: torch.optim.Optimizer,
-        dataloader: torch.utils.data.DataLoader,
-    ) -> Dict[str, float]:
-        """Trains a PyTorch model for one epoch.
-
-        Args:
-            model (torch.nn.Module): The model to be trained.
-            optimizer (torch.optim.Optimizer): Optimizer to be used.
-            dataloader (torch.utils.data.DataLoader): Train DataLoader.
-
-        Returns:
-            Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
-                metrics = {
-                    "accuracy": 0.94,
-                    "precession": 0.80,
-                    "recall": 0.69,
-                    "fscore": 0.76,
-                    "loss": 0.18,
-                }
-        """
-        model.train()
-
-        train_loss = 0
-        train_metrics = {
-            "accuracy": MulticlassAccuracy(num_classes=2).to(self.device),
-            "precession": MulticlassPrecision(num_classes=2).to(self.device),
-            "recall": MulticlassRecall(num_classes=2).to(self.device),
-            "fscore": MulticlassFBetaScore(num_classes=2, beta=2.0).to(self.device),
-        }
-
-        for X, y in dataloader:
-            X, y = X.to(self.device), y.to(self.device)
-
-            y_pred = model(X)
-
-            loss = self.loss_fn(y_pred, y)
-            train_loss += loss.item()
-
-            optimizer.zero_grad()
-            loss.backward()
-            optimizer.step()
-
-            y_pred_class = y_pred.argmax(dim=1)
-
-            for key, _ in train_metrics.items():
-                train_metrics[key].update(y_pred_class, y)
-
-        train_loss = train_loss / len(dataloader)
-
-        for key, _ in train_metrics.items():
-            train_metrics[key] = train_metrics[key].compute().item()
-        train_metrics["loss"] = train_loss
-
-        return train_metrics
-
-    def _test_step(
-        self: Self,
-        model: torch.nn.Module,
-        dataloader: torch.utils.data.DataLoader,
-    ) -> Dict[str, float]:
-        """Tests a PyTorch model for one epoch.
-
-        Args:
-            model (torch.nn.Module): The model to be tested.
-            dataloader (torch.utils.data.DataLoader): Test DataLoader.
-
-        Returns:
-            Dict[str, float]: Dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and loss. Example:
-                metrics = {
-                    "accuracy": 0.94,
-                    "precession": 0.80,
-                    "recall": 0.69,
-                    "fscore": 0.76,
-                    "loss": 0.18,
-                }
-        """
-        model.eval()
-
-        test_loss = 0
-        test_metrics = {
-            "accuracy": MulticlassAccuracy(num_classes=2).to(self.device),
-            "precession": MulticlassPrecision(num_classes=2).to(self.device),
-            "recall": MulticlassRecall(num_classes=2).to(self.device),
-            "fscore": MulticlassFBetaScore(num_classes=2, beta=2.0).to(self.device),
-        }
-
-        with torch.inference_mode():
-            for X, y in dataloader:
-                X, y = X.to(self.device), y.to(self.device)
-                test_pred_logits = model(X)
-
-                test_loss += self.loss_fn(test_pred_logits, y)
-
-                test_pred_labels = test_pred_logits.argmax(dim=1)
-
-                for key, _ in test_metrics.items():
-                    test_metrics[key].update(test_pred_labels, y)
-
-        test_loss = test_loss / len(dataloader)
-
-        for key, _ in test_metrics.items():
-            test_metrics[key] = test_metrics[key].compute().item()
-        test_metrics["loss"] = test_loss
-
-        return test_metrics
-
-    def _display_metrics(
-        self: Self,
-        phase: str,
-        epoch: int,
-        metrics: Dict[str, float],
-        writer: torch.utils.tensorboard.writer.SummaryWriter,
-    ) -> None:
-        """Receives data about the phase and epoch and prints out the metrics associated with them. 
-        It also saves the metrics' evolution throughout training/testing to a tensorboard writer.
-
-        Args:
-            phase (str): The current phase of "train" or "test".
-            epoch (int): The current epoch on "train" phase or total number of epochs on "test" phase.
-            metrics (Dict[str, float]): Dictionary containing the classification metrics and loss.
-            writer (torch.utils.tensorboard.writer.SummaryWriter):  
-                Tensorboard SummaryWriter object. If it is None then metrics will not be saved 
-                to tensorboard.
-
-        Raises:
-            ValueError: If the phase is not one of "train" or "test".
-        """
-        supported_phases = ["train", "test"]
-        if phase not in supported_phases:
-            raise ValueError(f"Phase {phase} not supported. Please choose between {supported_phases}")
-
-        # Print Metrics
-        print(f"{phase} || epoch: {epoch} | ", end="")
-
-        for key, metric in metrics.items():
-            print(f"{key}: {metric:.4f} | ", end="")
-        print()
-
-        # Save Metrics to Tensorboard
-        for key, metric in metrics.items():
-            writer.add_scalars(
-                main_tag=f"{phase}",
-                tag_scalar_dict={
-                    f"{key}": metric,
-                },
-                global_step=epoch
-            )
-        writer.close()
-
-    def train_model(
-        self: Self,
-    ) -> Dict[str, float]:
-        """Trains and tests a PyTorch model.
-
-        Passes a target PyTorch models through _train_step() function for a number of epochs.
-        When the training is done, passes the same updated model through _test_step() function,
-        to evaluate the model's performance on the test dataset.
-
-        Calculates, prints and stores evaluation metrics on training set throughout.
-
-        Stores metrics to specified writer in debug/runs/ folder and in the debug/metrics folder.
-
-        Returns:
-            Dict[str, float]: A dictionary containing the classification metrics, the loss for
-            the test dataset, and the time taken to train it. Example:
-                metrics = {
-                    "accuracy": 0.94,
-                    "precession": 0.80,
-                    "recall": 0.69,
-                    "fscore": 0.76,
-                    "loss": 0.18,
-                    "time": 0.18,
-                }
-        """
-        # Count model time
-        start_time = timer()
-
-        # Dataloaders
-        NUM_CORES = os.cpu_count()
-
-        train_dataloader = torch.utils.data.DataLoader(
-            dataset=self.train_dataset,
-            batch_size=self.batch_size,
-            shuffle=True,
-            num_workers=NUM_CORES if NUM_CORES is not None else 1,
-        )
-        test_dataloader = torch.utils.data.DataLoader(
-            dataset=self.test_dataset,
-            batch_size=self.batch_size,
-            shuffle=False,
-            num_workers=NUM_CORES if NUM_CORES is not None else 1,
-        )
-
-        # Create writer
-        writer = create_writer(timestamp_list=self.timestamp_list)
-
-        # Create model
-        model = self.model_obj.get_model()
-
-        # Create Optimizer
-        optimizer = GetOptimizer(
-            optimizer_name=self.optimizer_name,
-            params=model.parameters(),
-        ).get_optimizer()
-
-        for epoch in tqdm(range(self.num_epochs)):
-            train_metrics = self._train_step(
-                model=model,
-                dataloader=train_dataloader,
-                optimizer=optimizer,
-            )
-
-            self._display_metrics(
-                phase="train",
-                epoch=epoch,
-                metrics=train_metrics,
-                writer=writer
-            )
-
-        save_model(
-            model=model,
-            timestamp_list=self.timestamp_list,
-        )
-
-        test_metrics = self._test_step(
-            model=model,
-            dataloader=test_dataloader,
-        )
-        self._display_metrics(
-            phase="test",
-            epoch=self.num_epochs,
-            metrics=test_metrics,
-            writer=writer
-        )
-
-        end_time = timer()
-
-        metrics = test_metrics
-        metrics["time"] = end_time - start_time
-
-        save_metrics(
-            metrics=metrics,
-            timestamp_list=self.timestamp_list,
-        )
-
-        return metrics
-
-
-class KfoldSolver:
-    """Class that trains and tests a Pytorch model using k-fold cross validation
-
-    Args:
-        model_obj (GetModel): The model object to be trained and tested.
-        num_folds (int): Number of folds to be used in the cross validation.
-        num_epochs (int): Number of epochs to train the model.
-        batch_size (int): Number of samples per batch.
-        loss_fn (torch.nn.Module): Loss function to be used.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        device (torch.device): Device to be used to load the model.
-        train_dataset (torchvision.datasets.ImageFolder): Train dataset.
-        test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
-            Used for storage path.
-
-    Attributes:
-        model_obj (GetModel): The model object to be trained and tested.
-        num_folds (int): Number of folds to be used in the cross validation.
-        num_epochs (int): Number of epochs to train the model.
-        batch_size (int): Number of samples per batch.
-        loss_fn (torch.nn.Module): Loss function to be used.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        device (torch.device): Device to be used to load the model.
-        train_dataset (torchvision.datasets.ImageFolder): Train dataset.
-        test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.   
-
-    Methods:
-        _train_step: Trains a PyTorch model for one epoch.
-        _test_step: Tests a PyTorch model for one epoch.
-        _create_writer: Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to
-            a specific log_dir.
-        _display_metrics: Receives data about the phase and epoch and prints out the metrics while
-            saving them to a tensorboard writer.
         _average_metrics: Receives a dictionary of test results produced in each fold and produces
             another, which contains the average of each metric.
-        train_model: Trains and tests a PyTorch model.
+        train_model_kfold: Trains and tests a model using k-fold cross validation.
     """
 
     def __init__(
         self: Self,
         model_obj: GetModel,
-        num_folds: int,
         num_epochs: int,
         batch_size: int,
         loss_fn: torch.nn.Module,
@@ -393,6 +92,7 @@ class KfoldSolver:
         train_dataset: torchvision.datasets.ImageFolder,
         test_dataset: torchvision.datasets.ImageFolder,
         timestamp_list: List[str],
+        num_folds: Union[int, None] = None,
     ) -> None:
         """Initializes the Solver class."""
         self.model_obj = model_obj
@@ -519,27 +219,31 @@ class KfoldSolver:
     def _display_metrics(
         self: Self,
         phase: str,
-        fold: int,
         epoch: Union[int, None],
         metrics: Dict[str, float],
         writer: torch.utils.tensorboard.writer.SummaryWriter,
         global_step: int,
+        fold: Union[int, None] = None,
     ) -> None:
         """Receives data about the phase and epoch and prints out the metrics associated with them. 
         It also saves the metrics' evolution throughout training/testing to a tensorboard writer.
 
         Args:
             phase (str): The current phase of "train" or "test".
-            fold (int): The current fold.
-            epoch (Union[int, None]): The current epoch on "train" phase or None on "test" phase.
+            epoch (Union[int, None]): The current epoch. If it is None then it is a test phase 
+                of the k fold train.
             metrics (Dict[str, float]): Dictionary containing the classification metrics and loss.
             writer (torch.utils.tensorboard.writer.SummaryWriter):  
                 Tensorboard SummaryWriter object. If it is None then metrics will not be saved 
                 to tensorboard.
-            global_step (int): The global step for the SummaryWriter. 
+            global_step (int): The current global step. When simple train is used, it is the same
+                as the epoch. When k-fold cross validation is used, it alternates depending on the
+                phase.
+            fold (Union[int, None], optional): The current fold. If it is None then it is a simple
+                train.
 
         Raises:
-            ValueError: If the phase is not one of "train", "validation" or "test".
+            ValueError: If the phase is not one of "train" or "test".
         """
         supported_phases = ["train", "validation", "test"]
         if phase not in supported_phases:
@@ -548,15 +252,23 @@ class KfoldSolver:
         # Print Metrics
         epoch_text = f"epoch: {epoch} | " if epoch is not None else ""
 
-        print(f"{phase} || {epoch_text}", end="")
+        print(f"{phase} || {epoch_text} | ", end="")
 
         for key, metric in metrics.items():
             print(f"{key}: {metric:.4f} | ", end="")
         print()
 
         # Save Metrics to Tensorboard
-        if writer is not None and global_step is not None:
-            for key, metric in metrics.items():
+        for key, metric in metrics.items():
+            if fold is None:
+                writer.add_scalars(
+                    main_tag=f"{phase}",
+                    tag_scalar_dict={
+                        f"{key}": metric,
+                    },
+                    global_step=global_step,
+                )
+            else:
                 writer.add_scalars(
                     main_tag=f"{phase}_{key}",
                     tag_scalar_dict={
@@ -564,7 +276,110 @@ class KfoldSolver:
                     },
                     global_step=global_step
                 )
+
             writer.close()
+
+    def train_model(
+        self: Self,
+    ) -> Dict[str, float]:
+        """Trains and tests a PyTorch model.
+
+        Passes a target PyTorch models through _train_step() function for a number of epochs.
+        When the training is done, passes the same updated model through _test_step() function,
+        to evaluate the model's performance on the test dataset.
+
+        Calculates, prints and stores evaluation metrics on training set throughout.
+
+        Stores metrics to specified writer in debug/runs/ folder and in the debug/metrics folder.
+
+        Returns:
+            Dict[str, float]: A dictionary containing the classification metrics, the loss for
+            the test dataset, and the time taken to train it. Example:
+                metrics = {
+                    "accuracy": 0.94,
+                    "precession": 0.80,
+                    "recall": 0.69,
+                    "fscore": 0.76,
+                    "loss": 0.18,
+                    "time": 0.18,
+                }
+        """
+        # Count model time
+        start_time = timer()
+
+        # Dataloaders
+        NUM_CORES = os.cpu_count()
+
+        train_dataloader = torch.utils.data.DataLoader(
+            dataset=self.train_dataset,
+            batch_size=self.batch_size,
+            shuffle=True,
+            num_workers=NUM_CORES if NUM_CORES is not None else 1,
+        )
+        test_dataloader = torch.utils.data.DataLoader(
+            dataset=self.test_dataset,
+            batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=NUM_CORES if NUM_CORES is not None else 1,
+        )
+
+        # Create writer
+        writer = create_writer(timestamp_list=self.timestamp_list)
+
+        # Create model
+        model = self.model_obj.get_model()
+
+        # Create Optimizer
+        optimizer = GetOptimizer(
+            optimizer_name=self.optimizer_name,
+            params=model.parameters(),
+        ).get_optimizer()
+
+        for epoch in tqdm(range(self.num_epochs)):
+            train_metrics = self._train_step(
+                model=model,
+                dataloader=train_dataloader,
+                optimizer=optimizer,
+            )
+
+            self._display_metrics(
+                phase="train",
+                epoch=epoch,
+                metrics=train_metrics,
+                writer=writer,
+                global_step=epoch,
+            )
+
+        save_model(
+            model=model,
+            timestamp_list=self.timestamp_list,
+        )
+
+        test_metrics = self._test_step(
+            model=model,
+            dataloader=test_dataloader,
+        )
+        self._display_metrics(
+            phase="test",
+            epoch=self.num_epochs,
+            metrics=test_metrics,
+            writer=writer,
+            global_step=self.num_epochs,
+        )
+
+        end_time = timer()
+
+        metrics = test_metrics
+        metrics["time"] = end_time - start_time
+
+        save_metrics(
+            metrics=metrics,
+            timestamp_list=self.timestamp_list,
+        )
+
+        return metrics
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def _average_metrics(
         self: Self,
@@ -603,6 +418,9 @@ class KfoldSolver:
                         "time": 116,   
                     }
         """
+        if self.num_folds is None:
+            raise ValueError("num_folds must be specified")
+
         metrics_avg = {key: 0.0 for key in results[0]}
 
         for key, metrics_dict in results.items():
@@ -621,10 +439,10 @@ class KfoldSolver:
 
         return metrics_avg
 
-    def train_model(
+    def train_model_kfold(
         self: Self,
     ) -> Dict[str, float]:
-        """Trains and tests a PyTorch model.
+        """Trains and test a model using k-fold cross validation.
 
         Passes a target PyTorch models through _train_step() function for a number of epochs.
         When the training is done, passes the same updated model through _test_step() function,
@@ -646,6 +464,9 @@ class KfoldSolver:
                     "time": 0.18,
                 }
         """
+        if self.num_folds is None:
+            raise ValueError("num_folds must be specified")
+
         # Split data into k folds by shuffling the indices
         kf = KFold(n_splits=self.num_folds, shuffle=True)
 

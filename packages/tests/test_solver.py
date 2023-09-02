@@ -6,7 +6,7 @@ import torch.utils.data
 from torchvision.datasets import ImageFolder
 
 from packages.utils.models import GetModel
-from packages.utils.solver import KfoldSolver, Solver
+from packages.utils.solver import Solver
 from packages.utils.transforms import GetTransforms
 
 
@@ -19,7 +19,6 @@ def test_solver(
     train_dir: Path,
     test_dir: Path,
     transform_obj: GetTransforms,
-    root_dir: Path,
     timestamp_list: List[str],
 ) -> None:
 
@@ -43,8 +42,6 @@ def test_solver(
         optimizer_name=optimizer_name,
         train_dataset=train_dataset,
         test_dataset=test_dataset,
-        transform_name=transform_obj.transform_name,
-        root_dir=root_dir,
         timestamp_list=timestamp_list,
     )
 
@@ -61,7 +58,6 @@ def test_kfold_solver(
     train_dir: Path,
     test_dir: Path,
     transform_obj: GetTransforms,
-    root_dir: Path,
     timestamp_list: List[str],
 ) -> None:
 
@@ -76,7 +72,7 @@ def test_kfold_solver(
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
-    solver = KfoldSolver(
+    solver = Solver(
         model_obj=model_obj,
         device=device,
         num_folds=num_folds,
@@ -86,9 +82,7 @@ def test_kfold_solver(
         optimizer_name=optimizer_name,
         train_dataset=train_dataset,
         test_dataset=test_dataset,
-        transform_name=transform_obj.transform_name,
-        root_dir=root_dir,
         timestamp_list=timestamp_list,
     )
 
-    solver.train_model()
+    solver.train_model_kfold()
