@@ -4,14 +4,12 @@ from pathlib import Path
 
 import torch
 import torch.backends.mps
-import torchvision.datasets as datasets
 
 from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_train import test_train
 from packages.utils.configuration import GetModel
-from packages.utils.solver import Solver
 from packages.utils.storage import save_results
 from packages.utils.transforms import GetTransforms
 
