@@ -81,10 +81,7 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")  # Defaults to CPU if NVIDIA GPU/Apple GPU aren't available
 
-    print(f"[INFO] Using {device} device")
-
     # * Setup hyper-parameters
-
     test_names = ["evaluate", "transform", "solver", "kfold_solver"]
     if args.tn not in test_names:
         raise ValueError(f"Test name must be one of {test_names}")
@@ -126,13 +123,13 @@ if __name__ == "__main__":
     test_dir = data_dir / "test"
     results_dir = data_dir / "results"
 
-    print(f"[INFO] Training data file: {train_dir}")
-    print(f"[INFO] Testing data file: {test_dir}")
-    print(f"[INFO] Results data file: {results_dir}")
+    print(f"[INFO] Training data dir: {train_dir}")
+    print(f"[INFO] Testing data dir: {test_dir}")
+    print(f"[INFO] Results data dir: {results_dir}")
 
     # Models
-    models_path = root_dir / "models"
-    print(f"[INFO] Models path: {models_path}")
+    models_dir = root_dir / "models"
+    print(f"[INFO] Models dir: {models_dir}")
 
     # Test Model Path
     test_model_path = root_dir / "debug" / "test_model"
@@ -143,48 +140,19 @@ if __name__ == "__main__":
     else:
         NUM_WORKERS = os.cpu_count()
 
-    print(f"[INFO] Using {NUM_WORKERS} workers to load data")
+    print(f"[INFO] Using {NUM_WORKERS} workers to load data.")
 
     # * Run tests
-
     experiment_names = {
-        "train": "test_train",
+        "solver": "test_solver",
+        "kfold": "test_kfold",
         "evaluate": "test_model",
         "transform": "test_data",
-        "kfold": "test_kfold"
     }
 
-    print(f"[INFO] Running {TEST_NAME} test")
+    print(f"[INFO] Running {TEST_NAME} test.")
 
-    if TEST_NAME == "evaluate":
-        experiment_name = experiment_names[TEST_NAME]
-
-        metrics, infos, experiment_done = test_model(
-            model_obj=model_obj,
-            test_dir=results_dir,
-            num_fold=NUM_FOLDS,
-            num_epochs=NUM_EPOCHS,
-            batch_size=BATCH_SIZE,
-            models_path=models_path,
-            num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
-            test_model_path=test_model_path,
-            transform_obj=transform_obj,
-        )
-
-        save_results(
-            root_dir=root_dir,
-            models_name=model_obj.model_name,
-            experiment_name=experiment_name,
-            transform_name=transform_obj.transform_name,
-            extra=infos,
-            metrics=metrics
-        )
-    elif TEST_NAME == "transform":
-        test_transform(
-            data_dir=data_dir,
-            transform_obj=transform_obj
-        )
-    elif TEST_NAME == "solver":
+    if TEST_NAME == "solver":
         test_solver(
             model_obj=model_obj,
             device=device,
@@ -208,4 +176,32 @@ if __name__ == "__main__":
             test_dir=test_dir,
             transform_obj=transform_obj,
             root_dir=root_dir,
+        )
+    elif TEST_NAME == "evaluate":
+        experiment_name = experiment_names[TEST_NAME]
+
+        metrics, infos, experiment_done = test_model(
+            model_obj=model_obj,
+            test_dir=results_dir,
+            num_fold=NUM_FOLDS,
+            num_epochs=NUM_EPOCHS,
+            batch_size=BATCH_SIZE,
+            models_dir=models_dir,
+            num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
+            test_model_path=test_model_path,
+            transform_obj=transform_obj,
+        )
+
+        save_results(
+            root_dir=root_dir,
+            models_name=model_obj.model_name,
+            experiment_name=experiment_name,
+            transform_name=transform_obj.transform_name,
+            extra=infos,
+            metrics=metrics
+        )
+    elif TEST_NAME == "transform":
+        test_transform(
+            data_dir=data_dir,
+            transform_obj=transform_obj
         )

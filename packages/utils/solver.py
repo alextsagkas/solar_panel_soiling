@@ -31,7 +31,7 @@ class Solver:
     """Class that trains and tests a Pytorch model
 
     Args:
-        model (torch.nn.Module): The model to be trained and tested.
+        model_obj (GetModel): The model object to be trained and tested.
         device (torch.device): device to be used to load the model.
         num_epochs (int): number of epochs to train the model.
         batch_size (int): number of samples per batch.
@@ -44,9 +44,7 @@ class Solver:
 
     Attributes:
         experiment_name (str): Name of the experiment ("test_train").
-        model (torch.nn.Module): The model to be trained and tested.
-        model_name (str): String corresponds to the model's class name (used for storage 
-            path identification).
+        model_obj (GetModel): The model object to be trained and tested.
         num_epochs (int): Number of epochs to train the model.
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
@@ -73,7 +71,7 @@ class Solver:
 
     def __init__(
         self: Self,
-        model: torch.nn.Module,
+        model_obj: GetModel,
         device: torch.device,
         num_epochs: int,
         batch_size: int,
@@ -87,7 +85,7 @@ class Solver:
         """Initializes the Solver class.
 
         Args:
-            model (torch.nn.Module): The model to be trained and tested.
+            model_obj (GetModel): The model object to be trained and tested.
             device (torch.device): Device to be used to load the model.
             num_epochs (int): Number of epochs to train the model.
             batch_size (int): Number of samples per batch.
@@ -99,9 +97,9 @@ class Solver:
             root_dir (Path): Path to the root directory.
         """
         self.experiment_name = "test_train"
-        self.model = model
+        self.model_obj = model_obj
         # Get the model name from the model's class
-        self.model_name = str(self.model.__class__).split(".")[-1].replace("'>", "").lower()
+        self.model_name = model_obj.model_name
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.loss_fn = loss_fn
@@ -118,16 +116,16 @@ class Solver:
         # Extra
         self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
 
-        print(f"[INFO] Using {self.model_name} model.")
-
     def _train_step(
         self: Self,
+        model: torch.nn.Module,
         optimizer: torch.optim.Optimizer,
         dataloader: torch.utils.data.DataLoader,
     ) -> Dict[str, float]:
         """Trains a PyTorch model for one epoch.
 
         Args:
+            model (torch.nn.Module): The model to be trained.
             optimizer (torch.optim.Optimizer): Optimizer to be used.
             dataloader (torch.utils.data.DataLoader): Train DataLoader.
 
@@ -141,7 +139,7 @@ class Solver:
                     "loss": 0.18,
                 }
         """
-        self.model.train()
+        model.train()
 
         train_loss = 0
         train_metrics = {
@@ -154,7 +152,7 @@ class Solver:
         for X, y in dataloader:
             X, y = X.to(self.device), y.to(self.device)
 
-            y_pred = self.model(X)
+            y_pred = model(X)
 
             loss = self.loss_fn(y_pred, y)
             train_loss += loss.item()
@@ -178,11 +176,13 @@ class Solver:
 
     def _test_step(
         self: Self,
+        model: torch.nn.Module,
         dataloader: torch.utils.data.DataLoader,
     ) -> Dict[str, float]:
         """Tests a PyTorch model for one epoch.
 
         Args:
+            model (torch.nn.Module): The model to be tested.
             dataloader (torch.utils.data.DataLoader): Test DataLoader.
 
         Returns:
@@ -195,7 +195,7 @@ class Solver:
                     "loss": 0.18,
                 }
         """
-        self.model.eval()
+        model.eval()
 
         test_loss = 0
         test_metrics = {
@@ -208,7 +208,7 @@ class Solver:
         with torch.inference_mode():
             for X, y in dataloader:
                 X, y = X.to(self.device), y.to(self.device)
-                test_pred_logits = self.model(X)
+                test_pred_logits = model(X)
 
                 test_loss += self.loss_fn(test_pred_logits, y)
 
@@ -347,14 +347,18 @@ class Solver:
         # Create writer
         writer = self._create_writer()
 
+        # Create model
+        model = self.model_obj.get_model()
+
         # Create Optimizer
         optimizer = GetOptimizer(
             optimizer_name=self.optimizer_name,
-            params=self.model.parameters(),
+            params=model.parameters(),
         ).get_optimizer()
 
         for epoch in tqdm(range(self.num_epochs)):
             train_metrics = self._train_step(
+                model=model,
                 dataloader=train_dataloader,
                 optimizer=optimizer,
             )
@@ -367,7 +371,7 @@ class Solver:
             )
 
         save_model(
-            model=self.model,
+            model=model,
             models_path=self.models_dir,
             model_name=self.model_name,
             experiment_name=self.experiment_name,
@@ -376,6 +380,7 @@ class Solver:
         )
 
         test_metrics = self._test_step(
+            model=model,
             dataloader=test_dataloader,
         )
         self._display_metrics(
@@ -497,8 +502,6 @@ class KfoldSolver:
         self.transform_name = transform_name
         # Extra
         self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
-
-        print(f"[INFO] Using {self.model_name} model.")
 
     def _train_step(
         self: Self,

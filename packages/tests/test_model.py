@@ -17,7 +17,7 @@ def test_model(
     num_fold: int,
     num_epochs: int,
     batch_size: int,
-    models_path: Path,
+    models_dir: Path,
     num_workers: int,
     test_model_path: Path,
     transform_obj: GetTransforms,
@@ -30,7 +30,7 @@ def test_model(
         num_fold (int): Number of the fold (-1 if not k-fold).
         num_epochs (int): Number of epochs.
         batch_size (int): Batch size.
-        models_path (Path): Path to the models.
+        models_dir (Path): Path to the models.
         num_workers (int): Number of workers.
         test_model_path (Path): Path where to save the results of the test.
         transform_obj (GetTransforms): Transform object to use for the data.
@@ -48,7 +48,7 @@ def test_model(
     else:
         EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs"
         EXPERIMENT_DONE = "test_kfold"
-    MODEL_SAVE_DIR = models_path / model_obj.model_name / EXPERIMENT_DONE / transform_obj.transform_name
+    MODEL_SAVE_DIR = models_dir / model_obj.model_name / EXPERIMENT_DONE / transform_obj.transform_name
     MODEL_SAVE_NAME = EXTRA + ".pth"
 
     model = model_obj.get_model()

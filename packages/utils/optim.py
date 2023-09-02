@@ -4,8 +4,6 @@ import torch.optim
 from torch import optim
 from typing_extensions import Self
 
-from packages.models.tiny_vgg import TinyVGG
-
 
 class GetOptimizer:
     """Class that returns an optimizer based on the optimizer_name parameter. The list of available

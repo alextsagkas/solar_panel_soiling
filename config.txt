@@ -1,1 +1,1 @@
-Namespace(tn='kfold_solver', mn='tiny_vgg', f=2, e=1, bs=32, hu=10, on='adam', lr=0.001, tr='trivial')
+Namespace(tn='solver', mn='tiny_vgg', f=2, e=1, bs=32, hu=10, on='adam', lr=0.001, tr='simple')

@@ -33,7 +33,7 @@ def test_solver(
     loss_fn = torch.nn.CrossEntropyLoss()
 
     solver = Solver(
-        model=model_obj.get_model(),
+        model_obj=model_obj,
         device=device,
         num_epochs=num_epochs,
         batch_size=batch_size,
