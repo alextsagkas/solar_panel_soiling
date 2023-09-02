@@ -1,20 +1,18 @@
 import os
-from datetime import datetime
-from pathlib import Path
-from typing import Union
+from typing import List
 
 import torch
 import torch.utils.tensorboard
 from torch.utils.tensorboard.writer import SummaryWriter
 
+from packages.utils.configuration import tensorboard_dir
+
 
 def create_writer(
-    experiment_name: str,
-    model_name: str,
-    transform_name: str,
-    extra: Union[str, None] = None
+    timestamp_list: List[str],
 ) -> torch.utils.tensorboard.writer.SummaryWriter:
-    """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to a specific log_dir.
+    """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to the directory:
+    debug/runs/YYYY-MM-DD/HH-MM-SS/"
 
     log_dir is a combination of runs/timestamp/experiment_name/model_name/transform_name/extra.
 
@@ -30,17 +28,10 @@ def create_writer(
         torch.utils.tensorboard.writer.SummaryWriter(): Instance of a writer saving to log_dir.
     """
 
-    path = Path("/Users/alextsagkas/Document/Office/solar_panels/debug/runs")
-    os.makedirs(path, exist_ok=True)
+    # Create tensorboard directory if it doesn't exist
+    tensorboard_dir.mkdir(exist_ok=True, parents=True)
 
-    # Get timestamp of current date (all experiments on certain day live in same folder)
-    timestamp = datetime.now().strftime("%Y-%m-%d")  # returns current date in YYYY-MM-DD format
-
-    if extra:
-        # Create log directory path
-        log_dir = os.path.join(path, timestamp, model_name, experiment_name, transform_name, extra)
-    else:
-        log_dir = os.path.join(path, timestamp, model_name, experiment_name, transform_name)
+    log_dir = os.path.join(tensorboard_dir, *timestamp_list)
 
     print(f"[INFO] Created SummaryWriter, saving to: {log_dir}")
 

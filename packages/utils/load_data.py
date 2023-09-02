@@ -10,6 +10,8 @@ from PIL import Image
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
+from packages.utils.configuration import data_transforms_dir
+
 
 def plot_transformed_images(
         image_paths: list[Path],
@@ -39,7 +41,7 @@ def plot_transformed_images(
     random_image_paths = random.sample(image_paths, k=n)
 
     # Create folder to store results
-    debug_folder = image_paths[0].parents[3] / "debug" / "data_transforms" / transform_name
+    debug_folder = data_transforms_dir / transform_name
     os.makedirs(debug_folder, exist_ok=True)
 
     print(f"[INFO] Saving transformed images to {debug_folder} folder")

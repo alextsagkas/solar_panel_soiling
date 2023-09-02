@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 from pathlib import Path
 from timeit import default_timer as timer
-from typing import Dict, Union
+from typing import Dict, List, Union
 
 import numpy as np
 import torch
@@ -22,9 +22,11 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 from typing_extensions import Self
 
+from packages.utils.configuration import models_dir
 from packages.utils.models import GetModel
 from packages.utils.optim import GetOptimizer
-from packages.utils.storage import save_model, save_results
+from packages.utils.storage import save_metrics, save_model
+from packages.utils.tensorboard import create_writer
 
 
 class Solver:
@@ -32,32 +34,26 @@ class Solver:
 
     Args:
         model_obj (GetModel): The model object to be trained and tested.
-        device (torch.device): device to be used to load the model.
         num_epochs (int): number of epochs to train the model.
         batch_size (int): number of samples per batch.
         loss_fn (torch.nn.module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
+        device (torch.device): device to be used to load the model.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        transform_name (str): String that identifies the transform to be used.
-        root_dir (Path): Path to the root directory.
+        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
+            Used for storage path.
 
     Attributes:
-        experiment_name (str): Name of the experiment ("test_train").
         model_obj (GetModel): The model object to be trained and tested.
         num_epochs (int): Number of epochs to train the model.
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
         device (torch.device): Device to be used to load the model.
-        root_dir (Path): Path to the root directory.
-        models_dir (Path): Path to the models directory.
-        test_model_dir (Path): Path to the test model directory.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        transform_name (str): String that identifies the transform to be used.
-        extra (str): String that contains the number of epochs, batch size and learning rate (used
-            for storage path identification).
+        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
 
     Methods:
         _train_step: Trains a PyTorch model for one epoch.
@@ -72,49 +68,27 @@ class Solver:
     def __init__(
         self: Self,
         model_obj: GetModel,
-        device: torch.device,
         num_epochs: int,
         batch_size: int,
         loss_fn: torch.nn.Module,
         optimizer_name: str,
+        device: torch.device,
         train_dataset: torchvision.datasets.ImageFolder,
         test_dataset: torchvision.datasets.ImageFolder,
-        transform_name: str,
-        root_dir: Path,
+        timestamp_list: List[str],
     ) -> None:
-        """Initializes the Solver class.
-
-        Args:
-            model_obj (GetModel): The model object to be trained and tested.
-            device (torch.device): Device to be used to load the model.
-            num_epochs (int): Number of epochs to train the model.
-            batch_size (int): Number of samples per batch.
-            loss_fn (torch.nn.Module): Loss function to be used.
-            optimizer_name (str): String that identifies the optimizer to be used.
-            train_dataset (torchvision.datasets.ImageFolder): Train dataset.
-            test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-            transform_name (str): String that identifies the transform to be used.
-            root_dir (Path): Path to the root directory.
-        """
-        self.experiment_name = "test_train"
+        """Initializes the Solver class."""
         self.model_obj = model_obj
-        # Get the model name from the model's class
-        self.model_name = model_obj.model_name
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.loss_fn = loss_fn
         self.optimizer_name = optimizer_name
         self.device = device
-        # Paths
-        self.root_dir = root_dir
-        self.models_dir = self.root_dir / "models"
-        self.test_model_dir = self.models_dir / "test_model"
         # Datasets
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
-        self.transform_name = transform_name
         # Extra
-        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
+        self.timestamp_list = timestamp_list
 
     def _train_step(
         self: Self,
@@ -224,38 +198,6 @@ class Solver:
         test_metrics["loss"] = test_loss
 
         return test_metrics
-
-    def _create_writer(
-        self: Self,
-    ) -> torch.utils.tensorboard.writer.SummaryWriter:
-        """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to a specific log_dir.
-
-        log_dir is a combination of runs/timestamp/model_nam/experiment_name/transform_name/extra.
-
-        Where timestamp is the current date in YYYY-MM-DD format.
-
-        Returns:
-            torch.utils.tensorboard.writer.SummaryWriter(): Instance of a writer saving to log_dir.
-        """
-
-        path = self.root_dir / "debug" / "runs"
-        os.makedirs(path, exist_ok=True)
-
-        # Get timestamp of current date (all experiments on certain day live in same folder)
-        timestamp = datetime.now().strftime("%Y-%m-%d")  # returns current date in YYYY-MM-DD format
-
-        log_dir = os.path.join(
-            path,
-            timestamp,
-            self.model_name,
-            self.experiment_name,
-            self.transform_name,
-            self.extra
-        )
-
-        print(f"[INFO] Created SummaryWriter, saving to: {log_dir}")
-
-        return SummaryWriter(log_dir=log_dir)
 
     def _display_metrics(
         self: Self,
@@ -311,7 +253,7 @@ class Solver:
 
         Calculates, prints and stores evaluation metrics on training set throughout.
 
-        Stores metrics to specified writer in debug/runs/folder and in the debug/metrics folder.
+        Stores metrics to specified writer in debug/runs/ folder and in the debug/metrics folder.
 
         Returns:
             Dict[str, float]: A dictionary containing the classification metrics, the loss for
@@ -345,7 +287,7 @@ class Solver:
         )
 
         # Create writer
-        writer = self._create_writer()
+        writer = create_writer(timestamp_list=self.timestamp_list)
 
         # Create model
         model = self.model_obj.get_model()
@@ -372,11 +314,7 @@ class Solver:
 
         save_model(
             model=model,
-            models_path=self.models_dir,
-            model_name=self.model_name,
-            experiment_name=self.experiment_name,
-            transform_name=self.transform_name,
-            extra=self.extra,
+            timestamp_list=self.timestamp_list,
         )
 
         test_metrics = self._test_step(
@@ -395,13 +333,9 @@ class Solver:
         metrics = test_metrics
         metrics["time"] = end_time - start_time
 
-        save_results(
-            root_dir=self.root_dir,
-            models_name=self.model_name,
-            experiment_name=self.experiment_name,
-            transform_name=self.transform_name,
-            extra=self.extra,
+        save_metrics(
             metrics=metrics,
+            timestamp_list=self.timestamp_list,
         )
 
         return metrics
@@ -412,34 +346,28 @@ class KfoldSolver:
 
     Args:
         model_obj (GetModel): The model object to be trained and tested.
-        device (torch.device): Device to be used to load the model.
         num_folds (int): Number of folds to be used in the cross validation.
         num_epochs (int): Number of epochs to train the model.
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
+        device (torch.device): Device to be used to load the model.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        transform_name (str): String that identifies the transform to be used.
-        root_dir (Path): Path to the root directory.
+        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
+            Used for storage path.
 
     Attributes:
-        experiment_name (str): Name of the experiment ("test_train").
         model_obj (GetModel): The model object to be trained and tested.
-        model_name (str): String corresponds to the model's class name (used for storage 
-            path identification).
         num_folds (int): Number of folds to be used in the cross validation.
         num_epochs (int): Number of epochs to train the model.
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
         device (torch.device): Device to be used to load the model.
-        root_dir (Path): Path to the root directory.
-        models_dir (Path): Path to the models directory.
-        test_model_dir (Path): Path to the test model directory.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        transform_name (str): String that identifies the transform to be used.
+        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.   
 
     Methods:
         _train_step: Trains a PyTorch model for one epoch.
@@ -456,52 +384,29 @@ class KfoldSolver:
     def __init__(
         self: Self,
         model_obj: GetModel,
-        device: torch.device,
         num_folds: int,
         num_epochs: int,
         batch_size: int,
         loss_fn: torch.nn.Module,
         optimizer_name: str,
+        device: torch.device,
         train_dataset: torchvision.datasets.ImageFolder,
         test_dataset: torchvision.datasets.ImageFolder,
-        transform_name: str,
-        root_dir: Path,
+        timestamp_list: List[str],
     ) -> None:
-        """Initializes the KfoldSolver class.
-
-        Args:
-            model_obj (GetModel): The model object to be trained and tested.
-            device (torch.device): Device to be used to load the model.
-            num_folds (int): Number of folds to be used in the cross validation.
-            num_epochs (int): Number of epochs to train the model.
-            batch_size (int): Number of samples per batch.
-            loss_fn (torch.nn.Module): Loss function to be used.
-            optimizer_name (str): String that identifies the optimizer to be used.
-            train_dataset (torchvision.datasets.ImageFolder): Train dataset.
-            test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-            transform_name (str): String that identifies the transform to be used.
-            root_dir (Path): Path to the root directory.
-        """
-        self.experiment_name = "test_kfold"
+        """Initializes the Solver class."""
         self.model_obj = model_obj
-        # Get the model name from the model's class
-        self.model_name = model_obj.model_name
         self.num_folds = num_folds
         self.num_epochs = num_epochs
         self.batch_size = batch_size
         self.loss_fn = loss_fn
         self.optimizer_name = optimizer_name
         self.device = device
-        # Paths
-        self.root_dir = root_dir
-        self.models_dir = self.root_dir / "models"
-        self.test_model_dir = self.models_dir / "test_model"
         # Datasets
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
-        self.transform_name = transform_name
         # Extra
-        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
+        self.timestamp_list = timestamp_list
 
     def _train_step(
         self: Self,
@@ -610,38 +515,6 @@ class KfoldSolver:
         test_metrics["loss"] = test_loss
 
         return test_metrics
-
-    def _create_writer(
-        self: Self,
-    ) -> torch.utils.tensorboard.writer.SummaryWriter:
-        """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to a specific log_dir.
-
-        log_dir is a combination of runs/timestamp/model_nam/experiment_name/transform_name/extra.
-
-        Where timestamp is the current date in YYYY-MM-DD format.
-
-        Returns:
-            torch.utils.tensorboard.writer.SummaryWriter(): Instance of a writer saving to log_dir.
-        """
-
-        path = self.root_dir / "debug" / "runs"
-        os.makedirs(path, exist_ok=True)
-
-        # Get timestamp of current date (all experiments on certain day live in same folder)
-        timestamp = datetime.now().strftime("%Y-%m-%d")  # returns current date in YYYY-MM-DD format
-
-        log_dir = os.path.join(
-            path,
-            timestamp,
-            self.model_name,
-            self.experiment_name,
-            self.transform_name,
-            self.extra
-        )
-
-        print(f"[INFO] Created SummaryWriter, saving to: {log_dir}")
-
-        return SummaryWriter(log_dir=log_dir)
 
     def _display_metrics(
         self: Self,
@@ -787,7 +660,7 @@ class KfoldSolver:
         )
 
         # Create writer
-        writer = self._create_writer()
+        writer = create_writer(timestamp_list=self.timestamp_list)
 
         for fold, (train_idx, validation_idx) in enumerate(kf.split(train_indices)):
             print(f"\nFold {fold}")
@@ -848,14 +721,11 @@ class KfoldSolver:
                 )
 
             # Save the model for the current fold
-            EXTRA = f"{fold}_f_{self.num_epochs}_e_{self.batch_size}_bs"
+            EXTRA = f"{fold}_f"
 
             save_model(
                 model=model,
-                models_path=self.models_dir,
-                model_name=self.model_obj.model_name,
-                experiment_name=self.experiment_name,
-                transform_name=self.transform_name,
+                timestamp_list=self.timestamp_list,
                 extra=EXTRA,
             )
 
@@ -887,13 +757,9 @@ class KfoldSolver:
             results=results,
         )
 
-        save_results(
-            root_dir=self.root_dir,
-            models_name=self.model_name,
-            experiment_name=self.experiment_name,
-            transform_name=self.transform_name,
-            extra=self.extra,
+        save_metrics(
             metrics=metrics_avg,
+            timestamp_list=self.timestamp_list,
         )
 
         return metrics_avg

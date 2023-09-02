@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 
 import torch
 import torch.utils.data
@@ -19,6 +20,7 @@ def test_solver(
     test_dir: Path,
     transform_obj: GetTransforms,
     root_dir: Path,
+    timestamp_list: List[str],
 ) -> None:
 
     train_dataset = ImageFolder(
@@ -43,6 +45,7 @@ def test_solver(
         test_dataset=test_dataset,
         transform_name=transform_obj.transform_name,
         root_dir=root_dir,
+        timestamp_list=timestamp_list,
     )
 
     solver.train_model()
@@ -59,6 +62,7 @@ def test_kfold_solver(
     test_dir: Path,
     transform_obj: GetTransforms,
     root_dir: Path,
+    timestamp_list: List[str],
 ) -> None:
 
     train_dataset = ImageFolder(
@@ -84,6 +88,7 @@ def test_kfold_solver(
         test_dataset=test_dataset,
         transform_name=transform_obj.transform_name,
         root_dir=root_dir,
+        timestamp_list=timestamp_list,
     )
 
     solver.train_model()
