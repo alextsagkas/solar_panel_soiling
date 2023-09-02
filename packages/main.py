@@ -7,6 +7,7 @@ import torch.backends.mps
 
 from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
+from packages.tests.test_kfold_solver import test_solver as test_kfold_solver
 from packages.tests.test_model import test_model
 from packages.tests.test_solver import test_solver
 from packages.tests.test_train import test_train
@@ -90,7 +91,7 @@ if __name__ == "__main__":
 
     # * Setup hyper-parameters
 
-    test_names = ["train", "evaluate", "transform", "kfold", "solver"]
+    test_names = ["train", "evaluate", "transform", "kfold", "solver", "kfold_solver"]
     if args.tn not in test_names:
         raise ValueError(f"Test name must be one of {test_names}")
     else:
@@ -245,6 +246,20 @@ if __name__ == "__main__":
         test_solver(
             model_obj=model_obj,
             device=device,
+            num_epochs=NUM_EPOCHS,
+            batch_size=BATCH_SIZE,
+            optimizer_name=args.on,
+            learning_rate=args.lr,
+            train_dir=train_dir,
+            test_dir=test_dir,
+            transform_obj=transform_obj,
+            root_dir=root_dir,
+        )
+    elif TEST_NAME == "kfold_solver":
+        test_kfold_solver(
+            model_obj=model_obj,
+            device=device,
+            num_folds=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
             optimizer_name=args.on,

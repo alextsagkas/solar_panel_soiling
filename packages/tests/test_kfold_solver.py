@@ -5,13 +5,14 @@ import torch.utils.data
 from torchvision.datasets import ImageFolder
 
 from packages.utils.configuration import GetModel
-from packages.utils.solver import Solver
+from packages.utils.solver import KfoldSolver
 from packages.utils.transforms import GetTransforms
 
 
 def test_solver(
     model_obj: GetModel,
     device: torch.device,
+    num_folds: int,
     num_epochs: int,
     batch_size: int,
     optimizer_name: str,
@@ -33,9 +34,10 @@ def test_solver(
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
-    solver = Solver(
-        model=model_obj.get_model(),
+    solver = KfoldSolver(
+        model_obj=model_obj,
         device=device,
+        num_folds=num_folds,
         num_epochs=num_epochs,
         batch_size=batch_size,
         loss_fn=loss_fn,
