@@ -8,7 +8,7 @@ import torch.backends.mps
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_solvers import test_kfold_solver, test_solver
-from packages.utils.configuration import GetModel
+from packages.utils.models import GetModel
 from packages.utils.storage import save_results
 from packages.utils.transforms import GetTransforms
 
@@ -93,7 +93,6 @@ if __name__ == "__main__":
 
     model_obj = GetModel(
         model_name=args.mn,
-        hidden_units=args.hu,
         device=device,
     )
 

@@ -5,9 +5,9 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import GetModel
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
+from packages.utils.models import GetModel
 from packages.utils.transforms import GetTransforms
 
 

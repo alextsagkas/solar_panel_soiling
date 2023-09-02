@@ -22,7 +22,8 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 from typing_extensions import Self
 
-from packages.utils.configuration import GetModel, GetOptimizer
+from packages.utils.models import GetModel
+from packages.utils.optim import GetOptimizer
 from packages.utils.storage import save_model, save_results
 
 

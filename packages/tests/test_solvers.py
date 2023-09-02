@@ -4,7 +4,7 @@ import torch
 import torch.utils.data
 from torchvision.datasets import ImageFolder
 
-from packages.utils.configuration import GetModel
+from packages.utils.models import GetModel
 from packages.utils.solver import KfoldSolver, Solver
 from packages.utils.transforms import GetTransforms
 
