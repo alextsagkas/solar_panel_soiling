@@ -8,6 +8,7 @@ import torch.backends.mps
 from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
+from packages.tests.test_solver import test_solver
 from packages.tests.test_train import test_train
 from packages.utils.configuration import GetModel
 from packages.utils.storage import save_results
@@ -89,7 +90,7 @@ if __name__ == "__main__":
 
     # * Setup hyper-parameters
 
-    test_names = ["train", "evaluate", "transform", "kfold"]
+    test_names = ["train", "evaluate", "transform", "kfold", "solver"]
     if args.tn not in test_names:
         raise ValueError(f"Test name must be one of {test_names}")
     else:
@@ -103,7 +104,7 @@ if __name__ == "__main__":
 
     if args.f < 2 and args.tn in ["kfold"]:
         raise ValueError("Number of folds must be greater than 1")
-    elif args.f == -1 or args.tn in ["train"]:
+    elif args.f == -1 or args.tn in ["train", "solver"]:
         folds_text = ""
         NUM_FOLDS = -1
     else:
@@ -239,4 +240,17 @@ if __name__ == "__main__":
         test_transform(
             data_dir=data_dir,
             transform_obj=transform_obj
+        )
+    elif TEST_NAME == "solver":
+        test_solver(
+            model_obj=model_obj,
+            device=device,
+            num_epochs=NUM_EPOCHS,
+            batch_size=BATCH_SIZE,
+            optimizer_name=args.on,
+            learning_rate=args.lr,
+            train_dir=train_dir,
+            test_dir=test_dir,
+            transform_obj=transform_obj,
+            root_dir=root_dir,
         )
