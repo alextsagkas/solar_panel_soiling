@@ -36,7 +36,6 @@ class Solver:
         batch_size (int): number of samples per batch.
         loss_fn (torch.nn.module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float): Learning rate to be used by the optimizer.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
         transform_name (str): String that identifies the transform to be used.
@@ -51,7 +50,6 @@ class Solver:
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float): Learning rate to be used by the optimizer.
         device (torch.device): Device to be used to load the model.
         root_dir (Path): Path to the root directory.
         models_dir (Path): Path to the models directory.
@@ -80,7 +78,6 @@ class Solver:
         batch_size: int,
         loss_fn: torch.nn.Module,
         optimizer_name: str,
-        learning_rate: float,
         train_dataset: torchvision.datasets.ImageFolder,
         test_dataset: torchvision.datasets.ImageFolder,
         transform_name: str,
@@ -95,7 +92,6 @@ class Solver:
             batch_size (int): Number of samples per batch.
             loss_fn (torch.nn.Module): Loss function to be used.
             optimizer_name (str): String that identifies the optimizer to be used.
-            learning_rate (float): Learning rate to be used by the optimizer.
             train_dataset (torchvision.datasets.ImageFolder): Train dataset.
             test_dataset (torchvision.datasets.ImageFolder): Test dataset.
             transform_name (str): String that identifies the transform to be used.
@@ -109,7 +105,6 @@ class Solver:
         self.batch_size = batch_size
         self.loss_fn = loss_fn
         self.optimizer_name = optimizer_name
-        self.learning_rate = learning_rate
         self.device = device
         # Paths
         self.root_dir = root_dir
@@ -120,7 +115,7 @@ class Solver:
         self.test_dataset = test_dataset
         self.transform_name = transform_name
         # Extra
-        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs_{self.learning_rate}_lr"
+        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
 
         print(f"[INFO] Using {self.model_name} model.")
 
@@ -354,8 +349,7 @@ class Solver:
         # Create Optimizer
         optimizer = GetOptimizer(
             optimizer_name=self.optimizer_name,
-            model=self.model,
-            learning_rate=self.learning_rate,
+            params=self.model.parameters(),
         ).get_optimizer()
 
         for epoch in tqdm(range(self.num_epochs)):
@@ -418,7 +412,6 @@ class KfoldSolver:
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float): Learning rate to be used by the optimizer.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
         transform_name (str): String that identifies the transform to be used.
@@ -434,7 +427,6 @@ class KfoldSolver:
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
-        learning_rate (float): Learning rate to be used by the optimizer.
         device (torch.device): Device to be used to load the model.
         root_dir (Path): Path to the root directory.
         models_dir (Path): Path to the models directory.
@@ -464,7 +456,6 @@ class KfoldSolver:
         batch_size: int,
         loss_fn: torch.nn.Module,
         optimizer_name: str,
-        learning_rate: float,
         train_dataset: torchvision.datasets.ImageFolder,
         test_dataset: torchvision.datasets.ImageFolder,
         transform_name: str,
@@ -480,7 +471,6 @@ class KfoldSolver:
             batch_size (int): Number of samples per batch.
             loss_fn (torch.nn.Module): Loss function to be used.
             optimizer_name (str): String that identifies the optimizer to be used.
-            learning_rate (float): Learning rate to be used by the optimizer.
             train_dataset (torchvision.datasets.ImageFolder): Train dataset.
             test_dataset (torchvision.datasets.ImageFolder): Test dataset.
             transform_name (str): String that identifies the transform to be used.
@@ -495,7 +485,6 @@ class KfoldSolver:
         self.batch_size = batch_size
         self.loss_fn = loss_fn
         self.optimizer_name = optimizer_name
-        self.learning_rate = learning_rate
         self.device = device
         # Paths
         self.root_dir = root_dir
@@ -506,7 +495,7 @@ class KfoldSolver:
         self.test_dataset = test_dataset
         self.transform_name = transform_name
         # Extra
-        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs_{self.learning_rate}_lr"
+        self.extra = f"{self.num_epochs}_e_{self.batch_size}_bs"
 
         print(f"[INFO] Using {self.model_name} model.")
 
@@ -819,9 +808,8 @@ class KfoldSolver:
 
             # Initialize the optimizer
             optimizer = GetOptimizer(
-                model=model,
+                params=model.parameters(),
                 optimizer_name=self.optimizer_name,
-                learning_rate=self.learning_rate,
             ).get_optimizer()
 
             for epoch in tqdm(range(self.num_epochs)):
@@ -856,7 +844,7 @@ class KfoldSolver:
                 )
 
             # Save the model for the current fold
-            EXTRA = f"{fold}_f_{self.num_epochs}_e_{self.batch_size}_bs_{self.model_obj.hidden_units}_hu_{self.learning_rate}_lr"
+            EXTRA = f"{fold}_f_{self.num_epochs}_e_{self.batch_size}_bs"
 
             save_model(
                 model=model,

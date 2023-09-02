@@ -17,7 +17,6 @@ def test_model(
     num_fold: int,
     num_epochs: int,
     batch_size: int,
-    learning_rate: float,
     models_path: Path,
     num_workers: int,
     test_model_path: Path,
@@ -31,7 +30,6 @@ def test_model(
         num_fold (int): Number of the fold (-1 if not k-fold).
         num_epochs (int): Number of epochs.
         batch_size (int): Batch size.
-        learning_rate (float): Learning rate.
         models_path (Path): Path to the models.
         num_workers (int): Number of workers.
         test_model_path (Path): Path where to save the results of the test.
@@ -45,10 +43,10 @@ def test_model(
     """
     # Load model
     if num_fold == -1:
-        EXTRA = f"{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{num_epochs}_e_{batch_size}_bs"
         EXPERIMENT_DONE = "test_train"
     else:
-        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs_{model_obj.hidden_units}_hu_{learning_rate}_lr"
+        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs"
         EXPERIMENT_DONE = "test_kfold"
     MODEL_SAVE_DIR = models_path / model_obj.model_name / EXPERIMENT_DONE / transform_obj.transform_name
     MODEL_SAVE_NAME = EXTRA + ".pth"

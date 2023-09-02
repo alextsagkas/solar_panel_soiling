@@ -5,12 +5,9 @@ from pathlib import Path
 import torch
 import torch.backends.mps
 
-from packages.tests.test_cross_validation import test_cross_validation
 from packages.tests.test_data import test_transform
-from packages.tests.test_kfold_solver import test_solver as test_kfold_solver
 from packages.tests.test_model import test_model
-from packages.tests.test_solver import test_solver
-from packages.tests.test_train import test_train
+from packages.tests.test_solvers import test_kfold_solver, test_solver
 from packages.utils.configuration import GetModel
 from packages.utils.storage import save_results
 from packages.utils.transforms import GetTransforms
@@ -22,13 +19,11 @@ if __name__ == "__main__":
 
     # Get an arg for the test called
     parser.add_argument("--tn",
-                        default="train",
                         type=str,
                         help="the test to run")
 
     # Get an arg for model name
     parser.add_argument("--mn",
-                        default="tiny_vgg",
                         type=str,
                         help="the name of the model")
 
@@ -40,7 +35,6 @@ if __name__ == "__main__":
 
     # Get an arg for number of epochs
     parser.add_argument("--e",
-                        default=5,
                         type=int,
                         help="the number of epochs to train for")
 
@@ -91,7 +85,7 @@ if __name__ == "__main__":
 
     # * Setup hyper-parameters
 
-    test_names = ["train", "evaluate", "transform", "kfold", "solver", "kfold_solver"]
+    test_names = ["evaluate", "transform", "solver", "kfold_solver"]
     if args.tn not in test_names:
         raise ValueError(f"Test name must be one of {test_names}")
     else:
@@ -163,57 +157,7 @@ if __name__ == "__main__":
 
     print(f"[INFO] Running {TEST_NAME} test")
 
-    if TEST_NAME == "train":
-        experiment_name = experiment_names[TEST_NAME]
-
-        metrics, infos = test_train(
-            model_obj=model_obj,
-            train_dir=train_dir,
-            test_dir=test_dir,
-            batch_size=BATCH_SIZE,
-            num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
-            num_epochs=NUM_EPOCHS,
-            optimizer_name=args.on,
-            learning_rate=args.lr,
-            models_path=models_path,
-            experiment_name=experiment_name,
-            transform_obj=transform_obj,
-        )
-
-        save_results(
-            root_dir=root_dir,
-            models_name=model_obj.model_name,
-            experiment_name=experiment_name,
-            transform_name=transform_obj.transform_name,
-            extra=infos,
-            metrics=metrics
-        )
-    elif TEST_NAME == "kfold" and NUM_FOLDS != -1:
-        experiment_name = experiment_names[TEST_NAME]
-
-        metrics, infos = test_cross_validation(
-            model_obj=model_obj,
-            models_path=models_path,
-            train_dir=train_dir,
-            test_dir=test_dir,
-            num_folds=NUM_FOLDS,
-            num_epochs=NUM_EPOCHS,
-            batch_size=BATCH_SIZE,
-            learning_rate=args.lr,
-            optimizer_name=args.on,
-            experiment_name=experiment_name,
-            transform_obj=transform_obj,
-        )
-
-        save_results(
-            root_dir=root_dir,
-            models_name=model_obj.model_name,
-            experiment_name=experiment_name,
-            transform_name=transform_obj.transform_name,
-            extra=infos,
-            metrics=metrics
-        )
-    elif TEST_NAME == "evaluate":
+    if TEST_NAME == "evaluate":
         experiment_name = experiment_names[TEST_NAME]
 
         metrics, infos, experiment_done = test_model(
@@ -222,7 +166,6 @@ if __name__ == "__main__":
             num_fold=NUM_FOLDS,
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
-            learning_rate=args.lr,
             models_path=models_path,
             num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
             test_model_path=test_model_path,
@@ -249,7 +192,6 @@ if __name__ == "__main__":
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
             optimizer_name=args.on,
-            learning_rate=args.lr,
             train_dir=train_dir,
             test_dir=test_dir,
             transform_obj=transform_obj,
@@ -263,7 +205,6 @@ if __name__ == "__main__":
             num_epochs=NUM_EPOCHS,
             batch_size=BATCH_SIZE,
             optimizer_name=args.on,
-            learning_rate=args.lr,
             train_dir=train_dir,
             test_dir=test_dir,
             transform_obj=transform_obj,
