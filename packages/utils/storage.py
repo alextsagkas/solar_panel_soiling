@@ -30,7 +30,7 @@ def save_model(
     MODEL_NAME = f"{extra}.pth"
     model_save_path = models_dir / MODEL_NAME
 
-    print(f"\nSaving model to: {model_save_path}\n")
+    print(f"Saving model to: {model_save_path}")
 
     torch.save(
         obj=model.state_dict(),

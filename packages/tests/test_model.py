@@ -5,14 +5,14 @@ from typing import Dict, Tuple
 import torch
 import torch.backends.mps
 
+from packages.utils.configuration import GetModel
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
-from packages.utils.solver import Solver
 from packages.utils.transforms import GetTransforms
 
 
 def test_model(
-    model_obj: Solver,
+    model_obj: GetModel,
     test_dir: Path,
     num_fold: int,
     num_epochs: int,
@@ -26,7 +26,7 @@ def test_model(
     """Tests a model on the test set.
 
     Args:
-        model_obj (Solver): Model object to use.j
+        model_obj (GetModel): Model object to use.j
         test_dir (Path): Test set directory.
         num_fold (int): Number of the fold (-1 if not k-fold).
         num_epochs (int): Number of epochs.

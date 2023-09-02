@@ -17,8 +17,7 @@ from torchmetrics.classification import (
 )
 from tqdm import tqdm
 
-from packages.utils.configuration import GetOptimizer
-from packages.utils.solver import Solver
+from packages.utils.configuration import GetModel, GetOptimizer
 from packages.utils.storage import save_model
 
 
@@ -256,7 +255,7 @@ def _average_metrics(
 
 
 def k_fold_cross_validation(
-    model_obj: Solver,
+    model_obj: GetModel,
     train_dataset: torchvision.datasets.ImageFolder,
     test_dataset: torchvision.datasets.ImageFolder,
     loss_fn: torch.nn.Module,
@@ -278,7 +277,7 @@ def k_fold_cross_validation(
     returned.
 
     Args:
-        model_obj (Solver): Solver object that contains the model to be used.
+        model_obj (GetModel): GetModel object that contains the model to be used.
         train_dataset (torchvision.datasets.ImageFolder): The training dataset.
         test_dataset (torchvision.datasets.ImageFolder): The test dataset.
         loss_fn (torch.nn.Module): Loss function to be used.
