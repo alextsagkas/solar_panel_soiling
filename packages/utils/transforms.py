@@ -1,89 +1,140 @@
+from typing import Dict, Union
+
 from torchvision import transforms
 from typing_extensions import Self
 
 
 class GetTransforms:
     """Get the transforms for the data. The experimentation is done on the train data,
-    since the test data only resize resizing of the image.
+    since the test data only resize resizing of the image and turning it to tensor.
 
     Args:
         transform_name (str, optional): Name of the transform to use. Defaults to "simple".
+        config (Union[Dict[str, float], None], optional): Dictionary with the configuration
+            of the transform. Defaults to None.
 
     Attributes:
-        transform_name_list (list[str]): List of transform names.
         transform_name (str): Name of the transform to use.
-        simple_train_transform (transforms.transforms.Compose): Resize and randomly flip 
-            the image horizontally, then convert it to a tensor with values between 0 and 1.
-        trivial_train_transform (transforms.transforms.Compose): Resize and apply trivial augment
-            wide transform (https://arxiv.org/abs/2103.10158) to the image, then convert it to a
-            tensor with values between 0 and 1.
-        simple_test_transform (transforms.transforms.Compose): Resize and convert the image 
-            to a tensor with values between 0 and 1.
+        config (Union[Dict[str, float], None]): Dictionary with the configuration of the transform.
 
     Methods:
-        get_train_transform: Returns the train transform.
-        get_test_transform: Returns the test transform.
+        _simple: Resize and randomly flip the image horizontally, then convert it to a tensor with
+            values between 0 and 1.
+        _trivial: Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158)
+            Then convert it to a tensor with values between 0 and 1.
+        get_train_transform: Returns the train transform based on the transform_name attribute.
+        get_test_transform: Returns the test transform (default to the simple transform).
     """
 
     def __init__(
         self: Self,
         transform_name: str = "simple",
+        config: Union[Dict[str, float], None] = None,
     ) -> None:
         """Initialize the transform object.
 
         Args:
             transform_name (str, optional): Name that defines which transform to use on the
-            training data. Defaults to "simple".
-
-        Raises:
-            ValueError: If the transform name is not in the list of transform names.
+                training data. Defaults to "simple".
+            config (Union[Dict[str, float], None], optional): Dictionary with the configuration
+                of the transform. Defaults to None.
         """
-        self.transform_name_list = ["simple", "trivial"]
 
-        if transform_name not in self.transform_name_list:
-            raise ValueError(f"transform_name must be one of {self.transform_name_list}")
-        else:
-            self.transform_name = transform_name
-            print(
-                f"[INFO] Using '{self.transform_name}' transform for training data and 'simple' transform for test data.")
+        self.transform_name = transform_name
+        self.config = config
 
-        # Different Train Transforms
-        self.simple_train_transform = transforms.Compose([
-            transforms.Resize(size=(64, 64)),
-            transforms.RandomHorizontalFlip(p=0.5),
-            transforms.ToTensor()
-        ])
-        self.trivial_train_transform = transforms.Compose([
-            transforms.Resize(size=(64, 64)),
-            # Tuning-free Yet State-of-the-Art Data Augmentation
-            transforms.TrivialAugmentWide(),
-            transforms.ToTensor()
-        ])
-
-        # Test Transform
-        self.simple_test_transform = transforms.Compose([
-            transforms.Resize(size=(64, 64)),
-            transforms.ToTensor()
-        ])
-
-    def get_train_transform(self) -> transforms.transforms.Compose:  # type: ignore
-        """Returns the train transform.
+    def _simple(
+        self: Self,
+    ) -> transforms.transforms.Compose:
+        """Resize and randomly flip the image horizontally, then convert it to a tensor with 
+        values between 0 and 1.
 
         Returns:
-            transforms.transforms.Compose: Train transform based on 'transform_name' value.
+            transforms.transforms.Compose: Simple transform.
         """
-        transform_dict = {
-            "simple": self.simple_train_transform,
-            "trivial": self.trivial_train_transform,
-        }
+        if self.config is None:
+            self.config = {}
+        self.config.setdefault("resize_size", 64)
+        self.config.setdefault("random_horizontal_flip", 0.5)
 
-        if self.transform_name in transform_dict:
-            return transform_dict[self.transform_name]
+        print(
+            f"simple transform with resize_size={self.config['resize_size']} and "
+            f"random_horizontal_flip={self.config['random_horizontal_flip']}."
+        )
 
-    def get_test_transform(self) -> transforms.transforms.Compose:
+        return transforms.Compose([
+            transforms.Resize(
+                size=(
+                    self.config["resize_size"],
+                    self.config["resize_size"]
+                )
+            ),
+            transforms.RandomHorizontalFlip(
+                p=self.config["random_horizontal_flip"]
+            ),
+            transforms.ToTensor()
+        ])
+
+    def _trivial(
+        self: Self,
+    ) -> transforms.transforms.Compose:
+        """Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158).
+            Then convert it to a tensor with values between 0 and 1.
+
+        Returns:
+            transforms.transforms.Compose: Trivial transform.
+        """
+        if self.config is None:
+            self.config = {}
+        self.config.setdefault("resize_size", 64)
+        self.config.setdefault("num_magnitude_bins", 31)
+
+        print(
+            f"trivial transform with resize_size={self.config['resize_size']} and "
+            f"num_magnitude_bins={self.config['num_magnitude_bins']}."
+        )
+
+        return transforms.Compose([
+            transforms.Resize(
+                size=(
+                    self.config["resize_size"],
+                    self.config["resize_size"]
+                )
+            ),
+            # Tuning-free Yet State-of-the-Art Data Augmentation
+            transforms.TrivialAugmentWide(
+                num_magnitude_bins=int(self.config["num_magnitude_bins"]),
+            ),
+            transforms.ToTensor()
+        ])
+
+    def get_train_transform(
+        self
+    ) -> transforms.transforms.Compose:
+        """Returns the train transform based on the transform_name attribute.
+
+        Raises:
+            ValueError: When the transform_name does not correspond to any transform method.
+
+        Returns:
+            transforms.transforms.Compose: Train transform.
+        """
+        transform_method_name = f"_{self.transform_name}"
+        transform_method = getattr(self, transform_method_name, None)
+
+        if transform_method is not None and callable(transform_method):
+            print("[INFO] Train data augmentation: ", end="")
+            return transform_method()
+        else:
+            raise ValueError(f"Transform name {self.transform_name} is not supported.")
+
+    def get_test_transform(
+        self
+    ) -> transforms.transforms.Compose:
         """Returns the test transform.
 
         Returns:
             transforms.transforms.Compose: Test simple transform (do not play with test data).
         """
-        return self.simple_test_transform
+        print("[INFO] Test data augmentation: ", end="")
+        return self._simple()
