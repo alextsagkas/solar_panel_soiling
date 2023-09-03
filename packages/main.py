@@ -6,7 +6,6 @@ import torch
 import torch.backends.mps
 
 from packages.tests.test_data import test_transform
-from packages.tests.test_model import test_model
 from packages.tests.test_solver import test_kfold_solver, test_solver
 from packages.utils.configuration import config_dir, data_dir, test_dir, train_dir
 from packages.utils.models import GetModel
@@ -21,10 +20,10 @@ if __name__ == "__main__":
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
     hyperparameters = {
-        "test_name": test_names[3],
+        "test_name": test_names[2],
         "model_name": model_names[0],
-        "num_folds": 2,
-        "num_epochs": 1,
+        "num_folds": 3,
+        "num_epochs": 2,
         "batch_size": 32,
         "optimizer_name": "adam",
         "transform_name": "trivial",

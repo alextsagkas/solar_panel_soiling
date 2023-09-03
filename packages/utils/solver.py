@@ -10,6 +10,7 @@ import torchvision
 from sklearn.model_selection import KFold
 from torch.utils.data import DataLoader
 from torch.utils.data.sampler import SubsetRandomSampler
+from torch.utils.tensorboard.writer import SummaryWriter
 from torchmetrics.classification import (
     MulticlassAccuracy,
     MulticlassFBetaScore,
@@ -19,10 +20,10 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 from typing_extensions import Self
 
+from packages.utils.configuration import tensorboard_dir
 from packages.utils.models import GetModel
 from packages.utils.optim import GetOptimizer
 from packages.utils.storage import save_metrics, save_model
-from packages.utils.tensorboard import create_writer
 
 
 class Solver:
@@ -30,17 +31,17 @@ class Solver:
     function and a k-fold cross validation train function. 
 
     In the first case, the model is trained on the train dataset for num_epochs and evaluated on 
-    the test dataset in the end. The results on the test dataset are saved in the debug/metrics and
-    on tensorboard in debug/runs.
+    the test dataset in the end. The results on the test dataset are saved in the debug/metrics.
+    Also, the metrics generated on every epoch are saved on tensorboard, in debug/runs folder.
 
     In the second case, the train dataset is split into num_folds folds and the model is trained on 
     the 1 - mun_folds folds for num_epochs, whereas it is evaluated in the 1 fold remaining
     (validation set), for every epoch. The process is repeated until every single fold has been 
     used as a validation set. In the end of each fold the model is also evaluated on the test set. 
-    The results on the test set are averaged out and saved in the debug/metrics and on tensorboard 
-    in debug/runs.
+    The results on the test set are averaged out and saved in the debug/metrics. Also, the metrics
+    generated on each epoch are saved on tensorboard in debug/runs folder.
 
-    Also, any model that is trained is saved in the models/ folder.
+    In addition, any model that is trained is saved in the models/ folder.
 
     Args:
         model_obj (GetModel): The model object to be trained and tested.
@@ -72,7 +73,7 @@ class Solver:
         _train_step: Trains a PyTorch model for one epoch.
         _test_step: Tests a PyTorch model for one epoch.
         _create_writer: Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to
-            a specific log_dir.
+            the directory: debug/runs/YYYY-MM-DD/HH-MM-SS/".
         _display_metrics: Receives data about the phase and epoch and prints out the metrics while
             saving them to a tensorboard writer.
         train_model: Trains and tests a PyTorch model.
@@ -216,6 +217,29 @@ class Solver:
 
         return test_metrics
 
+    def _create_writer(
+        self: Self,
+        timestamp_list: List[str],
+    ) -> torch.utils.tensorboard.writer.SummaryWriter:
+        """Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to the 
+        directory: debug/runs/YYYY-MM-DD/HH-MM-SS/"
+
+        Args:
+            timestamp_list (List[str]): List of strings that contain the timestamp of the experiment. Form: [YYYY-MM-DD, HH-MM-SS].
+
+        Returns:
+            torch.utils.tensorboard.writer.SummaryWriter(): Instance of a writer saving to log_dir.
+        """
+
+        # Create tensorboard directory if it doesn't exist
+        tensorboard_dir.mkdir(exist_ok=True, parents=True)
+
+        log_dir = os.path.join(tensorboard_dir, *timestamp_list)
+
+        print(f"[INFO] Created SummaryWriter, saving to: {log_dir}")
+
+        return SummaryWriter(log_dir=log_dir)
+
     def _display_metrics(
         self: Self,
         phase: str,
@@ -237,10 +261,7 @@ class Solver:
                 Tensorboard SummaryWriter object. If it is None then metrics will not be saved 
                 to tensorboard.
             global_step (int): The current global step. When simple train is used, it is the same
-                as the epoch. When k-fold cross validation is used, it alternates depending on the
-                phase.
-            fold (Union[int, None], optional): The current fold. If it is None then it is a simple
-                train.
+                as the epoch.
 
         Raises:
             ValueError: If the phase is not one of "train" or "test".
@@ -252,7 +273,7 @@ class Solver:
         # Print Metrics
         epoch_text = f"epoch: {epoch} | " if epoch is not None else ""
 
-        print(f"{phase} || {epoch_text} | ", end="")
+        print(f"{phase} || {epoch_text}", end="")
 
         for key, metric in metrics.items():
             print(f"{key}: {metric:.4f} | ", end="")
@@ -260,22 +281,17 @@ class Solver:
 
         # Save Metrics to Tensorboard
         for key, metric in metrics.items():
-            if fold is None:
-                writer.add_scalars(
-                    main_tag=f"{phase}",
-                    tag_scalar_dict={
-                        f"{key}": metric,
-                    },
-                    global_step=global_step,
-                )
-            else:
-                writer.add_scalars(
-                    main_tag=f"{phase}_{key}",
-                    tag_scalar_dict={
-                        f"{fold}_f": metric,
-                    },
-                    global_step=global_step
-                )
+
+            main_tag = f"{phase}_classification_metrics" if key != "loss" else f"{phase}_loss"
+            scalar_name = f"{key}_{fold}_f" if fold is not None else f"{key}"
+
+            writer.add_scalars(
+                main_tag=main_tag,
+                tag_scalar_dict={
+                    scalar_name: metric,
+                },
+                global_step=global_step,
+            )
 
             writer.close()
 
@@ -324,7 +340,7 @@ class Solver:
         )
 
         # Create writer
-        writer = create_writer(timestamp_list=self.timestamp_list)
+        writer = self._create_writer(timestamp_list=self.timestamp_list)
 
         # Create model
         model = self.model_obj.get_model()
@@ -378,8 +394,6 @@ class Solver:
         )
 
         return metrics
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
 
     def _average_metrics(
         self: Self,
@@ -481,7 +495,7 @@ class Solver:
         )
 
         # Create writer
-        writer = create_writer(timestamp_list=self.timestamp_list)
+        writer = self._create_writer(timestamp_list=self.timestamp_list)
 
         for fold, (train_idx, validation_idx) in enumerate(kf.split(train_indices)):
             print(f"\nFold {fold}")
