@@ -3,7 +3,7 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.tiny_vgg import TinyVGG
+from packages.models.tiny_vgg import TinyVGG, TinyVGGDropout
 
 
 class GetModel:
@@ -28,7 +28,7 @@ class GetModel:
     def __init__(
         self: Self,
         model_name: str,
-        config: Union[Dict[str, int], None] = None,
+        config: Union[Dict[str, Union[int, float]], None] = None,
     ) -> None:
         """Initializes the GetModel class.
 
@@ -65,7 +65,28 @@ class GetModel:
 
         return TinyVGG(
             input_shape=self.input_shape,
-            hidden_units=self.config["hidden_units"],
+            hidden_units=int(self.config["hidden_units"]),
+            output_shape=self.output_shape,
+        )
+
+    def _tiny_vgg_dropout(
+        self: Self,
+    ) -> torch.nn.Module:
+        if self.config is None:
+            self.config = {}
+        self.config.setdefault("hidden_units", 32)
+        self.config.setdefault("dropout_rate", 0.5)
+
+        print(
+            "[INFO] Using TinyVGGDropout model with "
+            f"{self.config['hidden_units']} hidden units and "
+            f"{self.config['dropout_rate']} dropout rate."
+        )
+
+        return TinyVGGDropout(
+            dropout_rate=float(self.config["dropout_rate"]),
+            input_shape=self.input_shape,
+            hidden_units=int(self.config["hidden_units"]),
             output_shape=self.output_shape,
         )
 

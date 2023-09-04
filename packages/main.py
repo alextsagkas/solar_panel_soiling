@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_solvers-kfold", "test_model", "test_data"]
-    model_names = ["tiny_vgg"]
+    model_names = ["tiny_vgg", "tiny_vgg_dropout"]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -32,7 +32,7 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": model_names[0],
+            "model_name": model_names[1],
             "num_epochs": 10,
             "batch_size": 32,
             "optimizer_name": "adam",
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "timestamp_list": timestamp_list,
-            "test_timestamp_list": ["2023-09-04", "15-39-27"],
+            "test_timestamp_list": ["2023-09-04", "16-13-09"],
         }
 
         save_hyperparameters(hyperparameters=hyperparameters)
