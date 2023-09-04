@@ -43,7 +43,31 @@ class GetTransforms:
         self.transform_name = transform_name
         self.config = config
 
-    def _simple(
+    def _simple_test(
+        self: Self,
+    ) -> transforms.transforms.Compose:
+        """Resize and converts it to a tensor with values between 0 and 1.
+
+        Returns:
+            transforms.transforms.Compose: Simple transform.
+        """
+        if self.config is None:
+            self.config = {}
+        self.config.setdefault("resize_size", 64)
+
+        print(f"simple transform with resize_size={self.config['resize_size']}.")
+
+        return transforms.Compose([
+            transforms.Resize(
+                size=(
+                    self.config["resize_size"],
+                    self.config["resize_size"]
+                )
+            ),
+            transforms.ToTensor()
+        ])
+
+    def _simple_train(
         self: Self,
     ) -> transforms.transforms.Compose:
         """Resize and randomly flip the image horizontally, then convert it to a tensor with 
@@ -75,7 +99,7 @@ class GetTransforms:
             transforms.ToTensor()
         ])
 
-    def _trivial(
+    def _trivial_train(
         self: Self,
     ) -> transforms.transforms.Compose:
         """Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158).
@@ -119,7 +143,7 @@ class GetTransforms:
         Returns:
             transforms.transforms.Compose: Train transform.
         """
-        transform_method_name = f"_{self.transform_name}"
+        transform_method_name = f"_{self.transform_name}_train"
         transform_method = getattr(self, transform_method_name, None)
 
         if transform_method is not None and callable(transform_method):
@@ -137,4 +161,4 @@ class GetTransforms:
             transforms.transforms.Compose: Test simple transform (do not play with test data).
         """
         print("[INFO] Test data augmentation: ", end="")
-        return self._simple()
+        return self._simple_test()

@@ -11,12 +11,12 @@ from packages.utils.storage import save_hyperparameters
 if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-    test_names = ["test_data", "test_model", "test_solvers-simple", "test_solvers-kfold"]
+    test_names = ["test_solvers-simple", "test_solvers-kfold", "test_model", "test_data"]
     model_names = ["tiny_vgg"]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[1]
+    test_name = test_names[2]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "model_name": model_names[0],
-            "num_epochs": 2,
+            "num_epochs": 10,
             "batch_size": 32,
             "optimizer_name": "adam",
             "transform_name": "trivial",
@@ -79,7 +79,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "timestamp_list": timestamp_list,
-            "test_timestamp_list": ["2023-09-04", "00-37-27"],
+            "test_timestamp_list": ["2023-09-04", "15-39-27"],
         }
 
         save_hyperparameters(hyperparameters=hyperparameters)
