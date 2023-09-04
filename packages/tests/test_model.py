@@ -1,11 +1,10 @@
-import ast
 import os
 from typing import List
 
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import models_dir, results_dir, test_model_dir
+from packages.utils.configuration import models_dir, results_dir
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
 from packages.utils.models import GetModel

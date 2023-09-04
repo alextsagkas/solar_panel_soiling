@@ -225,7 +225,8 @@ class Solver:
         directory: debug/runs/YYYY-MM-DD/HH-MM-SS/"
 
         Args:
-            timestamp_list (List[str]): List of strings that contain the timestamp of the experiment. Form: [YYYY-MM-DD, HH-MM-SS].
+            timestamp_list (List[str]): List of strings that contain the timestamp of the 
+            experiment. Form: [YYYY-MM-DD, HH-MM-SS].
 
         Returns:
             torch.utils.tensorboard.writer.SummaryWriter(): Instance of a writer saving to log_dir.
@@ -268,7 +269,9 @@ class Solver:
         """
         supported_phases = ["train", "validation", "test"]
         if phase not in supported_phases:
-            raise ValueError(f"Phase {phase} not supported. Please choose between {supported_phases}")
+            raise ValueError(
+                f"Phase {phase} not supported. Please choose between {supported_phases}"
+                )
 
         # Print Metrics
         epoch_text = f"epoch: {epoch} | " if epoch is not None else ""
@@ -403,11 +406,13 @@ class Solver:
         self: Self,
         results: Dict[int, Dict[str, float]],
     ) -> Dict[str, float]:
-        """Receives a dictionary of test results produced in each fold and produces another, which contains the average of each metric.
+        """Receives a dictionary of test results produced in each fold and produces another, which 
+        contains the average of each metric.
 
         Args:
             results (Dict[int, Dict[str, float]]): The dictionary of results produced by each fold. 
-                Example of experiment with 2 folds containing 5 classification metrics (accuracy, precession, recall, f-score) and duration (time):
+                Example of experiment with 2 folds containing 5 classification metrics (accuracy, 
+                precession, recall, f-score) and duration (time):
                     results = {
                         0: {
                             "accuracy": 0.92,
@@ -427,7 +432,8 @@ class Solver:
 
         Returns:
             Dict[str, float]: The dictionary of average metrics. Example of experiment with 2 folds
-                containing 5 classification metrics (accuracy, precession, recall, f-score) and duration (time):
+                containing 5 classification metrics (accuracy, precession, recall, f-score) and 
+                duration (time):
                     metrics_avg = {
                         "Accuracy": 0.91,
                         "Precession": 0.84,
