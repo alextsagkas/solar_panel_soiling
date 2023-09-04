@@ -1,83 +1,70 @@
+import ast
 import os
-from pathlib import Path
-from typing import Dict, Tuple
+from typing import List
 
 import torch
 import torch.backends.mps
 
+from packages.utils.configuration import models_dir, results_dir, test_model_dir
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
 from packages.utils.models import GetModel
+from packages.utils.storage import load_hyperparameters
 from packages.utils.transforms import GetTransforms
 
 
 def test_model(
-    model_obj: GetModel,
-    test_dir: Path,
-    num_fold: int,
-    num_epochs: int,
-    batch_size: int,
-    models_dir: Path,
-    num_workers: int,
-    test_model_path: Path,
-    transform_obj: GetTransforms,
-) -> Tuple[Dict[str, float], str, str]:
+    device: torch.device,
+    test_timestamp_list: List[str],
+    timestamp_list: List[str],
+) -> None:
     """Tests a model on the test set.
 
     Args:
-        model_obj (GetModel): Model object to use.j
-        test_dir (Path): Test set directory.
-        num_fold (int): Number of the fold (-1 if not k-fold).
-        num_epochs (int): Number of epochs.
-        batch_size (int): Batch size.
-        models_dir (Path): Path to the models.
-        num_workers (int): Number of workers.
-        test_model_path (Path): Path where to save the results of the test.
-        transform_obj (GetTransforms): Transform object to use for the data.
-
-    Returns:
-        Tuple[Dict[str, float], str, str]: Dictionary with the classification metrics of the   
-          experiment (accuracy, precision, recall, f1-score, loss), the extra information 
-          concerning the training and the experiment's name done (test_train or test_kfold) 
-          so as to produce the model that was loaded to evaluate the data.
+        device (torch.device): Device to use for the testing.
+        test_timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the trained
+            model used.
+        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
+            called.
     """
+    # Load test hyperparameters
+    test_hyperparameters = load_hyperparameters(
+        test_timestamp_list=test_timestamp_list,
+    )
+
+    model_name = test_hyperparameters["model_name"]
+    loaded_timestamp_list = test_hyperparameters["timestamp_list"]
+    transform_name = test_hyperparameters["transform_name"]
+
     # Load model
-    if num_fold == -1:
-        EXTRA = f"{num_epochs}_e_{batch_size}_bs"
-        EXPERIMENT_DONE = "test_train"
-    else:
-        EXTRA = f"{num_fold-1}_f_{num_epochs}_e_{batch_size}_bs"
-        EXPERIMENT_DONE = "test_kfold"
-    MODEL_SAVE_DIR = models_dir / model_obj.model_name / EXPERIMENT_DONE / transform_obj.transform_name
-    MODEL_SAVE_NAME = EXTRA + ".pth"
+    MODEL_SAVE_PATH = models_dir / loaded_timestamp_list[0] / f"{loaded_timestamp_list[1]}.pth"
 
-    model = model_obj.get_model()
-    model.load_state_dict(torch.load(f=str(MODEL_SAVE_DIR / MODEL_SAVE_NAME)))
+    print(f"[INFO] Model loaded from {MODEL_SAVE_PATH}")
 
-    print(f"[INFO] Model loaded from {MODEL_SAVE_DIR / MODEL_SAVE_NAME}")
+    model = GetModel(model_name=model_name).get_model().to(device)
+    model.load_state_dict(torch.load(f=str(MODEL_SAVE_PATH)))
+
+    # Load transforms
+    transform_obj = GetTransforms(transform_name=transform_name)
 
     # Load data
     BATCH_SIZE = 1
 
+    NUM_WORKERS = os.cpu_count()
+
     test_dataloader, class_names = get_dataloader(
-        dir=str(test_dir),
+        dir=str(results_dir),
         data_transform=transform_obj.get_test_transform(),
         batch_size=BATCH_SIZE,
-        num_workers=num_workers,
+        num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,
         shuffle=False
     )
 
     # Inference
-    results_metrics = inference(
+    inference(
         model=model,
         test_dataloader=test_dataloader,
         class_names=class_names,
-        test_model_path=test_model_path,
-        model_name=model_obj.model_name,
-        experiment_name=EXPERIMENT_DONE,
-        transform_name=transform_obj.transform_name,
-        extra=EXTRA,
-        device=model_obj.device,
+        device=device,
+        timestamp_list=timestamp_list,
     )
-
-    return results_metrics, EXTRA, EXPERIMENT_DONE

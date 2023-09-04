@@ -17,6 +17,6 @@ config_dir = root_dir / "config"
 
 # Debug
 tensorboard_dir = root_dir / "debug" / "runs"
-test_model_path = root_dir / "debug" / "test_model"
+test_model_dir = root_dir / "debug" / "test_model"
 metrics_dir = root_dir / "debug" / "metrics"
 data_transforms_dir = root_dir / "debug" / "data_transforms"

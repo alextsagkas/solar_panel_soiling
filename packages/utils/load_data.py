@@ -97,6 +97,8 @@ def get_dataloader(
 
     class_names = data.classes
 
+    print(f"[INFO] Using {num_workers} workers to load data.")
+
     dataloader = DataLoader(
         dataset=data,
         batch_size=batch_size,
@@ -105,44 +107,3 @@ def get_dataloader(
     )
 
     return dataloader, class_names
-
-
-def get_dataloaders(
-    train_dir: str,
-    train_transform: transforms.transforms.Compose,
-    test_dir: str,
-    test_transform: transforms.transforms.Compose,
-    batch_size: int,
-    num_workers: int = 1,
-) -> tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]:
-    """Returns iterables (Dataloaders) on train and test data.
-
-    Args:
-        train_dir (str): Training data directory.
-        train_transform (transforms.transforms.Compose): Train data transforms.
-        test_dir (str): Test data directory.
-        test_transform (transforms.transforms.Compose): Test data transforms.
-        batch_size (int): Batch size.
-        num_workers (int, optional): Workers used to load the data (usually same 
-            as the number of CPU cores). Defaults to 1.
-
-    Returns:
-      tuple[torch.utils.data.DataLoader, torch.utils.data.DataLoader]: List of train and test dataloader
-    """
-    train_dataloader, _ = get_dataloader(
-        dir=train_dir,
-        data_transform=train_transform,
-        batch_size=batch_size,
-        num_workers=num_workers,
-        shuffle=True
-    )
-
-    test_dataloader, _ = get_dataloader(
-        dir=test_dir,
-        data_transform=test_transform,
-        batch_size=batch_size,
-        num_workers=num_workers,
-        shuffle=False
-    )
-
-    return train_dataloader, test_dataloader

@@ -5,4 +5,4 @@ num_epochs: 2
 batch_size: 32
 optimizer_name: adam
 transform_name: trivial
-timestamp_list: ['2023-09-04', '00-30-44']
+timestamp_list: ['2023-09-04', '12-15-02']

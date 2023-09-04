@@ -1,4 +1,4 @@
-test_name: test_solvers-simple
+test_name: test_model
 model_name: tiny_vgg
 num_folds: 3
 num_epochs: 2
