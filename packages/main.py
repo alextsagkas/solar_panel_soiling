@@ -50,7 +50,6 @@ if __name__ == "__main__":
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Pick Model ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     model_obj = GetModel(
         model_name=hyperparameters["model_name"],
-        device=device,
     )
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Data Augmentation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #

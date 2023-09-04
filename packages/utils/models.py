@@ -28,7 +28,6 @@ class GetModel:
     def __init__(
         self: Self,
         model_name: str,
-        device: torch.device,
         config: Union[Dict[str, int], None] = None,
     ) -> None:
         """Initializes the GetModel class.
@@ -36,13 +35,11 @@ class GetModel:
         Args:
             self (Self): GetModel instance.
             model_name (str): String that identifies the model to be used.
-            device (torch.device): Device to be used to load the model.
             config (Union[Dict[str, int], None], optional): Dictionary with the configuration of
                 the model. Defaults to None.
         """
         self.model_name = model_name
         self.config = config
-        self.device = device
         self.input_shape = 3  # 3 channels (RGB)
         self.output_shape = 2  # 2 classes (clean and soiled)
 
@@ -63,15 +60,14 @@ class GetModel:
 
         print(
             "[INFO] Using TinyVGG model with "
-            f"{self.config['hidden_units']} hidden units, "
-            f"on {self.device} device."
+            f"{self.config['hidden_units']} hidden units."
         )
 
         return TinyVGG(
             input_shape=self.input_shape,
             hidden_units=self.config["hidden_units"],
             output_shape=self.output_shape,
-        ).to(self.device)
+        )
 
     def get_model(
         self: Self,

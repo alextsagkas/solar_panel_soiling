@@ -326,13 +326,15 @@ class Solver:
         # Dataloaders
         NUM_CORES = os.cpu_count()
 
-        train_dataloader = torch.utils.data.DataLoader(
+        print(f"[INFO] Using {NUM_CORES} workers for data loading.")
+
+        train_dataloader = DataLoader(
             dataset=self.train_dataset,
             batch_size=self.batch_size,
             shuffle=True,
             num_workers=NUM_CORES if NUM_CORES is not None else 1,
         )
-        test_dataloader = torch.utils.data.DataLoader(
+        test_dataloader = DataLoader(
             dataset=self.test_dataset,
             batch_size=self.batch_size,
             shuffle=False,
@@ -343,7 +345,9 @@ class Solver:
         writer = self._create_writer(timestamp_list=self.timestamp_list)
 
         # Create model
-        model = self.model_obj.get_model()
+        model = self.model_obj.get_model().to(self.device)
+
+        print(f"[INFO] Using {self.device} for training and testing.")
 
         # Create Optimizer
         optimizer = GetOptimizer(
@@ -489,9 +493,15 @@ class Solver:
         train_indices = np.arange(len(self.train_dataset))
 
         # Define the data loader for the test set
+        NUM_CORES = os.cpu_count()
+
+        print(f"[INFO] Using {NUM_CORES} workers for data loading.")
+
         test_loader = DataLoader(
             dataset=self.test_dataset,
             batch_size=self.batch_size,
+            shuffle=False,
+            num_workers=NUM_CORES if NUM_CORES is not None else 1,
         )
 
         # Create writer
@@ -507,16 +517,20 @@ class Solver:
             train_loader = DataLoader(
                 dataset=self.train_dataset,
                 batch_size=self.batch_size,
+                num_workers=NUM_CORES if NUM_CORES is not None else 1,
                 sampler=SubsetRandomSampler(train_idx.tolist()),
             )
             validation_loader = DataLoader(
                 dataset=self.train_dataset,
                 batch_size=self.batch_size,
+                num_workers=NUM_CORES if NUM_CORES is not None else 1,
                 sampler=SubsetRandomSampler(validation_idx.tolist()),
             )
 
             # Initialize the model
-            model = self.model_obj.get_model()
+            model = self.model_obj.get_model().to(self.device)
+
+            print(f"[INFO] Using {self.device} for training, validation and testing.")
 
             # Initialize the optimizer
             optimizer = GetOptimizer(
