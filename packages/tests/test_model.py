@@ -17,7 +17,11 @@ def test_model(
     test_timestamp_list: List[str],
     timestamp_list: List[str],
 ) -> None:
-    """Tests a model on the test set.
+    """Tests a model on the test set. It uses the `data/results/` directory to test the model on.
+    The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. Also,
+    despite the evaluation of classification metrics, images are saved in `debug/test_model/
+    YYYY-MM-DD, HH-MM-SS/` containing the predicted class and the ground truth, while displaying the
+    probability with which the choice was made.
 
     Args:
         device (torch.device): Device to use for the testing.
