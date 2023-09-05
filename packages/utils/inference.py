@@ -27,7 +27,7 @@ def inference(
     Saves every image in the test_model_dir/timestamp_list[0]/timestamp_list[1] folder 
     and provides information about the classification on the title of the image.
 
-    It also returns a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score).
+    It also saves a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and prints it on the console.
 
     Args:
       model (torch.nn.Module): A PyTorch model to be trained and tested.
@@ -79,8 +79,13 @@ def inference(
             plt.savefig(save_folder / f"{truth}_{preds_class}_{prob}_{i}.png")
             plt.close()
 
+    print("result || ", end="")
+
     for key, _ in results_metrics.items():
         results_metrics[key] = results_metrics[key].compute().item()
+
+        print(f"{key}: {results_metrics[key]*100:.2f}% | ", end="")
+    print()
 
     save_metrics(
         metrics=results_metrics,

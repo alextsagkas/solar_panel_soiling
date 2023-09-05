@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[3]
+    test_name = test_names[2]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -33,12 +33,13 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "model_name": model_names[1],
-            "model_config": {"hidden_units": 64,
+            "model_config": {"hidden_units": 32,
                              "dropout_rate": 0.5},
-            "num_epochs": 1,
+            "num_epochs": 10,
             "batch_size": 32,
             "optimizer_name": "adam",
             "transform_name": "trivial",
+            "transform_config": {"random_rotation": 180},
             "timestamp_list": timestamp_list
         }
 
@@ -52,7 +53,8 @@ if __name__ == "__main__":
             transform_name=hyperparameters["transform_name"],
             timestamp_list=hyperparameters["timestamp_list"],
             device=device,
-            model_config=hyperparameters["model_config"]
+            model_config=hyperparameters["model_config"],
+            transform_config=hyperparameters["transform_config"],
         )
     elif test_name == "test_solvers-kfold":
         hyperparameters = {
@@ -83,7 +85,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "timestamp_list": timestamp_list,
-            "test_timestamp_list": ["2023-09-05", "13-19-06"],
+            "test_timestamp_list": ["2023-09-05", "16-31-21"],
         }
 
         save_hyperparameters(hyperparameters=hyperparameters)
