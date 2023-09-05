@@ -6,6 +6,7 @@ debug/
 miscellaneous/
 .vscode
 .DS_Store
+.VSCODECounter/
 
 # ~~~~~~~~~~~~~~~ Python Related ~~~~~~~~~~~~~~~ #
 # Byte-compiled / optimized / DLL files
