@@ -97,7 +97,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "transform_name": "trivial",
-            "transform_config": {"resize_size": 128},
+            "transform_config": {"random_rotation": 180},
             "timestamp_list": timestamp_list,
         }
 
@@ -105,5 +105,6 @@ if __name__ == "__main__":
 
         test_transform(
             transform_name=hyperparameters["transform_name"],
+            timestamp_list=hyperparameters["timestamp_list"],
             transform_config=hyperparameters["transform_config"],
         )

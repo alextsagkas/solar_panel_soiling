@@ -1,0 +1,4 @@
+test_name: test_data
+transform_name: trivial
+transform_config: {'random_rotation': 180}
+timestamp_list: ['2023-09-05', '16-17-17']

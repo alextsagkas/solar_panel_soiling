@@ -112,9 +112,12 @@ class GetTransforms:
             self.config = {}
         self.config.setdefault("resize_size", 64)
         self.config.setdefault("num_magnitude_bins", 31)
+        self.config.setdefault("random_rotation", 0)
 
         print(
-            f"trivial transform with resize_size={self.config['resize_size']} and "
+            f"trivial transform with "
+            f"resize_size={self.config['resize_size']}, "
+            f"random rotation of {self.config['random_rotation']}˚ and "
             f"num_magnitude_bins={self.config['num_magnitude_bins']}."
         )
 
@@ -124,6 +127,9 @@ class GetTransforms:
                     self.config["resize_size"],
                     self.config["resize_size"]
                 )
+            ),
+            transforms.RandomRotation(
+                degrees=self.config["random_rotation"]
             ),
             # Tuning-free Yet State-of-the-Art Data Augmentation
             transforms.TrivialAugmentWide(

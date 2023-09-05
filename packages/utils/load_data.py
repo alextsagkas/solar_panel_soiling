@@ -1,7 +1,7 @@
 import os
 import random
 from pathlib import Path
-from typing import Union
+from typing import List, Union
 
 import matplotlib.pyplot as plt
 import torch
@@ -17,10 +17,12 @@ def plot_transformed_images(
         image_paths: list[Path],
         transform: transforms.transforms.Compose,
         transform_name: str,
+        timestamp_list: List[str],
         n: int = 3,
         seed: Union[int, None] = None
 ) -> None:
-    """Saves a series of random images from image_paths to the debug/data_transforms folder.
+    """Saves a series of random images from image_paths to the debug/data_transforms/transform_name/
+    YYYY-MM-DD/HH-MM-SS/ folder.
 
     Will open n image paths from image_paths, transform them
     with transform and save them one by one.
@@ -30,6 +32,7 @@ def plot_transformed_images(
         transform (PyTorch Transforms): Transforms to apply to images.
         transform_name (str): Name of the transform to use as a subfolder for 
             saving the transformed images.
+        timestamp_list (List[str]): Timestamp of the test.
         n (int, optional): Number of images to plot. Defaults to 3.
         seed (int, optional): Random seed for the random generator. Defaults to None.k
     """
@@ -41,7 +44,7 @@ def plot_transformed_images(
     random_image_paths = random.sample(image_paths, k=n)
 
     # Create folder to store results
-    debug_folder = data_transforms_dir / transform_name
+    debug_folder = data_transforms_dir / transform_name / timestamp_list[0] / timestamp_list[1]
     os.makedirs(debug_folder, exist_ok=True)
 
     print(f"[INFO] Saving transformed images to {debug_folder} folder")
