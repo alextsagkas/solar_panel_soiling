@@ -3,7 +3,8 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.tiny_vgg import TinyVGG, TinyVGGDropout
+from packages.models.resnet import Resnet18
+from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 
 
 class GetModel:
@@ -46,30 +47,25 @@ class GetModel:
     def _tiny_vgg(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the TinyVGG model.
-
-        Args:
-            self (Self): GetModel instance.
-
-        Returns:
-            torch.nn.Module: TinyVGG model.
-        """
         if self.config is None:
             self.config = {}
         self.config.setdefault("hidden_units", 32)
+        self.config.setdefault("dropout_rate", 0.5)
 
         print(
             "[INFO] Using TinyVGG model with "
-            f"{self.config['hidden_units']} hidden units."
+            f"{self.config['hidden_units']} hidden units and "
+            f"{self.config['dropout_rate']} dropout rate."
         )
 
         return TinyVGG(
+            dropout_rate=float(self.config["dropout_rate"]),
             input_shape=self.input_shape,
             hidden_units=int(self.config["hidden_units"]),
             output_shape=self.output_shape,
         )
 
-    def _tiny_vgg_dropout(
+    def _tiny_vgg_batchnorm(
         self: Self,
     ) -> torch.nn.Module:
         if self.config is None:
@@ -78,17 +74,31 @@ class GetModel:
         self.config.setdefault("dropout_rate", 0.5)
 
         print(
-            "[INFO] Using TinyVGGDropout model with "
+            "[INFO] Using TinyVGGBatchnorm model with "
             f"{self.config['hidden_units']} hidden units and "
             f"{self.config['dropout_rate']} dropout rate."
         )
 
-        return TinyVGGDropout(
+        return TinyVGGBatchnorm(
             dropout_rate=float(self.config["dropout_rate"]),
             input_shape=self.input_shape,
             hidden_units=int(self.config["hidden_units"]),
             output_shape=self.output_shape,
         )
+
+    # def _resnet18(
+    #     self: Self,
+    # ) -> torch.nn.Module:
+    #     if self.config is None:
+    #         self.config = {}
+    #     self.config.setdefault("pretrained", True)
+
+    #     print(
+    #         "[INFO] Using ResNet18 model with "
+    #         f"pretrained={self.config['pretrained']}."
+    #     )
+
+    #     return Resnet18
 
     def get_model(
         self: Self,

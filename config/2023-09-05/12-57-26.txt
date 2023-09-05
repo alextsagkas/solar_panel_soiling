@@ -1,5 +1,5 @@
 test_name: test_solvers-simple
-model_name: tiny_vgg_dropout
+model_name: tiny_vgg
 num_epochs: 2
 batch_size: 32
 optimizer_name: adam

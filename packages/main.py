@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_solvers-kfold", "test_model", "test_data"]
-    model_names = ["tiny_vgg", "tiny_vgg_dropout"]
+    model_names = ["tiny_vgg", "tiny_vgg_batchnorm"]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -35,9 +35,10 @@ if __name__ == "__main__":
             "model_name": model_names[1],
             "model_config": {"hidden_units": 32,
                              "dropout_rate": 0.5},
-            "num_epochs": 10,
+            "num_epochs": 14,
             "batch_size": 32,
             "optimizer_name": "adam",
+            "optimizer_config": {"weight_decay": 0.001},
             "transform_name": "trivial",
             "transform_config": {"random_rotation": 180},
             "timestamp_list": timestamp_list
@@ -50,6 +51,7 @@ if __name__ == "__main__":
             num_epochs=hyperparameters["num_epochs"],
             batch_size=hyperparameters["batch_size"],
             optimizer_name=hyperparameters["optimizer_name"],
+            optimizer_config=hyperparameters["optimizer_config"],
             transform_name=hyperparameters["transform_name"],
             timestamp_list=hyperparameters["timestamp_list"],
             device=device,
@@ -85,7 +87,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "timestamp_list": timestamp_list,
-            "test_timestamp_list": ["2023-09-05", "16-31-21"],
+            "test_timestamp_list": ["2023-09-05", "18-48-18"],
         }
 
         save_hyperparameters(hyperparameters=hyperparameters)

@@ -57,12 +57,14 @@ class GetOptimizer:
         if self.config is None:
             self.config = {}
         self.config.setdefault("learning_rate", 1e-2)
+        self.config.setdefault("weight_decay", 0.0)
 
         print(f"[INFO] Using SGD optimizer with lr={self.config['learning_rate']}")
 
         return optim.SGD(
             params=self.params,
             lr=self.config["learning_rate"],
+            weight_decay=self.config["weight_decay"],
         )
 
     def _adam(
@@ -79,13 +81,15 @@ class GetOptimizer:
         self.config.setdefault("beta1", 0.9)
         self.config.setdefault("beta2", 0.999)
         self.config.setdefault("epsilon", 1e-8)
+        self.config.setdefault("weight_decay", 0.0)
 
         print(
             f"[INFO] Using Adam optimizer with "
             f"lr={self.config['learning_rate']}, "
             f"beta1={self.config['beta1']}, "
             f"beta2={self.config['beta2']}, "
-            f"epsilon={self.config['epsilon']}."
+            f"epsilon={self.config['epsilon']} and "
+            f"weight_decay={self.config['weight_decay']}."
         )
 
         return optim.Adam(
@@ -93,6 +97,7 @@ class GetOptimizer:
             lr=self.config["learning_rate"],
             betas=(self.config["beta1"], self.config["beta2"]),
             eps=self.config["epsilon"],
+            weight_decay=self.config["weight_decay"],
         )
 
     def get_optimizer(
