@@ -104,7 +104,7 @@ class GetModel:
             "pre-trained weights in all layers, but the classifier."
         )
 
-        return ResNet18
+        return ResNet18()
 
     def get_model(
         self: Self,
