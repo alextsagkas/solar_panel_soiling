@@ -3,7 +3,7 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.resnet import Resnet18
+from packages.models.resnet import ResNet18
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 
 
@@ -86,19 +86,25 @@ class GetModel:
             output_shape=self.output_shape,
         )
 
-    # def _resnet18(
-    #     self: Self,
-    # ) -> torch.nn.Module:
-    #     if self.config is None:
-    #         self.config = {}
-    #     self.config.setdefault("pretrained", True)
+    def _resnet18(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the ResNet18 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
 
-    #     print(
-    #         "[INFO] Using ResNet18 model with "
-    #         f"pretrained={self.config['pretrained']}."
-    #     )
+        Args:
+            self (Self): GetModel instance.
 
-    #     return Resnet18
+        Returns:
+            torch.nn.Module: The ResNet18 model.
+        """
+
+        print(
+            "[INFO] Using ResNet18 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return ResNet18
 
     def get_model(
         self: Self,

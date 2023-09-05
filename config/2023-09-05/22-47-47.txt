@@ -1,0 +1,4 @@
+test_name: test_model
+device: mps
+test_timestamp_list: ['2023-09-05', '22-15-48']
+timestamp_list: ['2023-09-05', '22-47-47']

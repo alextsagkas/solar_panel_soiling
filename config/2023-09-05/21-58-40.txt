@@ -1,0 +1,4 @@
+timestamp_list: ['2023-09-05', '21-58-40']
+test_name: test_data
+train_transform_name: resnet18
+train_transform_config: {'random_rotation': 180}

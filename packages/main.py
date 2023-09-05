@@ -5,20 +5,20 @@ import torch.backends.mps
 
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
-from packages.tests.test_solver import test_kfold_solver, test_solver
+from packages.tests.test_solver import test_solver
 from packages.utils.storage import save_hyperparameters
 
 if __name__ == "__main__":
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-    test_names = ["test_solvers-simple", "test_solvers-kfold", "test_model", "test_data"]
-    model_names = ["tiny_vgg", "tiny_vgg_batchnorm"]
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    test_names = ["test_solvers-simple", "test_model", "test_data"]
+    model_names = ["tiny_vgg", "tiny_vgg_batchnorm", "resnet18"]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[2]
+    test_name = test_names[0]
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
         device = torch.device("cuda")  # NVIDIA GPU
     elif torch.backends.mps.is_available():
@@ -26,89 +26,40 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")  # CPU (if others unavailable)
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Run Test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Run Test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     print(f"[INFO] Running {test_name} test.")
 
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": model_names[1],
-            "model_config": {"hidden_units": 32,
-                             "dropout_rate": 0.5},
-            "num_epochs": 14,
+            "model_name": model_names[0],
+            "num_epochs": 5,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {"weight_decay": 0.001},
-            "transform_name": "trivial",
-            "transform_config": {"random_rotation": 180},
-            "timestamp_list": timestamp_list
+            "train_transform_name": "trivial",
+            "train_transform_config": {"random_rotation": 180},
+            "test_transform_name": "simple",
+            "timestamp_list": timestamp_list,
+            "device": device,
         }
-
         save_hyperparameters(hyperparameters=hyperparameters)
-
-        test_solver(
-            model_name=hyperparameters["model_name"],
-            num_epochs=hyperparameters["num_epochs"],
-            batch_size=hyperparameters["batch_size"],
-            optimizer_name=hyperparameters["optimizer_name"],
-            optimizer_config=hyperparameters["optimizer_config"],
-            transform_name=hyperparameters["transform_name"],
-            timestamp_list=hyperparameters["timestamp_list"],
-            device=device,
-            model_config=hyperparameters["model_config"],
-            transform_config=hyperparameters["transform_config"],
-        )
-    elif test_name == "test_solvers-kfold":
-        hyperparameters = {
-            "test_name": test_name,
-            "model_name": model_names[0],
-            "model_config": {"hidden_units": 64},
-            "num_folds": 3,
-            "num_epochs": 2,
-            "batch_size": 32,
-            "optimizer_name": "adam",
-            "transform_name": "trivial",
-            "timestamp_list": timestamp_list
-        }
-
-        save_hyperparameters(hyperparameters=hyperparameters)
-
-        test_kfold_solver(
-            model_name=hyperparameters["model_name"],
-            num_folds=hyperparameters["num_folds"],
-            num_epochs=hyperparameters["num_epochs"],
-            batch_size=hyperparameters["batch_size"],
-            optimizer_name=hyperparameters["optimizer_name"],
-            transform_name=hyperparameters["transform_name"],
-            timestamp_list=hyperparameters["timestamp_list"],
-            device=device,
-        )
+        test_solver(**hyperparameters)
     elif test_name == "test_model":
         hyperparameters = {
             "test_name": test_name,
+            "device": device,
+            "test_timestamp_list": ["2023-09-05", "22-15-48"],
             "timestamp_list": timestamp_list,
-            "test_timestamp_list": ["2023-09-05", "18-48-18"],
         }
-
         save_hyperparameters(hyperparameters=hyperparameters)
-
-        test_model(
-            device=device,
-            test_timestamp_list=hyperparameters["test_timestamp_list"],
-            timestamp_list=hyperparameters["timestamp_list"],
-        )
+        test_model(**hyperparameters)
     elif test_name == "test_data":
         hyperparameters = {
-            "test_name": test_name,
-            "transform_name": "trivial",
-            "transform_config": {"random_rotation": 180},
             "timestamp_list": timestamp_list,
+            "test_name": test_name,
+            "train_transform_name": "resnet18",
+            "train_transform_config": {"random_rotation": 180},
         }
-
         save_hyperparameters(hyperparameters=hyperparameters)
-
-        test_transform(
-            transform_name=hyperparameters["transform_name"],
-            timestamp_list=hyperparameters["timestamp_list"],
-            transform_config=hyperparameters["transform_config"],
-        )
+        test_transform(**hyperparameters)

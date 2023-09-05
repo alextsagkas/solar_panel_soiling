@@ -15,30 +15,46 @@ def test_solver(
     num_epochs: int,
     batch_size: int,
     optimizer_name: str,
-    transform_name: str,
+    train_transform_name: str,
+    test_transform_name: str,
     timestamp_list: List[str],
     device: torch.device,
     **kwargs,
 ) -> None:
     """Train and test a model using simple train from Solver.
 
+    Via the kwargs the training can be further customized. An example of the supported 
+    kwargs is the following:
+        kwargs = {
+            "model_config": {"hidden_units": 128},
+            "optimizer_config": {"weight_decay": 0.001},
+            "train_transform_config": {"random_horizontal_flip": 0.45},
+            "test_transform_config": {"random_rotation": 180},
+        }
+
     Args:
         model_name (str): String that identifies the model to be used.
         num_epochs (int): The number of epochs to train the model.
         batch_size (int): The size of the batches to be used in the training and testing.
         optimizer_name (str): String that identifies the optimizer to be used.
-        transform_name (str): String that identifies the transform to be used.
+        train_transform_name (str): String that identifies the transform to be used on the 
+            train data.
+        test_transform_name (str): String that identifies the transform to be used on the
+            test data.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
         device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
         kwargs (dict): Dictionary of optional arguments. Defaults to None.
     """
     model_config = kwargs.get("model_config", None)
     optimizer_config = kwargs.get("optimizer_config", None)
-    transform_config = kwargs.get("transform_config", None)
+    train_transform_config = kwargs.get("train_transform_config", None)
+    test_transform_config = kwargs.get("test_transform_config", None)
 
     transform_obj = GetTransforms(
-        transform_name=transform_name,
-        config=transform_config,
+        train_transform_name=train_transform_name,
+        train_config=train_transform_config,
+        test_transform_name=test_transform_name,
+        test_config=test_transform_config,
     )
 
     train_dataset = ImageFolder(
@@ -79,12 +95,22 @@ def test_kfold_solver(
     num_epochs: int,
     batch_size: int,
     optimizer_name: str,
-    transform_name: str,
+    train_transform_name: str,
+    test_transform_name: str,
     timestamp_list: List[str],
     device: torch.device,
     **kwargs,
 ) -> None:
     """Train and test a model using k-fold train from Solver.
+
+    Via the kwargs the training can be further customized. An example of the supported
+    kwargs is the following:    
+        kwargs = {
+            "model_config": {"hidden_units": 128},
+            "optimizer_config": {"weight_decay": 0.001},
+            "train_transform_config": {"random_horizontal_flip": 0.45},
+            "test_transform_config": {"random_rotation": 180},
+        }
 
     Args:
         model_name (str): String that identifies the model to be used.
@@ -92,18 +118,24 @@ def test_kfold_solver(
         num_epochs (int): The number of epochs to train the model.
         batch_size (int): The size of the batches to be used in the training and testing.
         optimizer_name (str): String that identifies the optimizer to be used.
-        transform_name (str): String that identifies the transform to be used.
+        train_transform_name (str): String that identifies the transform to be used on the
+            train data.
+        test_transform_name (str): String that identifies the transform to be used on the   
+            test data.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
         device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
         kwargs (dict): Dictionary of optional arguments. Defaults to None.
     """
     model_config = kwargs.get("model_config", None)
     optimizer_config = kwargs.get("optimizer_config", None)
-    transform_config = kwargs.get("transform_config", None)
+    train_transform_config = kwargs.get("train_transform_config", None)
+    test_transform_config = kwargs.get("test_transform_config", None)
 
     transform_obj = GetTransforms(
-        transform_name=transform_name,
-        config=transform_config,
+        train_transform_name=train_transform_name,
+        train_config=train_transform_config,
+        test_transform_name=test_transform_name,
+        test_config=test_transform_config,
     )
 
     train_dataset = ImageFolder(

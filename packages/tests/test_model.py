@@ -16,12 +16,21 @@ def test_model(
     device: torch.device,
     test_timestamp_list: List[str],
     timestamp_list: List[str],
+    **kwargs,
 ) -> None:
     """Tests a model on the test set. It uses the `data/results/` directory to test the model on.
     The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. Also,
     despite the evaluation of classification metrics, images are saved in `debug/test_model/
     YYYY-MM-DD, HH-MM-SS/` containing the predicted class and the ground truth, while displaying the
     probability with which the choice was made.
+
+    Via the `**kwargs` argument, the test transform, that is picked by the train_transform name of 
+    the loaded parameters, can be configured further. An example is the following:
+        kwargs = {
+            "test_transform_config": {
+                "resize_size": 256,
+                "crop_size": 224,
+        }
 
     Args:
         device (torch.device): Device to use for the testing.
@@ -30,6 +39,8 @@ def test_model(
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
             called.
     """
+    test_transform_config = kwargs.get("test_transform_config", None)
+
     # Load test hyperparameters
     test_hyperparameters = load_hyperparameters(
         test_timestamp_list=test_timestamp_list,
@@ -38,8 +49,7 @@ def test_model(
     model_name = test_hyperparameters["model_name"]
     model_config = test_hyperparameters.get("model_config", None)
     loaded_timestamp_list = test_hyperparameters["timestamp_list"]
-    transform_name = test_hyperparameters["transform_name"]
-    transform_config = test_hyperparameters.get("transform_config", None)
+    train_transform_name = test_hyperparameters["train_transform_name"]
 
     # Load model
     MODEL_SAVE_PATH = models_dir / loaded_timestamp_list[0] / f"{loaded_timestamp_list[1]}.pth"  # type: ignore
@@ -54,8 +64,8 @@ def test_model(
 
     # Load transforms
     transform_obj = GetTransforms(
-        transform_name=transform_name,  # type: ignore
-        config=transform_config,  # type: ignore
+        test_transform_name=train_transform_name,  # type: ignore
+        test_config=test_transform_config,
     )
 
     # Load data
