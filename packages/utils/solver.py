@@ -56,6 +56,7 @@ class Solver:
             Used for storage path.
         num_folds (Union[int, None], optional): Number of folds to be used in k-fold cross  
             validation.
+        kwargs (dict): Dictionary of optional arguments. Defaults to None.
 
     Attributes:
         model_obj (GetModel): The model object to be trained and tested.
@@ -94,6 +95,7 @@ class Solver:
         test_dataset: torchvision.datasets.ImageFolder,
         timestamp_list: List[str],
         num_folds: Union[int, None] = None,
+        **kwargs,
     ) -> None:
         """Initializes the Solver class."""
         self.model_obj = model_obj
@@ -108,6 +110,8 @@ class Solver:
         self.test_dataset = test_dataset
         # Extra
         self.timestamp_list = timestamp_list
+        # Configuration
+        self.optimizer_config = kwargs.get("optimizer_config", None)
 
     def _train_step(
         self: Self,
@@ -271,7 +275,7 @@ class Solver:
         if phase not in supported_phases:
             raise ValueError(
                 f"Phase {phase} not supported. Please choose between {supported_phases}"
-                )
+            )
 
         # Print Metrics
         epoch_text = f"epoch: {epoch} | " if epoch is not None else ""
@@ -356,6 +360,7 @@ class Solver:
         optimizer = GetOptimizer(
             optimizer_name=self.optimizer_name,
             params=model.parameters(),
+            config=self.optimizer_config,
         ).get_optimizer()
 
         for epoch in tqdm(range(self.num_epochs)):
@@ -542,6 +547,7 @@ class Solver:
             optimizer = GetOptimizer(
                 params=model.parameters(),
                 optimizer_name=self.optimizer_name,
+                config=self.optimizer_config,
             ).get_optimizer()
 
             for epoch in tqdm(range(self.num_epochs)):

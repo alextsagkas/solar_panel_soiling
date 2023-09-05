@@ -87,26 +87,38 @@ def save_hyperparameters(
 
 def load_hyperparameters(
     test_timestamp_list: List[str],
-) -> Dict[str, str]:
+) -> Dict[str, Union[str, int, float, Dict[str, Union[str, int, float]]]]:
     """Loads the hyperparameters of the experiment from config_dir/YYYY-MM-DD/HH-MM-SS.txt.
 
     Args:
         test_timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
 
     Returns:
-        Dict[str, str]: _description_
+        Dict[str, str]: hyperparameters used for the loaded experiment.
     """
     config_path = config_dir / test_timestamp_list[0] / f"{test_timestamp_list[1]}.txt"
 
     print(f"[INFO] Loading hyperparameters from: {config_path}.")
 
     # Create a dictionary with keys and values out of every line of config
-    with open(config_path, "r") as f:
-        config_dict = dict(line.strip().split(": ") for line in f)
+    with open(config_path, "r") as file:
+        lines = file.readlines()
 
-    # Correct the type of the values
-    for key, value in config_dict.items():
-        if key == "timestamp_list":
-            config_dict[key] = ast.literal_eval(value)
+    # Create the config dictionary
+    config_dict = {}
+
+    for line in lines:
+        # Split each line into key and value using ':'
+        key, value = line.strip().split(': ', 1)
+
+        # Check if the value can be parsed as a dictionary
+        try:
+            value = ast.literal_eval(value)
+        except (ValueError, SyntaxError):
+            # If it's not a dictionary, use it as is
+            pass
+
+        # Add the key-value pair to the hyperparameters dictionary
+        config_dict[key] = value
 
     return config_dict

@@ -36,19 +36,27 @@ def test_model(
     )
 
     model_name = test_hyperparameters["model_name"]
+    model_config = test_hyperparameters.get("model_config", None)
     loaded_timestamp_list = test_hyperparameters["timestamp_list"]
     transform_name = test_hyperparameters["transform_name"]
+    transform_config = test_hyperparameters.get("transform_config", None)
 
     # Load model
-    MODEL_SAVE_PATH = models_dir / loaded_timestamp_list[0] / f"{loaded_timestamp_list[1]}.pth"
+    MODEL_SAVE_PATH = models_dir / loaded_timestamp_list[0] / f"{loaded_timestamp_list[1]}.pth"  # type: ignore
 
     print(f"[INFO] Model loaded from {MODEL_SAVE_PATH}")
 
-    model = GetModel(model_name=model_name).get_model().to(device)
+    model = GetModel(
+        model_name=model_name,  # type: ignore
+        config=model_config,  # type: ignore
+    ).get_model().to(device)
     model.load_state_dict(torch.load(f=str(MODEL_SAVE_PATH)))
 
     # Load transforms
-    transform_obj = GetTransforms(transform_name=transform_name)
+    transform_obj = GetTransforms(
+        transform_name=transform_name,  # type: ignore
+        config=transform_config,  # type: ignore
+    )
 
     # Load data
     BATCH_SIZE = 1

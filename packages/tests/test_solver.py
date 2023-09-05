@@ -18,6 +18,7 @@ def test_solver(
     transform_name: str,
     timestamp_list: List[str],
     device: torch.device,
+    **kwargs,
 ) -> None:
     """Train and test a model using simple train from Solver.
 
@@ -29,9 +30,16 @@ def test_solver(
         transform_name (str): String that identifies the transform to be used.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
         device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
+        kwargs (dict): Dictionary of optional arguments. Defaults to None.
     """
+    model_config = kwargs.get("model_config", None)
+    optimizer_config = kwargs.get("optimizer_config", None)
+    transform_config = kwargs.get("transform_config", None)
 
-    transform_obj = GetTransforms(transform_name=transform_name)
+    transform_obj = GetTransforms(
+        transform_name=transform_name,
+        config=transform_config,
+    )
 
     train_dataset = ImageFolder(
         root=str(train_dir),
@@ -44,7 +52,10 @@ def test_solver(
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
-    model_obj = GetModel(model_name=model_name)
+    model_obj = GetModel(
+        model_name=model_name,
+        config=model_config,
+    )
 
     solver = Solver(
         model_obj=model_obj,
@@ -56,6 +67,7 @@ def test_solver(
         train_dataset=train_dataset,
         test_dataset=test_dataset,
         timestamp_list=timestamp_list,
+        optimizer_config=optimizer_config,
     )
 
     solver.train_model()
@@ -70,6 +82,7 @@ def test_kfold_solver(
     transform_name: str,
     timestamp_list: List[str],
     device: torch.device,
+    **kwargs,
 ) -> None:
     """Train and test a model using k-fold train from Solver.
 
@@ -82,9 +95,16 @@ def test_kfold_solver(
         transform_name (str): String that identifies the transform to be used.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
         device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
+        kwargs (dict): Dictionary of optional arguments. Defaults to None.
     """
+    model_config = kwargs.get("model_config", None)
+    optimizer_config = kwargs.get("optimizer_config", None)
+    transform_config = kwargs.get("transform_config", None)
 
-    transform_obj = GetTransforms(transform_name=transform_name)
+    transform_obj = GetTransforms(
+        transform_name=transform_name,
+        config=transform_config,
+    )
 
     train_dataset = ImageFolder(
         root=str(train_dir),
@@ -97,7 +117,10 @@ def test_kfold_solver(
 
     loss_fn = torch.nn.CrossEntropyLoss()
 
-    model_obj = GetModel(model_name=model_name)
+    model_obj = GetModel(
+        model_name=model_name,
+        config=model_config,
+    )
 
     solver = Solver(
         model_obj=model_obj,
@@ -110,6 +133,7 @@ def test_kfold_solver(
         train_dataset=train_dataset,
         test_dataset=test_dataset,
         timestamp_list=timestamp_list,
+        optimizer_config=optimizer_config,
     )
 
     solver.train_model_kfold()

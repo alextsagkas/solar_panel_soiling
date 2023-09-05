@@ -1,0 +1,7 @@
+test_name: test_solvers-simple
+model_name: tiny_vgg_dropout
+num_epochs: 2
+batch_size: 32
+optimizer_name: adam
+transform_name: trivial
+timestamp_list: ['2023-09-05', '12-57-26']
