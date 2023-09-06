@@ -9,12 +9,6 @@ class GetOptimizer:
     """Class that returns an optimizer based on the optimizer_name parameter. The list of available
     optimizers is: ["adam", "sgd"].
 
-    Args:
-        model (torch.nn.Module): The model to be optimized.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        config (Union[Dict[str, float], None], optional): Dictionary with the configuration of the
-            optimizer. Defaults to None.
-
     Attributes:
         optimizer_name (str): String that identifies the optimizer to be used.
         params (Iterator[torch.nn.Parameter]): List of parameters of the model to be optimized.

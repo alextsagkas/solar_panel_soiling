@@ -9,16 +9,6 @@ class GetTransforms:
     The transforms can also be optionally configured through the train_config and test_config 
     attributes.
 
-    Args:
-        train_transform_name (str, optional): Name of the transform to use on the train data. 
-            Defaults to "simple".
-        train_config (Union[Dict[str, float], None], optional): Dictionary with the configuration
-            of the train transform. Defaults to None.
-        test_transform_name (str, optional): Name of the transform to use on the test data. Defaults
-            to "simple".
-        test_config (Union[Dict[str, float], None], optional): Dictionary with the configuration of
-            the test transform. Defaults to None.
-
     Attributes:
         train_transform_name (str): Name of the transform to use on the train data.
         train_config (Union[Dict[str, float], None]): Dictionary with the configuration of the
@@ -56,6 +46,16 @@ class GetTransforms:
         test_config: Union[Dict[str, float], None] = None,
     ) -> None:
         """Initialize the transform object.
+
+        Args:
+            train_transform_name (str, optional): Name of the transform to use on the train data. 
+                Defaults to "simple".
+            train_config (Union[Dict[str, float], None], optional): Dictionary with the configuration
+                of the train transform. Defaults to None.
+            test_transform_name (str, optional): Name of the transform to use on the test data. Defaults
+                to "simple".
+            test_config (Union[Dict[str, float], None], optional): Dictionary with the configuration of
+                the test transform. Defaults to None.
         """
         self.train_transform_name = train_transform_name
         self.train_config = train_config

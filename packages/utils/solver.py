@@ -43,21 +43,6 @@ class Solver:
 
     In addition, any model that is trained is saved in the models/ folder.
 
-    Args:
-        model_obj (GetModel): The model object to be trained and tested.
-        num_epochs (int): number of epochs to train the model.
-        batch_size (int): number of samples per batch.
-        loss_fn (torch.nn.module): Loss function to be used.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        device (torch.device): device to be used to load the model.
-        train_dataset (torchvision.datasets.ImageFolder): Train dataset.
-        test_dataset (torchvision.datasets.ImageFolder): Test dataset.
-        timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
-            Used for storage path.
-        num_folds (Union[int, None], optional): Number of folds to be used in k-fold cross  
-            validation.
-        kwargs (dict): Dictionary of optional arguments. Defaults to None.
-
     Attributes:
         model_obj (GetModel): The model object to be trained and tested.
         num_folds (int): Number of folds to be used in k-fold cross validation.
@@ -97,7 +82,23 @@ class Solver:
         num_folds: Union[int, None] = None,
         **kwargs,
     ) -> None:
-        """Initializes the Solver class."""
+        """Initializes the Solver class.
+
+        Args:
+            model_obj (GetModel): The model object to be trained and tested.
+            num_epochs (int): number of epochs to train the model.
+            batch_size (int): number of samples per batch.
+            loss_fn (torch.nn.module): Loss function to be used.
+            optimizer_name (str): String that identifies the optimizer to be used.
+            device (torch.device): device to be used to load the model.
+            train_dataset (torchvision.datasets.ImageFolder): Train dataset.
+            test_dataset (torchvision.datasets.ImageFolder): Test dataset.
+            timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
+                Used for storage path.
+            num_folds (Union[int, None], optional): Number of folds to be used in k-fold cross  
+                validation.
+            kwargs (dict): Dictionary of optional arguments. Defaults to None.
+        """
         self.model_obj = model_obj
         self.num_folds = num_folds
         self.num_epochs = num_epochs
