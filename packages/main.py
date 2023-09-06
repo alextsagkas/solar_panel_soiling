@@ -34,17 +34,17 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "model_name": model_names[2],
-            "num_epochs": 2,
+            "num_epochs": 14,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {
-                "learning_rate": 1e-4,
-                "weight_decay": 1e-4
+                "learning_rate": 1e-3,
+                "weight_decay": 5e-4
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
                 "step_size": 4,
-                "verbose": True,
+                "gamma": 0.5,
             },
             "train_transform_name": "resnet18",
             "train_transform_config": {"random_rotation": 180},

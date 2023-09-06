@@ -145,7 +145,7 @@ class GetOptimizer:
             self.scheduler_config = {}
         self.scheduler_config.setdefault("step_size", 5)
         self.scheduler_config.setdefault("gamma", 0.5)
-        self.scheduler_config.setdefault("verbose", True)
+        self.scheduler_config.setdefault("verbose", False)
 
         print(
             "[INFO] Using StepLR scheduler with "
