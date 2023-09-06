@@ -65,7 +65,7 @@ def plot_transformed_images(
             ax[1].axis("off")
 
             fig.suptitle(f"Class: {image_path.parent.stem}", fontsize=16)
-            fig.savefig(str(debug_folder) + f"/{image_path.stem}_transformed.jpg")
+            fig.savefig(str(debug_folder) + f"/{image_path.stem}_transformed.jpeg")
 
 
 def get_dataloader(

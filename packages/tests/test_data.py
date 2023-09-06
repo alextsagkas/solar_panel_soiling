@@ -32,7 +32,7 @@ def test_transform(
     test_transform_config = kwargs.pop("test_transform_config", None)
 
     # Get all the image names inside the data/ folder
-    image_path_list = list(data_dir.glob("*/*/*.jpg"))
+    image_path_list = list(data_dir.glob("*/*/*.jpeg"))
 
     # Create image transform
     transform_obj = GetTransforms(
