@@ -1,0 +1,14 @@
+load_config: {'checkpoint_timestamp_list': ['2023-09-06', '21-01-48'], 'load_epoch': 9}
+test_name: test_resume
+model_name: resnet18
+num_epochs: 7
+batch_size: 32
+optimizer_name: adam
+optimizer_config: {'learning_rate': 5e-05, 'weight_decay': 0.0001}
+scheduler_name: steplr
+scheduler_config: {'step_size': 2, 'gamma': 0.1}
+train_transform_name: resnet18
+train_transform_config: {'random_rotation': 180}
+test_transform_name: resnet18
+timestamp_list: ['2023-09-06', '22-07-21']
+device: mps

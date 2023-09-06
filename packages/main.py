@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data"]
-    model_names = ["tiny_vgg", "tiny_vgg_batchnorm", "resnet18"]
+    model_names = ["tiny_vgg", "tiny_vgg_batchnorm", "resnet18", "resnet34"]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -59,9 +59,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "device": device,
-            "save_dir": checkpoint_dir,
-            "extra": "epoch_9",
-            "test_timestamp_list": ["2023-09-06", "21-01-48"],
+            "test_timestamp_list": ["2023-09-06", "22-07-21"],
             "timestamp_list": timestamp_list,
         }
         save_hyperparameters(hyperparameters=hyperparameters)
@@ -69,16 +67,22 @@ if __name__ == "__main__":
     elif test_name == "test_resume":
         hyperparameters = {
             "load_config": {
-                "checkpoint_timestamp_list": ["2023-09-06", "17-13-20"],
-                "load_epoch": 1,
+                "checkpoint_timestamp_list": ["2023-09-06", "21-01-48"],
+                "load_epoch": 9,
             },
             "test_name": test_name,
-            "num_epochs": 2,
+            "model_name": model_names[2],
+            "num_epochs": 7,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {
-                "learning_rate": 1e-4,
+                "learning_rate": 5e-5,
                 "weight_decay": 1e-4
+            },
+            "scheduler_name": "steplr",
+            "scheduler_config": {
+                "step_size": 2,
+                "gamma": 0.1,
             },
             "train_transform_name": "resnet18",
             "train_transform_config": {"random_rotation": 180},
