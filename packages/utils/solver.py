@@ -447,11 +447,11 @@ class Solver:
             if scheduler is not None:
                 print(
                     "[INFO] Scheduler's learning rate step: ",
-                    f"{scheduler.get_last_lr()[0]:e} -> ",
+                    f"{scheduler.get_last_lr()[0]:.2e} -> ",
                     end=""
                 )
                 scheduler.step()
-                print(f"{scheduler.get_last_lr()[0]:e}")
+                print(f"{scheduler.get_last_lr()[0]:.2e}")
 
         save_model(
             model=model,
