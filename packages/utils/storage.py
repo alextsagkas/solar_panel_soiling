@@ -11,16 +11,18 @@ from packages.utils.time import get_time
 def save_model(
     model: torch.nn.Module,
     timestamp_list: List[str],
+    save_dir: Path = models_dir,
     extra: Union[str, None] = None,
 ) -> None:
-    """Saves the state dict of model in models_dir/YYYY-MM-DD/HH-MM-SS_{extra}.pth.
+    """Saves the state dict of model in save_dir/YYYY-MM-DD/HH-MM-SS_{extra}.pth.
 
     Args:
         model (torch.nn.Module): Model to save.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
+        save_dir (Path, optional): Directory where to save the model. Defaults to models_dir.
         extra (str): Extra information concerning the training (used as name of file saved).
     """
-    model_save_dir = models_dir / timestamp_list[0]
+    model_save_dir = save_dir / timestamp_list[0]
     model_save_dir.mkdir(exist_ok=True, parents=True)
 
     if extra is None:

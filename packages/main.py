@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[1]
+    test_name = test_names[0]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -33,7 +33,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "model_name": model_names[2],
-            "num_epochs": 15,
+            "num_epochs": 2,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {

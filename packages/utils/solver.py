@@ -20,7 +20,7 @@ from torchmetrics.classification import (
 from tqdm import tqdm
 from typing_extensions import Self
 
-from packages.utils.configuration import tensorboard_dir
+from packages.utils.configuration import checkpoint_dir, tensorboard_dir
 from packages.utils.models import GetModel
 from packages.utils.optim import GetOptimizer
 from packages.utils.storage import save_metrics, save_model
@@ -302,6 +302,26 @@ class Solver:
 
             writer.close()
 
+    def _save_checkpoint(
+        self: Self,
+        model: torch.nn.Module,
+        extra: str,
+    ) -> None:
+        """Save checkpoint of the model training process so as to be able to resume it later. The
+        checkpoint is saved in the checkpoint_dir/YYYY-MM-DD/HH-MM-SS_{extra}.pth. 
+
+        Args:
+            self (Self): Instance of the Solver class.
+            model (torch.nn.Module): The model to be saved.
+            extra (str): Extra information concerning the training (used as name of file saved).
+        """
+        save_model(
+            model=model,
+            timestamp_list=self.timestamp_list,
+            save_dir=checkpoint_dir,
+            extra=extra,
+        )
+
     def train_model(
         self: Self,
     ) -> Dict[str, float]:
@@ -363,13 +383,16 @@ class Solver:
             config=self.optimizer_config,
         ).get_optimizer()
 
+        # Initialize metrics to avoid type error after the loop
+        test_metrics = {}
+
         for epoch in tqdm(range(self.num_epochs)):
+            # Optimization on train set
             train_metrics = self._train_step(
                 model=model,
                 dataloader=train_dataloader,
                 optimizer=optimizer,
             )
-
             self._display_metrics(
                 phase="train",
                 epoch=epoch,
@@ -378,21 +401,27 @@ class Solver:
                 global_step=epoch,
             )
 
+            # Evaluation on test set
+            test_metrics = self._test_step(
+                model=model,
+                dataloader=test_dataloader,
+            )
+            self._display_metrics(
+                phase="test",
+                epoch=epoch,
+                metrics=test_metrics,
+                writer=writer,
+                global_step=epoch,
+            )
+
+            self._save_checkpoint(
+                model=model,
+                extra=f"epoch_{epoch}",
+            )
+
         save_model(
             model=model,
             timestamp_list=self.timestamp_list,
-        )
-
-        test_metrics = self._test_step(
-            model=model,
-            dataloader=test_dataloader,
-        )
-        self._display_metrics(
-            phase="test",
-            epoch=self.num_epochs,
-            metrics=test_metrics,
-            writer=writer,
-            global_step=self.num_epochs,
         )
 
         end_time = timer()
