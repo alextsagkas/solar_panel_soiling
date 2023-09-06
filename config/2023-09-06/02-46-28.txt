@@ -1,0 +1,11 @@
+test_name: test_solvers-simple
+model_name: resnet18
+num_epochs: 15
+batch_size: 32
+optimizer_name: adam
+optimizer_config: {'learning_rate': 0.0001, 'weight_decay': 0.0001}
+train_transform_name: resnet18
+train_transform_config: {'random_rotation': 180}
+test_transform_name: resnet18
+timestamp_list: ['2023-09-06', '02-46-28']
+device: mps

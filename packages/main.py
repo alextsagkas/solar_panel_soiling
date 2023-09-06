@@ -16,7 +16,7 @@ if __name__ == "__main__":
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[0]
+    test_name = test_names[1]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -32,14 +32,17 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": model_names[0],
-            "num_epochs": 5,
+            "model_name": model_names[2],
+            "num_epochs": 15,
             "batch_size": 32,
             "optimizer_name": "adam",
-            "optimizer_config": {"weight_decay": 0.001},
-            "train_transform_name": "trivial",
+            "optimizer_config": {
+                "learning_rate": 1e-4,
+                "weight_decay": 1e-4
+            },
+            "train_transform_name": "resnet18",
             "train_transform_config": {"random_rotation": 180},
-            "test_transform_name": "simple",
+            "test_transform_name": "resnet18",
             "timestamp_list": timestamp_list,
             "device": device,
         }
@@ -49,7 +52,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "device": device,
-            "test_timestamp_list": ["2023-09-05", "22-15-48"],
+            "test_timestamp_list": ["2023-09-06", "02-46-28"],
             "timestamp_list": timestamp_list,
         }
         save_hyperparameters(hyperparameters=hyperparameters)
