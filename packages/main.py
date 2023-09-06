@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data"]
-    test_name = test_names[1]
+    test_name = test_names[3]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -94,7 +94,10 @@ if __name__ == "__main__":
             "timestamp_list": timestamp_list,
             "test_name": test_name,
             "train_transform_name": "resnet",
-            "train_transform_config": {"random_rotation": 180},
+            "train_transform_config": {
+                "random_rotation": 180,
+                "num_magnitude_bins": 31,
+            },
         }
         save_hyperparameters(hyperparameters=hyperparameters)
         test_transform(**hyperparameters)

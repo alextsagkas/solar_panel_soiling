@@ -41,21 +41,21 @@ class GetTransforms:
     def __init__(
         self: Self,
         train_transform_name: str = "simple",
-        train_config: Union[Dict[str, float], None] = None,
+        train_config: Union[Dict, None] = None,
         test_transform_name: str = "simple",
-        test_config: Union[Dict[str, float], None] = None,
+        test_config: Union[Dict, None] = None,
     ) -> None:
         """Initialize the transform object.
 
         Args:
             train_transform_name (str, optional): Name of the transform to use on the train data. 
                 Defaults to "simple".
-            train_config (Union[Dict[str, float], None], optional): Dictionary with the configuration
-                of the train transform. Defaults to None.
-            test_transform_name (str, optional): Name of the transform to use on the test data. Defaults
-                to "simple".
-            test_config (Union[Dict[str, float], None], optional): Dictionary with the configuration of
-                the test transform. Defaults to None.
+            train_config (Union[Dict, None], optional): Dictionary with the configuration of the 
+                train transform. Defaults to None.
+            test_transform_name (str, optional): Name of the transform to use on the test data. 
+                Defaults to "simple".
+            test_config (Union[Dict, None], optional): Dictionary with the configuration of the 
+                test transform. Defaults to None.
         """
         self.train_transform_name = train_transform_name
         self.train_config = train_config
@@ -129,9 +129,8 @@ class GetTransforms:
     def _resnet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and crops the image before applying data augmentation (horizontal flip & 
-        rotation). In the end the image is converted to tensor with values between 0 and 1 and
-        the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        """Resize and crops the image before applying data augmentation (horizontal flip, trivial
+        transform (optional - avoid if num_magnitude_bins=0) & rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
 
         Args:
             self (Self): GetTransforms instance.
@@ -143,6 +142,7 @@ class GetTransforms:
             self.train_config = {}
         self.train_config.setdefault("resize_size", 256)
         self.train_config.setdefault("crop_size", 224)
+        self.train_config.setdefault("num_magnitude_bins", 0)
         self.train_config.setdefault("random_horizontal_flip", 0.5)
         self.train_config.setdefault("random_rotation", 0)
 
@@ -150,12 +150,13 @@ class GetTransforms:
             "resnet transform with "
             f"resize_size={self.train_config['resize_size']}, "
             f"crop_size={self.train_config['crop_size']}, "
+            f"num_magnitude_bins={self.train_config['num_magnitude_bins']}, "
             f"random_horizontal_flip={self.train_config['random_horizontal_flip']} and "
             f"random_rotation={self.train_config['random_rotation']}."
         )
 
         # Create transform function
-        return transforms.Compose([
+        transforms_list = [
             transforms.Resize(
                 size=self.train_config["resize_size"]
             ),
@@ -173,7 +174,18 @@ class GetTransforms:
                 mean=[0.485, 0.456, 0.406],
                 std=[0.229, 0.224, 0.225]
             )
-        ])
+        ]
+
+        # Add trivial augment wide transform if num_magnitude_bins > 0
+        if self.train_config["num_magnitude_bins"] > 0:
+            transforms_list.insert(
+                2,
+                transforms.TrivialAugmentWide(
+                    num_magnitude_bins=self.train_config["num_magnitude_bins"],
+                )
+            )
+
+        return transforms.Compose(transforms_list)
 
     def get_train_transform(
         self
