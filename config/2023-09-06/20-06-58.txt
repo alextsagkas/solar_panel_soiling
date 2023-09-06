@@ -6,8 +6,8 @@ optimizer_name: adam
 optimizer_config: {'learning_rate': 0.0001, 'weight_decay': 0.0001}
 scheduler_name: steplr
 scheduler_config: {'step_size': 1, 'verbose': True}
-train_transform_name: resnet18
+train_transform_name: resnet
 train_transform_config: {'random_rotation': 180}
-test_transform_name: resnet18
+test_transform_name: resnet
 timestamp_list: ['2023-09-06', '20-06-58']
 device: mps

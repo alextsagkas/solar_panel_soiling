@@ -3,7 +3,7 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.resnet import ResNet18, ResNet34
+from packages.models.resnet import ResNet18, ResNet34, ResNet50
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
 from packages.utils.storage import load_hyperparameters
@@ -147,6 +147,26 @@ class GetModel:
         )
 
         return ResNet34()
+
+    def _resnet50(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the ResNet50 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The ResNet50 model.
+        """
+
+        print(
+            "[INFO] Using ResNet50 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return ResNet50()
 
     def _load_model(
         self: Self,

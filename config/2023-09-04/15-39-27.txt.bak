@@ -1,0 +1,7 @@
+l_fancytest_solvers-simple
+model_name: tiny_vgg
+num_epochs: 10
+batch_size: 32
+optimizer_name: adam
+transform_name: trivial
+timestamp_list: ['2023-09-04', '15-39-27']
