@@ -7,6 +7,7 @@ from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_resume import test_resume
 from packages.tests.test_solver import test_solver
+from packages.utils.configuration import checkpoint_dir
 from packages.utils.storage import save_hyperparameters
 
 if __name__ == "__main__":
@@ -17,7 +18,7 @@ if __name__ == "__main__":
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[0]
+    test_name = test_names[1]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -58,7 +59,9 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "device": device,
-            "test_timestamp_list": ["2023-09-06", "02-46-28"],
+            "save_dir": checkpoint_dir,
+            "extra": "epoch_9",
+            "test_timestamp_list": ["2023-09-06", "21-01-48"],
             "timestamp_list": timestamp_list,
         }
         save_hyperparameters(hyperparameters=hyperparameters)

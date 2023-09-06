@@ -1,5 +1,6 @@
 import os
-from typing import List
+from pathlib import Path
+from typing import List, Union
 
 import torch
 import torch.backends.mps
@@ -16,6 +17,8 @@ def test_model(
     device: torch.device,
     test_timestamp_list: List[str],
     timestamp_list: List[str],
+    save_dir: Path = models_dir,
+    extra: Union[str, None] = None,
     **kwargs,
 ) -> None:
     """Tests a model on the test set. It uses the `data/results/` directory to test the model on.
@@ -38,6 +41,10 @@ def test_model(
             model used.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
             called.
+        save_dir (Path, optional): Directory where the model is saved. Defaults to models_dir. It 
+            can be used to load checkpoints from training.
+        extra (Union[str, None], optional): Extra string to append to the model name. Used to 
+            choose which epoch of checkpoint you would like to pick. Defaults to None.
     """
     test_transform_config = kwargs.get("test_transform_config", None)
 
@@ -52,7 +59,16 @@ def test_model(
     train_transform_name = test_hyperparameters["train_transform_name"]
 
     # Load model
-    MODEL_SAVE_PATH = models_dir / loaded_timestamp_list[0] / f"{loaded_timestamp_list[1]}.pth"  # type: ignore
+    if extra is not None:
+        MODEL_SAVE_PATH = (
+            save_dir /
+            loaded_timestamp_list[0] /  # type: ignore
+            f"{loaded_timestamp_list[1]}_{extra}.pth")  # type: ignore
+    else:
+        MODEL_SAVE_PATH = (
+            save_dir /
+            loaded_timestamp_list[0] /  # type: ignore
+            f"{loaded_timestamp_list[1]}.pth")  # type: ignore
 
     print(f"[INFO] Model loaded from {MODEL_SAVE_PATH}")
 
