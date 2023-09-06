@@ -18,7 +18,7 @@ def test_transform(
         hyperparameters = {
             "timestamp_list": timestamp_list,
             "test_name": test_name,
-            "train_transform_name": "resnet18",
+            "train_transform_name": "resnet",
             "train_transform_config": {"random_rotation": 180},
         }
 

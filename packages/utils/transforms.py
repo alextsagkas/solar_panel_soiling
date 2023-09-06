@@ -24,12 +24,12 @@ class GetTransforms:
         _trivial_train: Resize and apply trivial augment wide transform 
             (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0
             and 1.
-        _resnet18_train: Resize and crops the image before applying data augmentation (horizontal
+        _resnet_train: Resize and crops the image before applying data augmentation (horizontal
             flip & rotation). In the end the image is converted to tensor with values between 0 and
             1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Test Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _simple_test: Resize and converts it to a tensor with values between 0 and 1.
-        _resnet18_test: Resize and crops the image before converting it to a tensor with values
+        _resnet_test: Resize and crops the image before converting it to a tensor with values
             between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
             0.225] are subtracted.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -126,7 +126,7 @@ class GetTransforms:
             transforms.ToTensor()
         ])
 
-    def _resnet18_train(
+    def _resnet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
         """Resize and crops the image before applying data augmentation (horizontal flip & 
@@ -137,7 +137,7 @@ class GetTransforms:
             self (Self): GetTransforms instance.
 
         Returns:
-            transforms.transforms.Compose: The resnet18 train transform.
+            transforms.transforms.Compose: The resnet train transform.
         """
         if self.train_config is None:
             self.train_config = {}
@@ -147,7 +147,7 @@ class GetTransforms:
         self.train_config.setdefault("random_rotation", 0)
 
         print(
-            "resnet18 transform with "
+            "resnet transform with "
             f"resize_size={self.train_config['resize_size']}, "
             f"crop_size={self.train_config['crop_size']}, "
             f"random_horizontal_flip={self.train_config['random_horizontal_flip']} and "
@@ -216,7 +216,7 @@ class GetTransforms:
             transforms.ToTensor()
         ])
 
-    def _resnet18_test(
+    def _resnet_test(
         self: Self,
     ) -> transforms.transforms.Compose:
         """Resize and crops the image before converting it to a tensor with values between 0 and 1.
@@ -226,7 +226,7 @@ class GetTransforms:
             self (Self): The object itself.
 
         Returns:
-            transforms.transforms.Compose: The resnet18 test transform.
+            transforms.transforms.Compose: The resnet test transform.
         """
         if self.test_config is None:
             self.test_config = {}
@@ -234,7 +234,7 @@ class GetTransforms:
         self.test_config.setdefault("crop_size", 224)
 
         print(
-            "resnet18 transform with "
+            "resnet transform with "
             f"resize_size={self.test_config['resize_size']}, "
             f"crop_size={self.test_config['crop_size']}."
         )

@@ -34,22 +34,22 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": model_names[2],
+            "model_name": model_names[3],
             "num_epochs": 14,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {
                 "learning_rate": 1e-3,
-                "weight_decay": 5e-4
+                "weight_decay": 1e-3
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
-                "step_size": 4,
+                "step_size": 2,
                 "gamma": 0.5,
             },
-            "train_transform_name": "resnet18",
+            "train_transform_name": "resnet",
             "train_transform_config": {"random_rotation": 180},
-            "test_transform_name": "resnet18",
+            "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,
         }
@@ -84,9 +84,9 @@ if __name__ == "__main__":
                 "step_size": 2,
                 "gamma": 0.1,
             },
-            "train_transform_name": "resnet18",
+            "train_transform_name": "resnet",
             "train_transform_config": {"random_rotation": 180},
-            "test_transform_name": "resnet18",
+            "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,
         }
@@ -96,7 +96,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "timestamp_list": timestamp_list,
             "test_name": test_name,
-            "train_transform_name": "resnet18",
+            "train_transform_name": "resnet",
             "train_transform_config": {"random_rotation": 180},
         }
         save_hyperparameters(hyperparameters=hyperparameters)
