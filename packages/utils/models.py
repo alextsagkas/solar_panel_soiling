@@ -5,44 +5,66 @@ from typing_extensions import Self
 
 from packages.models.resnet import ResNet18
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
+from packages.utils.configuration import checkpoint_dir
+from packages.utils.storage import load_hyperparameters
 
 
 class GetModel:
     """Class that returns a model based on the model_name parameter.
 
-    Args:
-        model_name (str): String that identifies the model to be used.
-        device (torch.device): Device to be used to load the model.
-        config (Union[Dict[str, int], None], optional): Dictionary with the configuration of the
-            model. Defaults to None.
-
     Attributes:
         model_name (str): String that identifies the model to be used.
-        device (torch.device): Device to be used to load the model.
         config (Union[Dict[str, int], None]): Dictionary with the configuration of the model.
+        input_shape (int): Number of channels of the input images.
+        output_shape (int): Number of classes of the output.
+        load_checkpoint (bool): If True, the model is loaded from the checkpoint path, that is 
+            specified in the load_config parameter.
+        load_config (Union[Dict, None]): Dictionary with the configuration of the loaded model.
+        mode_save_path (str): Path to the model parameters checkpoint to be loaded.
+
 
     Methods:
         _tiny_vgg: Returns the TinyVGG model.
+        _tiny_vgg_batchnorm: Returns the TinyVGGBatchnorm model.
+        _resnet18: Returns the ResNet18 model.
+        _load_model: Uses the load_config parameter to get the model name and the configuration
+            used while initially training it. It also computes the path of the model parameters
+            checkpoint to be loaded.
         get_model: Returns the model based on the model_name parameter.
     """
 
     def __init__(
         self: Self,
-        model_name: str,
+        model_name: str = "",
         config: Union[Dict[str, Union[int, float]], None] = None,
+        load_checkpoint: bool = False,
+        load_config: Union[Dict, None] = None,
     ) -> None:
         """Initializes the GetModel class.
 
         Args:
             self (Self): GetModel instance.
-            model_name (str): String that identifies the model to be used.
-            config (Union[Dict[str, int], None], optional): Dictionary with the configuration of
-                the model. Defaults to None.
+            model_name (str, optional): String that identifies the model to be used. Defaults to "".
+            config (Union[Dict[str, Union[int, float]], None], optional): Dictionary with the   
+                configuration of the model. Defaults to None.
+            load_checkpoint (bool, optional): If True, the model is loaded from the checkpoint
+                path, that is specified in the load_config parameter. Defaults to False.
+            load_config (Union[Dict, None], optional): Dictionary with the configuration of the
+                loaded model. An example of a load_config is the following:
+                    load_config = {
+                        "checkpoint_timestamp_list": ["2021-08-01", "2021-08-01_12-00-00"],
+                        "load_epoch": 1,
+                    }
+                Defaults to None. 
         """
         self.model_name = model_name
         self.config = config
         self.input_shape = 3  # 3 channels (RGB)
         self.output_shape = 2  # 2 classes (clean and soiled)
+
+        self.load_checkpoint = load_checkpoint
+        self.load_config = load_config
+        self.model_save_path = ""
 
     def _tiny_vgg(
         self: Self,
@@ -106,22 +128,77 @@ class GetModel:
 
         return ResNet18()
 
+    def _load_model(
+        self: Self,
+    ) -> None:
+        """Uses the load_config parameter to get the model name and the configuration used while 
+        initially training it. It also computes the path of the model parameters checkpoint to be 
+        loaded. 
+
+        The following parameters are saved in class' attributes:
+            model_name: String that identifies the model to be used.
+            config: Dictionary with the configuration of the model.
+            model_save_path: Path to the model parameters checkpoint to be loaded.
+
+        Args:
+            self (Self): Instance of GetModel.
+
+        Raises:
+            ValueError: If load_config is None.
+        """
+        if self.load_config == None:
+            raise ValueError("load_config must be provided.")
+        checkpoint_timestamp_list = self.load_config["checkpoint_timestamp_list"]
+        load_epoch = self.load_config["load_epoch"]
+
+        # Load test hyperparameters
+        test_hyperparameters = load_hyperparameters(
+            test_timestamp_list=checkpoint_timestamp_list,
+        )
+
+        # Extract hyperparameters from initial model training
+        self.model_name = test_hyperparameters["model_name"]
+        self.config: Union[Dict, None] = test_hyperparameters.get("model_config", None)  # type: ignore
+
+        print(self.model_name)
+
+        # Load model
+        self.model_save_path = (
+            checkpoint_dir /
+            checkpoint_timestamp_list[0] /
+            f"{checkpoint_timestamp_list[1]}_epoch_{load_epoch}.pth")  # type: ignore
+
     def get_model(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the model based on the model_name parameter.
+        """Returns the model based on the model_name parameter. If load_checkpoint is True, the 
+        model is loaded from the checkpoint path.
 
         Args:
             self (Self): GetModel instance.
 
         Returns:
             torch.nn.Module: The model to be used.
+
+        Raises:
+            ValueError: If the model_name is not supported (there is no method that implements it).
         """
+        if self.load_checkpoint:
+            self._load_model()
+
         model_method_name = f"_{self.model_name}"
         model_method = getattr(self, model_method_name, None)
 
         if model_method is not None and callable(model_method):
-            return model_method()
+
+            model = model_method()
+
+            if self.load_checkpoint:
+                model.load_state_dict(torch.load(f=self.model_save_path))
+
+                print(f"[INFO] Model loaded from {self.model_save_path}.")
+
+            return model
 
         else:
             raise ValueError(f"Model {self.model_name} is not supported.")
