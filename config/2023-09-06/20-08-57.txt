@@ -1,0 +1,13 @@
+test_name: test_solvers-simple
+model_name: resnet18
+num_epochs: 2
+batch_size: 32
+optimizer_name: adam
+optimizer_config: {'learning_rate': 0.0001, 'weight_decay': 0.0001}
+scheduler_name: steplr
+scheduler_config: {'step_size': 1, 'verbose': True}
+train_transform_name: resnet18
+train_transform_config: {'random_rotation': 180}
+test_transform_name: resnet18
+timestamp_list: ['2023-09-06', '20-08-57']
+device: mps

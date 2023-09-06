@@ -50,10 +50,14 @@ class Solver:
         batch_size (int): Number of samples per batch.
         loss_fn (torch.nn.Module): Loss function to be used.
         optimizer_name (str): String that identifies the optimizer to be used.
+        scheduler_name (Union[str, None]): String that identifies the scheduler to be used.
         device (torch.device): Device to be used to load the model.
         train_dataset (torchvision.datasets.ImageFolder): Train dataset.
         test_dataset (torchvision.datasets.ImageFolder): Test dataset.
         timestamp_list (List[str]): List of strings that contain the timestamp of the experiment.
+        optimizer_config (Union[Dict[str, float], None]): Dictionary with the configuration of the
+            optimizer.
+        scheduler_config (Union[Dict, None]): Dictionary with the configuration of the scheduler.
 
     Methods:
         _train_step: Trains a PyTorch model for one epoch.
@@ -80,6 +84,7 @@ class Solver:
         test_dataset: torchvision.datasets.ImageFolder,
         timestamp_list: List[str],
         num_folds: Union[int, None] = None,
+        scheduler_name: Union[str, None] = None,
         **kwargs,
     ) -> None:
         """Initializes the Solver class.
@@ -97,22 +102,32 @@ class Solver:
                 Used for storage path.
             num_folds (Union[int, None], optional): Number of folds to be used in k-fold cross  
                 validation.
+            scheduler_name (Union[str, None], optional): String that identifies the scheduler to be
+                used. Defaults to None.
             kwargs (dict): Dictionary of optional arguments. Defaults to None.
         """
         self.model_obj = model_obj
+
         self.num_folds = num_folds
         self.num_epochs = num_epochs
         self.batch_size = batch_size
+
         self.loss_fn = loss_fn
         self.optimizer_name = optimizer_name
+        self.scheduler_name = scheduler_name
+
         self.device = device
+
         # Datasets
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
+
         # Extra
         self.timestamp_list = timestamp_list
+
         # Configuration
         self.optimizer_config = kwargs.get("optimizer_config", None)
+        self.scheduler_config = kwargs.get("scheduler_config", None)
 
     def _train_step(
         self: Self,
@@ -377,12 +392,21 @@ class Solver:
 
         print(f"[INFO] Using {self.device} for training and testing.")
 
-        # Create Optimizer
-        optimizer = GetOptimizer(
+        # Create Optimizer & Scheduler
+        optimizer_obj = GetOptimizer(
             optimizer_name=self.optimizer_name,
             params=model.parameters(),
             config=self.optimizer_config,
-        ).get_optimizer()
+            scheduler_name=self.scheduler_name,
+            scheduler_config=self.scheduler_config,
+        )
+
+        optimizer = optimizer_obj.get_optimizer()
+
+        if self.scheduler_name is not None:
+            scheduler = optimizer_obj.get_scheduler()
+        else:
+            scheduler = None
 
         # Initialize metrics to avoid type error after the loop
         test_metrics = {}
@@ -419,6 +443,9 @@ class Solver:
                 model=model,
                 extra=f"epoch_{epoch}",
             )
+
+            if scheduler is not None:
+                scheduler.step()
 
         save_model(
             model=model,

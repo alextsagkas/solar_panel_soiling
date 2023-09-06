@@ -17,7 +17,7 @@ if __name__ == "__main__":
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    test_name = test_names[2]
+    test_name = test_names[0]
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
@@ -40,6 +40,11 @@ if __name__ == "__main__":
             "optimizer_config": {
                 "learning_rate": 1e-4,
                 "weight_decay": 1e-4
+            },
+            "scheduler_name": "steplr",
+            "scheduler_config": {
+                "step_size": 4,
+                "verbose": True,
             },
             "train_transform_name": "resnet18",
             "train_transform_config": {"random_rotation": 180},
