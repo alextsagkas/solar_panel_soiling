@@ -1,9 +1,0 @@
-test_name: test_solvers-simple
-model_name: tiny_vgg
-hidden_units: 64
-dropout_rate: 0.8
-num_epochs: 10
-batch_size: 32
-optimizer_name: adam
-transform_name: trivial
-timestamp_list: ['2023-09-05', '13-00-36']

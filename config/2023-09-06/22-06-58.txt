@@ -1,6 +1,0 @@
-test_name: test_model
-device: mps
-save_dir: /Users/alextsagkas/Document/Office/solar_panels/debug/checkpoints
-extra: epoch_9
-test_timestamp_list: ['2023-09-06', '21-01-48']
-timestamp_list: ['2023-09-06', '22-06-58']

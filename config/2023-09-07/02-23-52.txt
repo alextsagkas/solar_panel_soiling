@@ -1,4 +1,0 @@
-timestamp_list: ['2023-09-07', '02-23-52']
-test_name: test_data
-train_transform_name: resnet
-train_transform_config: {'random_rotation': 180}

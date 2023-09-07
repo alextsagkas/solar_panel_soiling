@@ -1,4 +1,0 @@
-test_name: test_model
-timestamp_list: ['2023-09-05', '20-11-30']
-test_transform_name: resnet
-test_timestamp_list: ['2023-09-05', '18-48-18']

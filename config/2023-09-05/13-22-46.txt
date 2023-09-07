@@ -1,3 +1,0 @@
-test_name: test_model
-timestamp_list: ['2023-09-05', '13-22-46']
-test_timestamp_list: ['2023-09-05', '13-19-06']

@@ -1,3 +1,0 @@
-timestamp_list: ['2023-09-05', '21-58-24']
-test_name: test_data
-test_transform_name: resnet

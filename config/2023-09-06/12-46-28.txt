@@ -1,4 +1,0 @@
-test_name: test_model
-device: mps
-test_timestamp_list: ['2023-09-06', '02-46-28']
-timestamp_list: ['2023-09-06', '12-46-28']

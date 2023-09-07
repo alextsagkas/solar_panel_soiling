@@ -1,4 +1,0 @@
-test_name: test_data
-transform_name: trivial
-transform_config: {'resize_size': 128}
-timestamp_list: ['2023-09-05', '13-46-09']
