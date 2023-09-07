@@ -11,7 +11,15 @@ def test_scraping(
     delay: float = 0.8,
     **kwargs,
 ) -> None:
-    # TODO: Add docstring
+    """Test data scraping by getting their urls and downloading them.
+
+    Args:
+        url (str): Google images url (The url when searching in Google the term you are interested 
+            about and then chooses images).
+        max_images (int): Maximum number of images to scrape.
+        timestamp_list (List[str]): List of timestamps.
+        delay (float, optional): Delay between button clicks and scrolling. Defaults to 0.8.
+    """
 
     image_urls = get_image_urls(
         url=url,
