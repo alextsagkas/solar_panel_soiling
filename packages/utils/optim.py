@@ -23,9 +23,10 @@ class GetOptimizer:
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Optimizers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _sgd: Returns a SGD optimizer.
         _adam: Returns an Adam optimizer.
-        get_optimizer: Returns the optimizer based on the optimizer_name parameter.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Schedulers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _steplr: Returns a StepLR scheduler.
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        get_optimizer: Returns the optimizer based on the optimizer_name parameter.
         get_scheduler: Returns the scheduler based on the scheduler_name parameter.
     """
 
