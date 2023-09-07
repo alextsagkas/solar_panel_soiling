@@ -5,6 +5,6 @@ batch_size: 32
 optimizer_name: adam
 optimizer_config: {'weight_decay': 0.001}
 train_transform_name: trivial
-test_transform_name: resnet18
+test_transform_name: resnet
 timestamp_list: ['2023-09-05', '21-44-33']
 device: mps

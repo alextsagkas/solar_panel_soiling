@@ -4,8 +4,8 @@ num_epochs: 5
 batch_size: 32
 optimizer_name: adam
 optimizer_config: {'weight_decay': 0.001}
-train_transform_name: resnet18
+train_transform_name: resnet
 train_transform_config: {'random_rotation': 180}
-test_transform_name: resnet18
+test_transform_name: resnet
 timestamp_list: ['2023-09-05', '22-15-48']
 device: mps
