@@ -6,19 +6,20 @@ import torch.backends.mps
 from packages.tests.test_data import test_transform
 from packages.tests.test_model import test_model
 from packages.tests.test_resume import test_resume
+from packages.tests.test_scraping import test_scraping
 from packages.tests.test_solver import test_solver
 from packages.utils.configuration import checkpoint_dir
 from packages.utils.storage import save_hyperparameters
 
 if __name__ == "__main__":
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-    test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data"]
-    test_name = test_names[1]
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
+    test_name = test_names[4]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup Device ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     if torch.cuda.is_available():
         device = torch.device("cuda")  # NVIDIA GPU
     elif torch.backends.mps.is_available():
@@ -26,7 +27,7 @@ if __name__ == "__main__":
     else:
         device = torch.device("cpu")  # CPU (if others unavailable)
 
-    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Run Test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Run Test ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     print(f"[INFO] Running {test_name} test.")
 
     if test_name == "test_solvers-simple":
@@ -108,3 +109,13 @@ if __name__ == "__main__":
         }
         save_hyperparameters(hyperparameters=hyperparameters)
         test_transform(**hyperparameters)
+    elif test_name == "test_scraping":
+        hyperparameters = {
+            "test_name": test_name,
+            "timestamp_list": timestamp_list,
+            "max_images": 50,
+            "delay": 0,
+            "url": "https://www.google.com/search?client=safari&sca_esv=563382129&rls=en&sxsrf=AB5stBjcBYJvBNXbZkQoxcLP8mUEu8OMlQ:1694090812474&q=solar+panel+images&tbm=isch&source=lnms&sa=X&ved=2ahUKEwjN0OCIxJiBAxXvV0EAHalWC-AQ0pQJegQICBAB&biw=1016&bih=1175&dpr=2",
+        }
+        save_hyperparameters(hyperparameters=hyperparameters)
+        test_scraping(**hyperparameters)
