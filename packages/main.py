@@ -61,9 +61,10 @@ if __name__ == "__main__":
             "test_name": test_name,
             "device": device,
             "save_dir": checkpoint_dir,
-            "extra": "epoch_6",
-            "test_timestamp_list": ["2023-09-07", "02-47-02"],
+            "extra": "epoch_8",
+            "test_timestamp_list": ["2023-09-07", "13-45-48"],
             "timestamp_list": timestamp_list,
+            "save_images": False,
         }
         save_hyperparameters(hyperparameters=hyperparameters)
         test_model(**hyperparameters)

@@ -19,13 +19,16 @@ def test_model(
     timestamp_list: List[str],
     save_dir: Path = models_dir,
     extra: Union[str, None] = None,
+    save_images: bool = False,
     **kwargs,
 ) -> None:
     """Tests a model on the test set. It uses the `data/results/` directory to test the model on.
-    The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. Also,
-    despite the evaluation of classification metrics, images are saved in `debug/test_model/
+    The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. 
+
+    Also, despite the evaluation of classification metrics, images are saved in `debug/test_model/
     YYYY-MM-DD, HH-MM-SS/` containing the predicted class and the ground truth, while displaying the
-    probability with which the choice was made.
+    probability with which the choice was made. This behavior is controlled optionally by the
+    `save_images` argument.
 
     Via the `**kwargs` argument, the test transform, that is picked by the train_transform name of 
     the loaded parameters, can be configured further. An example is the following:
@@ -45,6 +48,7 @@ def test_model(
             can be used to load checkpoints from training.
         extra (Union[str, None], optional): Extra string to append to the model name. Used to 
             choose which epoch of checkpoint you would like to pick. Defaults to None.
+        save_images (bool, optional): Whether to save images or not. Defaults to False.
     """
     test_transform_config = kwargs.get("test_transform_config", None)
 
@@ -104,4 +108,5 @@ def test_model(
         class_names=class_names,
         device=device,
         timestamp_list=timestamp_list,
+        save_images=save_images,
     )
