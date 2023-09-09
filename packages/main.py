@@ -33,7 +33,7 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "resnet50",
+            "model_name": "resnet34",
             "num_epochs": 30,
             "batch_size": 32,
             "optimizer_name": "adam",
@@ -52,7 +52,7 @@ if __name__ == "__main__":
                 "random_rotation": 180,
                 "num_magnitude_bins": 31,
             },
-            "test_dit": test_dir,
+            "test_dir": test_dir,
             "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,
