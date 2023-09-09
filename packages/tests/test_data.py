@@ -33,6 +33,7 @@ def test_transform(
 
     # Get all the image names inside the data/ folder
     image_path_list = list(data_dir.glob("*/*/*.jpeg"))
+    image_path_list.extend(list(data_dir.glob("*/*/*.jpg")))
 
     # Create image transform
     transform_obj = GetTransforms(

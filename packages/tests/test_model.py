@@ -5,7 +5,7 @@ from typing import List, Union
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import models_dir, results_dir
+from packages.utils.configuration import download_dir, models_dir
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
 from packages.utils.models import GetModel
@@ -17,12 +17,13 @@ def test_model(
     device: torch.device,
     test_timestamp_list: List[str],
     timestamp_list: List[str],
+    test_dir: Path = download_dir,
     save_dir: Path = models_dir,
     extra: Union[str, None] = None,
     save_images: bool = False,
     **kwargs,
 ) -> None:
-    """Tests a model on the test set. It uses the `data/results/` directory to test the model on.
+    """Tests a model on the test set. It uses the `dir` directory to test the model on.
     The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. 
 
     Also, despite the evaluation of classification metrics, images are saved in `debug/test_model/
@@ -44,6 +45,8 @@ def test_model(
             model used.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
             called.
+        test_dir (Path, optional): Directory where the test data is located. 
+            Defaults to download_dir.
         save_dir (Path, optional): Directory where the model is saved. Defaults to models_dir. It 
             can be used to load checkpoints from training.
         extra (Union[str, None], optional): Extra string to append to the model name. Used to 
@@ -94,7 +97,7 @@ def test_model(
     NUM_WORKERS = os.cpu_count()
 
     test_dataloader, class_names = get_dataloader(
-        dir=str(results_dir),
+        dir=str(test_dir),
         data_transform=transform_obj.get_test_transform(),
         batch_size=BATCH_SIZE,
         num_workers=NUM_WORKERS if NUM_WORKERS is not None else 1,

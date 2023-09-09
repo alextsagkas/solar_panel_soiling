@@ -113,9 +113,9 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "timestamp_list": timestamp_list,
-            "max_images": 50,
-            "delay": 0,
-            "url": "https://www.google.com/search?client=safari&sca_esv=563382129&rls=en&sxsrf=AB5stBjcBYJvBNXbZkQoxcLP8mUEu8OMlQ:1694090812474&q=solar+panel+images&tbm=isch&source=lnms&sa=X&ved=2ahUKEwjN0OCIxJiBAxXvV0EAHalWC-AQ0pQJegQICBAB&biw=1016&bih=1175&dpr=2",
+            "max_images": 300,
+            "delay": 1.5,
+            "url": "https://www.google.gr/search?q=solar%20panels%20images%20leaves&tbm=isch&hl=el&tbs=rimg:CXkYJ-o92B8gYQGwBcG10kwVsgIRCgIIABAAOgQIABABVSx8SD_1AAgDYAgDgAgA&sa=X&ved=0CBoQuIIBahcKEwiwpNPB6Z2BAxUAAAAAHQAAAAAQBg&biw=2032&bih=1175",
         }
         save_hyperparameters(hyperparameters=hyperparameters)
         test_scraping(**hyperparameters)

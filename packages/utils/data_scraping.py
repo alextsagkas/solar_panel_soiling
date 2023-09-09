@@ -77,7 +77,7 @@ def get_image_urls(
     # Click Reject all button
     _press_button(
         wd=wd,
-        button_text="Reject all",
+        button_text="Απόρριψη όλων",
         class_value="Nc7WLe",
         delay=delay,
     )

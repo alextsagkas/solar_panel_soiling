@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Dict, List, Union
 
 import torch
@@ -19,6 +20,8 @@ def test_resume(
     test_transform_name: str,
     timestamp_list: List[str],
     device: torch.device,
+    train_dir: Path = train_dir,
+    test_dir: Path = test_dir,
     scheduler_name: Union[str, None] = None,
     **kwargs,
 ) -> None:
@@ -49,6 +52,10 @@ def test_resume(
             test data.
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
         device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
+        train_dir (Path, optional): Path to the directory containing the training data.
+            Defaults to train_dir.
+        test_dir (Path, optional): Path to the directory containing the testing data.
+            Defaults to test_dir.
         scheduler_name (Union[str, None], optional): String that identifies the scheduler to be
             used. Defaults to None.
         kwargs (dict): Dictionary of optional arguments. Defaults to None.
