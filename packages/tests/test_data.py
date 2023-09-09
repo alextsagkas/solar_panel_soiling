@@ -8,6 +8,7 @@ from packages.utils.transforms import GetTransforms
 
 def test_transform(
     timestamp_list: List[str],
+    n: int = 10,
     **kwargs,
 ) -> None:
     """Test the train and test transform on the data. The results are saved in debug/
@@ -24,6 +25,7 @@ def test_transform(
 
     Args:
         timestamp_list (List[str]): The timestamp of the test. Used to create subfolders.
+        n (int, optional): The number of images to visualize. Defaults to 10.
         kwargs (dict): The configuration of the test.
     """
     train_transform_name = kwargs.pop("train_transform_name", None)
@@ -54,5 +56,5 @@ def test_transform(
         transform=transform,
         transform_name=transform_name,
         timestamp_list=timestamp_list,
-        n=10,
+        n=n,
     )

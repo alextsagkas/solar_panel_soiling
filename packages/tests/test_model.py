@@ -104,6 +104,8 @@ def test_model(
         shuffle=False
     )
 
+    print(f"[INFO] Testing model on {test_dir} data.")
+
     # Inference
     inference(
         model=model,

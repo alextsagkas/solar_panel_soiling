@@ -8,14 +8,14 @@ from packages.tests.test_model import test_model
 from packages.tests.test_resume import test_resume
 from packages.tests.test_scraping import test_scraping
 from packages.tests.test_solver import test_solver
-from packages.utils.configuration import checkpoint_dir
+from packages.utils.configuration import checkpoint_dir, download_dir, test_dir
 from packages.utils.storage import save_hyperparameters
 
 if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
-    test_name = test_names[4]
+    test_name = test_names[0]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -34,7 +34,7 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "model_name": "resnet50",
-            "num_epochs": 10,
+            "num_epochs": 30,
             "batch_size": 32,
             "optimizer_name": "adam",
             "optimizer_config": {
@@ -43,14 +43,16 @@ if __name__ == "__main__":
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
-                "step_size": 3,
+                "step_size": 8,
                 "gamma": 0.1,
             },
+            "train_dir": download_dir,
             "train_transform_name": "resnet",
             "train_transform_config": {
                 "random_rotation": 180,
                 "num_magnitude_bins": 31,
             },
+            "test_dit": test_dir,
             "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,
@@ -100,6 +102,7 @@ if __name__ == "__main__":
     elif test_name == "test_data":
         hyperparameters = {
             "timestamp_list": timestamp_list,
+            "n": 20,
             "test_name": test_name,
             "train_transform_name": "resnet",
             "train_transform_config": {

@@ -81,6 +81,11 @@ def test_resume(
         transform=transform_obj.get_test_transform()
     )
 
+    print(
+        f"[INFO] Using {train_dir} data to train the model and "
+        f"{test_dir} data to test the model."
+    )
+
     loss_fn = torch.nn.CrossEntropyLoss()
 
     model_obj = GetModel(
