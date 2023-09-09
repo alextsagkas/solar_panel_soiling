@@ -8,7 +8,8 @@ data_dir = root_dir / "data"
 
 train_dir = data_dir / "train"
 test_dir = data_dir / "test"
-download_dir = data_dir / "download"
+download_train_dir = data_dir / "download_train"
+download_test_dir = data_dir / "download_test"
 
 # Models
 models_dir = root_dir / "models"

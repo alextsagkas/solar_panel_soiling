@@ -8,7 +8,11 @@ from packages.tests.test_model import test_model
 from packages.tests.test_resume import test_resume
 from packages.tests.test_scraping import test_scraping
 from packages.tests.test_solver import test_solver
-from packages.utils.configuration import checkpoint_dir, download_dir, test_dir
+from packages.utils.configuration import (
+    checkpoint_dir,
+    download_test_dir,
+    download_train_dir,
+)
 from packages.utils.storage import save_hyperparameters
 
 if __name__ == "__main__":
@@ -35,7 +39,7 @@ if __name__ == "__main__":
             "test_name": test_name,
             "model_name": "resnet34",
             "num_epochs": 30,
-            "batch_size": 128,
+            "batch_size": 64,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-1,
@@ -47,13 +51,13 @@ if __name__ == "__main__":
                 "step_size": 6,
                 "gamma": 0.1,
             },
-            "train_dir": download_dir,
+            "train_dir": download_train_dir,
             "train_transform_name": "resnet",
             "train_transform_config": {
-                "random_rotation": 180,
+                "random_rotation": 0,
                 "num_magnitude_bins": 0,
             },
-            "test_dir": test_dir,
+            "test_dir": download_test_dir,
             "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,
@@ -93,12 +97,12 @@ if __name__ == "__main__":
                 "step_size": 5,
                 "gamma": 0.1,
             },
-            "train_dir": download_dir,
+            "train_dir": download_train_dir,
             "train_transform_name": "resnet",
             "train_transform_config": {
                 "random_rotation": 180
             },
-            "test_dir": test_dir,
+            "test_dir": download_test_dir,
             "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,

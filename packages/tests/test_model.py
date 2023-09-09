@@ -5,7 +5,7 @@ from typing import List, Union
 import torch
 import torch.backends.mps
 
-from packages.utils.configuration import download_dir, models_dir
+from packages.utils.configuration import download_train_dir, models_dir
 from packages.utils.inference import inference
 from packages.utils.load_data import get_dataloader
 from packages.utils.models import GetModel
@@ -17,7 +17,7 @@ def test_model(
     device: torch.device,
     test_timestamp_list: List[str],
     timestamp_list: List[str],
-    test_dir: Path = download_dir,
+    test_dir: Path = download_train_dir,
     save_dir: Path = models_dir,
     extra: Union[str, None] = None,
     save_images: bool = False,
@@ -46,7 +46,7 @@ def test_model(
         timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
             called.
         test_dir (Path, optional): Directory where the test data is located. 
-            Defaults to download_dir.
+            Defaults to download_train_dir.
         save_dir (Path, optional): Directory where the model is saved. Defaults to models_dir. It 
             can be used to load checkpoints from training.
         extra (Union[str, None], optional): Extra string to append to the model name. Used to 

@@ -1,6 +1,6 @@
 from typing import List
 
-from packages.utils.configuration import download_dir
+from packages.utils.configuration import download_train_dir
 from packages.utils.data_scraping import download_image, get_image_urls
 
 
@@ -31,6 +31,6 @@ def test_scraping(
 
     for i, url in enumerate(image_urls):
         download_image(
-            download_path=download_dir,
+            download_path=download_train_dir,
             url=url,
             file_name=f"{timestamp_string}_{i}.jpg")
