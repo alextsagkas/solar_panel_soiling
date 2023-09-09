@@ -305,8 +305,8 @@ class Solver:
         # Save Metrics to Tensorboard
         for key, metric in metrics.items():
 
-            main_tag = f"{phase}_classification_metrics" if key != "loss" else f"{phase}_loss"
-            scalar_name = f"{key}_{fold}_f" if fold is not None else f"{key}"
+            main_tag = "classification_metrics" if key != "loss" else "loss"
+            scalar_name = f"{phase}_{key}_{fold}_f" if fold is not None else f"{phase}_{key}"
 
             writer.add_scalars(
                 main_tag=main_tag,

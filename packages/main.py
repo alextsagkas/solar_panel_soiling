@@ -35,22 +35,23 @@ if __name__ == "__main__":
             "test_name": test_name,
             "model_name": "resnet34",
             "num_epochs": 30,
-            "batch_size": 32,
-            "optimizer_name": "adam",
+            "batch_size": 128,
+            "optimizer_name": "sgd",
             "optimizer_config": {
-                "learning_rate": 1e-3,
-                "weight_decay": 1e-3
+                "learning_rate": 1e-1,
+                "momentum": 0.9,
+                "weight_decay": 1e-4
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
-                "step_size": 8,
+                "step_size": 6,
                 "gamma": 0.1,
             },
             "train_dir": download_dir,
             "train_transform_name": "resnet",
             "train_transform_config": {
                 "random_rotation": 180,
-                "num_magnitude_bins": 31,
+                "num_magnitude_bins": 0,
             },
             "test_dir": test_dir,
             "test_transform_name": "resnet",
@@ -74,25 +75,30 @@ if __name__ == "__main__":
     elif test_name == "test_resume":
         hyperparameters = {
             "load_config": {
-                "checkpoint_timestamp_list": ["2023-09-06", "23-47-28"],
-                "load_epoch": 9,
+                "checkpoint_timestamp_list": ["2023-09-09", "21-44-28"],
+                "load_epoch": 10,
             },
             "test_name": test_name,
-            "model_name": "resnet34",
-            "num_epochs": 7,
-            "batch_size": 32,
-            "optimizer_name": "adam",
+            "model_name": "resnet50",
+            "num_epochs": 15,
+            "batch_size": 256,
+            "optimizer_name": "sgd",
             "optimizer_config": {
-                "learning_rate": 5e-5,
+                "learning_rate": 0.001,
+                "momentum": 0.9,
                 "weight_decay": 1e-4
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
-                "step_size": 2,
+                "step_size": 5,
                 "gamma": 0.1,
             },
+            "train_dir": download_dir,
             "train_transform_name": "resnet",
-            "train_transform_config": {"random_rotation": 180},
+            "train_transform_config": {
+                "random_rotation": 180
+            },
+            "test_dir": test_dir,
             "test_transform_name": "resnet",
             "timestamp_list": timestamp_list,
             "device": device,

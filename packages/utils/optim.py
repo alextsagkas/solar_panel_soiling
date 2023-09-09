@@ -71,12 +71,18 @@ class GetOptimizer:
             self.config = {}
         self.config.setdefault("learning_rate", 1e-2)
         self.config.setdefault("weight_decay", 0.0)
+        self.config.setdefault("momentum", 0.9)
 
-        print(f"[INFO] Using SGD optimizer with lr={self.config['learning_rate']}")
+        print(
+            f"[INFO] Using SGD optimizer with lr={self.config['learning_rate']}, "
+            f"momentum={self.config['momentum']} and "
+            f"weight_decay={self.config['weight_decay']}."
+        )
 
         return optim.SGD(
             params=self.params,
             lr=self.config["learning_rate"],
+            momentum=self.config["momentum"],
             weight_decay=self.config["weight_decay"],
         )
 
