@@ -7,6 +7,7 @@ from packages.models.efficientnet import (
     EfficientNetB0,
     EfficientNetB1,
     EfficientNetB2,
+    EfficientNetB3,
     EfficientNetB6,
 )
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
@@ -238,6 +239,26 @@ class GetModel:
         )
 
         return EfficientNetB2()
+
+    def _efficientnet_b3(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNetB3 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNetB3 model.
+        """
+
+        print(
+            "[INFO] Using EfficientNetB3 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetB3()
 
     def _efficientnet_b6(
         self: Self,

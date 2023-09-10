@@ -39,11 +39,10 @@ if __name__ == "__main__":
             "test_name": test_name,
             "model_name": "efficientnet_b2",
             "num_epochs": 30,
-            "batch_size": 128,
+            "batch_size": 256,
             "optimizer_name": "sgd",
             "optimizer_config": {
-                "learning_rate": 1e-1,
-                "momentum": 0.9,
+                "learning_rate": 1e-3,
                 "weight_decay": 1e-4
             },
             "scheduler_name": "steplr",
@@ -67,9 +66,10 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "device": device,
+            "test_dir": download_test_dir,
             "save_dir": checkpoint_dir,
-            "extra": "epoch_8",
-            "test_timestamp_list": ["2023-09-07", "13-45-48"],
+            "extra": "epoch_26",
+            "test_timestamp_list": ["2023-09-10", "22-51-34"],
             "timestamp_list": timestamp_list,
             "save_images": False,
         }
@@ -78,31 +78,30 @@ if __name__ == "__main__":
     elif test_name == "test_resume":
         hyperparameters = {
             "load_config": {
-                "checkpoint_timestamp_list": ["2023-09-09", "21-44-28"],
-                "load_epoch": 10,
+                "checkpoint_timestamp_list": ["2023-09-10", "22-51-34"],
+                "load_epoch": 26,
             },
             "test_name": test_name,
-            "model_name": "resnet50",
+            "model_name": "efficientnet_b6",
             "num_epochs": 15,
             "batch_size": 256,
-            "optimizer_name": "sgd",
+            "optimizer_name": "adam",
             "optimizer_config": {
-                "learning_rate": 0.001,
-                "momentum": 0.9,
-                "weight_decay": 1e-4
+                "learning_rate": 1e-2,
+                "weight_decay": 1e-3
             },
             "scheduler_name": "steplr",
             "scheduler_config": {
-                "step_size": 5,
+                "step_size": 8,
                 "gamma": 0.1,
             },
             "train_dir": download_train_dir,
-            "train_transform_name": "resnet",
+            "train_transform_name": "efficientnet",
             "train_transform_config": {
-                "random_rotation": 180
+                "random_rotation": 0
             },
             "test_dir": download_test_dir,
-            "test_transform_name": "resnet",
+            "test_transform_name": "efficientnet",
             "timestamp_list": timestamp_list,
             "device": device,
         }
