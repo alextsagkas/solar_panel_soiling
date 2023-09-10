@@ -3,7 +3,7 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.efficientnet import EfficientNetB0, EfficientNetB1
+from packages.models.efficientnet import EfficientNetB0, EfficientNetB1, EfficientNetB2
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
@@ -32,6 +32,7 @@ class GetModel:
         _resnet50: Returns the ResNet50 model.
         _efficientnet_b0: Returns the EfficientNetB0 model.
         _efficientnet_b1: Returns the EfficientNetB1 model.
+        _efficientnet_b2: Returns the EfficientNetB2 model.
         _load_model: Uses the load_config parameter to get the model name and the configuration
             used while initially training it. It also computes the path of the model parameters
             checkpoint to be loaded.
@@ -212,6 +213,26 @@ class GetModel:
         )
 
         return EfficientNetB1()
+
+    def _efficientnet_b2(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNetB2 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNetB2 model.
+        """
+
+        print(
+            "[INFO] Using EfficientNetB2 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetB2()
 
     def _load_model(
         self: Self,
