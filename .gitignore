@@ -4,7 +4,6 @@
 data/
 debug/
 config/
-models/
 miscellaneous/
 .vscode
 .DS_Store
