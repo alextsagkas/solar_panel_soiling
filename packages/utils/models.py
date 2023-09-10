@@ -9,6 +9,7 @@ from packages.models.efficientnet import (
     EfficientNetB2,
     EfficientNetB3,
     EfficientNetB6,
+    EfficientNetV2S,
 )
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
@@ -279,6 +280,26 @@ class GetModel:
         )
 
         return EfficientNetB6()
+
+    def _efficientnet_v2_s(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNet_V2_S model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNet_V2_S model.
+        """
+
+        print(
+            "[INFO] Using EfficientNet_V2_S model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetV2S()
 
     def _load_model(
         self: Self,

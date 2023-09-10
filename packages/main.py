@@ -37,12 +37,13 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_b2",
+            "model_name": "efficientnet_b3",
             "num_epochs": 30,
             "batch_size": 256,
             "optimizer_name": "sgd",
             "optimizer_config": {
-                "learning_rate": 1e-3,
+                "learning_rate": 1e-1,
+                "momentum": 0.9,
                 "weight_decay": 1e-4
             },
             "scheduler_name": "steplr",
