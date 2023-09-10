@@ -3,7 +3,12 @@ from typing import Dict, Union
 import torch
 from typing_extensions import Self
 
-from packages.models.efficientnet import EfficientNetB0, EfficientNetB1, EfficientNetB2
+from packages.models.efficientnet import (
+    EfficientNetB0,
+    EfficientNetB1,
+    EfficientNetB2,
+    EfficientNetB6,
+)
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
@@ -233,6 +238,26 @@ class GetModel:
         )
 
         return EfficientNetB2()
+
+    def _efficientnet_b6(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNetB6 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNetB6 model.
+        """
+
+        print(
+            "[INFO] Using EfficientNetB6 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetB6()
 
     def _load_model(
         self: Self,
