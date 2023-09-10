@@ -9,6 +9,7 @@ from packages.models.efficientnet import (
     EfficientNetB2,
     EfficientNetB3,
     EfficientNetB6,
+    EfficientNetV2M,
     EfficientNetV2S,
 )
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
@@ -40,6 +41,10 @@ class GetModel:
         _efficientnet_b0: Returns the EfficientNetB0 model.
         _efficientnet_b1: Returns the EfficientNetB1 model.
         _efficientnet_b2: Returns the EfficientNetB2 model.
+        _efficientnet_b3: Returns the EfficientNetB3 model.
+        _efficientnet_b6: Returns the EfficientNetB6 model.
+        _efficientnet_v2_s: Returns the EfficientNet_V2_S model.
+        _efficientnet_v2_m: Returns the EfficientNet_V2_M model.
         _load_model: Uses the load_config parameter to get the model name and the configuration
             used while initially training it. It also computes the path of the model parameters
             checkpoint to be loaded.
@@ -300,6 +305,26 @@ class GetModel:
         )
 
         return EfficientNetV2S()
+
+    def _efficientnet_v2_m(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNet_V2_M model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNet_V2_M model.
+        """
+
+        print(
+            "[INFO] Using EfficientNet_V2_M model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetV2M()
 
     def _load_model(
         self: Self,
