@@ -410,6 +410,9 @@ class Solver:
 
         # Initialize metrics to avoid type error after the loop
         test_metrics = {}
+        best_test_metrics = {
+            "accuracy": 0.0,
+        }
 
         for epoch in tqdm(range(self.num_epochs)):
             # Optimization on train set
@@ -438,6 +441,9 @@ class Solver:
                 writer=writer,
                 global_step=epoch,
             )
+            if test_metrics["accuracy"] > best_test_metrics["accuracy"]:
+                best_test_metrics = test_metrics
+                best_test_metrics["epoch"] = epoch
 
             self._save_checkpoint(
                 model=model,
@@ -460,7 +466,7 @@ class Solver:
 
         end_time = timer()
 
-        metrics = test_metrics
+        metrics = best_test_metrics
         metrics["time"] = end_time - start_time
 
         save_metrics(

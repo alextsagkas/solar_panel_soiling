@@ -62,6 +62,8 @@ def save_metrics(
                 f.write(f"{key}: {get_time(metric)}\n")
             elif key == "loss":
                 f.write(f"{key}: {metric:.4f}\n")
+            elif key == "epoch":
+                f.write(f"{key}: {metric:.0f}\n")
             else:
                 f.write(f"{key}: {metric * 100:.2f}%\n")
 
