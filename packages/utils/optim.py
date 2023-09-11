@@ -20,15 +20,18 @@ class GetOptimizer:
         scheduler_config (Union[Dict, None]): Dictionary with the configuration of the scheduler.
 
     Methods:
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Optimizers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Optimizers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _sgd: Returns a SGD optimizer.
         _adam: Returns an Adam optimizer.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Schedulers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Schedulers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _steplr: Returns a StepLR scheduler.
         _reduce_lr_on_plateau: Returns a ReduceLROnPlateau scheduler.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         get_optimizer: Returns the optimizer based on the optimizer_name parameter.
         get_scheduler: Returns the scheduler based on the scheduler_name parameter.
+        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Update Scheduler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+        update_scheduler: Updates the scheduler based on the scheduler_name parameter.
+            if there is not scheduler configured, it does nothing.
     """
 
     def __init__(
@@ -153,7 +156,7 @@ class GetOptimizer:
             self.scheduler_config = {}
         self.scheduler_config.setdefault("step_size", 5)
         self.scheduler_config.setdefault("gamma", 0.5)
-        self.scheduler_config.setdefault("verbose", True)
+        self.scheduler_config.setdefault("verbose", False)
 
         print(
             "[INFO] Using StepLR scheduler with "
@@ -189,7 +192,7 @@ class GetOptimizer:
         self.scheduler_config.setdefault("cooldown", 0)
         self.scheduler_config.setdefault("min_lr", 0)
         self.scheduler_config.setdefault("eps", 1e-8)
-        self.scheduler_config.setdefault("verbose", True)
+        self.scheduler_config.setdefault("verbose", False)
 
         print(
             "[INFO] Using ReduceLROnPlateau scheduler with "
@@ -235,3 +238,34 @@ class GetOptimizer:
             return scheduler_method()
         else:
             raise ValueError(f"Scheduler '{self.scheduler_name}' is not supported.")
+
+    def update_scheduler(
+        self: Self,
+        test_metrics: Dict[str, float],
+        scheduler: Union[
+            torch.optim.lr_scheduler.LRScheduler,
+            torch.optim.lr_scheduler.ReduceLROnPlateau,
+            None,
+        ],
+    ) -> None:
+        """Updates the scheduler based on the scheduler_name attribute. If there is not scheduler
+        configured, it does nothing.
+
+        Args:
+            self (Self): Instance of GetOptimizer.
+            test_metrics (Dict[str, float]): Dictionary with the metrics of the test.
+            scheduler (Union[ torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.
+                ReduceLROnPlateau, None]): Scheduler instance.
+        """
+        if scheduler is not None:
+            current_lr = self.config["learning_rate"]  # type: ignore
+            if type(scheduler) == torch.optim.lr_scheduler.ReduceLROnPlateau:
+                metric = test_metrics[self.scheduler_config["metric"]]  # type: ignore
+                scheduler.step(metric)
+                print("[INFO] Update ReduceLROnPlateau scheduler.")
+                current_lr = scheduler.optimizer.param_groups[0]["lr"]
+            elif type(scheduler) == torch.optim.lr_scheduler.StepLR:
+                scheduler.step()
+                current_lr = scheduler.get_last_lr()[0]
+                print("[INFO] Update StepLR scheduler.")
+            print(f"[INFO] Current learning rate: {current_lr}")

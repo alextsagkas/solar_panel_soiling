@@ -449,13 +449,10 @@ class Solver:
                 model=model,
                 extra=f"epoch_{epoch}",
             )
-
-            if scheduler is not None:
-                if type(scheduler) == torch.optim.lr_scheduler.ReduceLROnPlateau:
-                    metric = test_metrics[optimizer_obj.scheduler_config["metric"]]  # type: ignore
-                    scheduler.step(metric)
-                elif type(scheduler) == torch.optim.lr_scheduler.StepLR:
-                    scheduler.step()
+            optimizer_obj.update_scheduler(
+                test_metrics=test_metrics,
+                scheduler=scheduler,
+            )
 
         save_model(
             model=model,
