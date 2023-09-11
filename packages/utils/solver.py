@@ -451,13 +451,11 @@ class Solver:
             )
 
             if scheduler is not None:
-                print(
-                    "[INFO] Scheduler's learning rate step: ",
-                    f"{scheduler.get_last_lr()[0]:.2e} -> ",
-                    end=""
-                )
-                scheduler.step()
-                print(f"{scheduler.get_last_lr()[0]:.2e}")
+                if type(scheduler) == torch.optim.lr_scheduler.ReduceLROnPlateau:
+                    metric = test_metrics[optimizer_obj.scheduler_config["metric"]]  # type: ignore
+                    scheduler.step(metric)
+                elif type(scheduler) == torch.optim.lr_scheduler.StepLR:
+                    scheduler.step()
 
         save_model(
             model=model,

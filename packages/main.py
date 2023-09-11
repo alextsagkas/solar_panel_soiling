@@ -37,8 +37,8 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_v2_m",
-            "num_epochs": 30,
+            "model_name": "efficientnet_b0",
+            "num_epochs": 50,
             "batch_size": 256,
             "optimizer_name": "sgd",
             "optimizer_config": {
@@ -46,18 +46,27 @@ if __name__ == "__main__":
                 "momentum": 0.9,
                 "weight_decay": 1e-4
             },
-            "scheduler_name": "steplr",
+            "scheduler_name": "reducelronplateau",
             "scheduler_config": {
-                "step_size": 10,
-                "gamma": 0.1,
+                "metric": "accuracy",
+                "mode": "max",
+                "patience": 3,
+                "threshold": 1e-2,
+                "min_lr": 1e-5,
             },
             "train_dir": download_train_dir,
             "train_transform_name": "efficientnet",
             "train_transform_config": {
+                "resize_size": 256,
+                "crop_size": 224,
                 "random_rotation": 0,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "efficientnet",
+            "test_transform_config": {
+                "resize_size": 256,
+                "crop_size": 224,
+            },
             "timestamp_list": timestamp_list,
             "device": device,
         }

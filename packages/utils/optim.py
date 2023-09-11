@@ -25,6 +25,7 @@ class GetOptimizer:
         _adam: Returns an Adam optimizer.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Schedulers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _steplr: Returns a StepLR scheduler.
+        _reduce_lr_on_plateau: Returns a ReduceLROnPlateau scheduler.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         get_optimizer: Returns the optimizer based on the optimizer_name parameter.
         get_scheduler: Returns the scheduler based on the scheduler_name parameter.
@@ -152,7 +153,7 @@ class GetOptimizer:
             self.scheduler_config = {}
         self.scheduler_config.setdefault("step_size", 5)
         self.scheduler_config.setdefault("gamma", 0.5)
-        self.scheduler_config.setdefault("verbose", False)
+        self.scheduler_config.setdefault("verbose", True)
 
         print(
             "[INFO] Using StepLR scheduler with "
@@ -168,9 +169,57 @@ class GetOptimizer:
             verbose=self.scheduler_config["verbose"],
         )
 
+    def _reducelronplateau_scheduler(
+        self: Self,
+
+    ) -> torch.optim.lr_scheduler.ReduceLROnPlateau:
+        """Returns a ReduceLROnPlateau scheduler.
+
+        Returns:
+            torch.optim.lr_scheduler.ReduceLROnPlateau: Scheduler.
+        """
+        if self.scheduler_config is None:
+            self.scheduler_config = {}
+        self.scheduler_config.setdefault("metric", "loss")
+        self.scheduler_config.setdefault("mode", "min")
+        self.scheduler_config.setdefault("factor", 0.1)
+        self.scheduler_config.setdefault("patience", 10)
+        self.scheduler_config.setdefault("threshold", 1e-4)
+        self.scheduler_config.setdefault("threshold_mode", "rel")
+        self.scheduler_config.setdefault("cooldown", 0)
+        self.scheduler_config.setdefault("min_lr", 0)
+        self.scheduler_config.setdefault("eps", 1e-8)
+        self.scheduler_config.setdefault("verbose", True)
+
+        print(
+            "[INFO] Using ReduceLROnPlateau scheduler with "
+            f"metric={self.scheduler_config['metric']}, "
+            f"mode={self.scheduler_config['mode']}, "
+            f"factor={self.scheduler_config['factor']}, "
+            f"patience={self.scheduler_config['patience']}, "
+            f"threshold={self.scheduler_config['threshold']}, "
+            f"threshold_mode={self.scheduler_config['threshold_mode']}, "
+            f"cooldown={self.scheduler_config['cooldown']}, "
+            f"min_lr={self.scheduler_config['min_lr']}, "
+            f"eps={self.scheduler_config['eps']} and "
+            f"verbose={self.scheduler_config['verbose']}."
+        )
+
+        return optim.lr_scheduler.ReduceLROnPlateau(
+            optimizer=self.optimizer,
+            mode=self.scheduler_config["mode"],
+            factor=self.scheduler_config["factor"],
+            patience=self.scheduler_config["patience"],
+            threshold=self.scheduler_config["threshold"],
+            cooldown=self.scheduler_config["cooldown"],
+            min_lr=self.scheduler_config["min_lr"],
+            eps=self.scheduler_config["eps"],
+            verbose=self.scheduler_config["verbose"],
+        )
+
     def get_scheduler(
         self: Self,
-    ) -> torch.optim.lr_scheduler.LRScheduler:
+    ) -> Union[torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.ReduceLROnPlateau]:
         """Returns the scheduler based on the scheduler_name attribute.
 
         Raises:
