@@ -5,6 +5,7 @@ data/
 debug/
 config/
 miscellaneous/
+models/
 .vscode
 .DS_Store
 .VSCODECounter/
