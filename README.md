@@ -93,6 +93,7 @@ In order to update the parameters of a model an optimizer is used. The optimizer
 | ----------------- | ----------------- | -------------------------------- |
 | EfficientNet_B3   | 85.77             | 2023-09-11/01-46-03_epoch_5.txt  |
 | EfficientNet_V2_S | 85.84             | 2023-09-11/02-27-02_epoch_20.txt |
+| EfficientNet_V2_M | 78.70             | 2023-09-11/02-58-55_epoch_15.txt |
 
 <!-- | ResNet18        | 78.03             | 2023-09-06/02-46-28.txt | -->
 <!-- | ResNet34        | 81.36             | 2023-09-06/22-54-45.txt | -->

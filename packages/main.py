@@ -37,7 +37,7 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_v2_s",
+            "model_name": "efficientnet_v2_m",
             "num_epochs": 30,
             "batch_size": 256,
             "optimizer_name": "sgd",
