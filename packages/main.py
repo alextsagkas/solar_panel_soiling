@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_b2",
+            "model_name": "efficientnet_b6",
             "num_epochs": 35,
-            "batch_size": 128,
+            "batch_size": 32,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-1,
@@ -57,14 +57,14 @@ if __name__ == "__main__":
             "train_dir": download_train_dir,
             "train_transform_name": "efficientnet",
             "train_transform_config": {
-                "resize_size": 288,
-                "crop_size": 288,
+                "resize_size": 528,
+                "crop_size": 528,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "efficientnet",
             "test_transform_config": {
-                "resize_size": 288,
-                "crop_size": 288,
+                "resize_size": 528,
+                "crop_size": 528,
             },
             "timestamp_list": timestamp_list,
             "device": device,

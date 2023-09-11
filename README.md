@@ -8,12 +8,12 @@
 | EfficientNet_B1   | 86.90             | 2023-09-11/16-04-08_epoch_9.txt  |
 | EfficientNet_B2   | 89.30             | 2023-09-11/16-45-38_epoch_21.txt |
 | EfficientNet_B3   | 85.77             | 2023-09-11/01-46-03_epoch_5.txt  |
+| EfficientNet_B6   | 83.73             | 2023-09-11/17-16-42_epoch_8.txt  |
 | EfficientNet_V2_S | 85.84             | 2023-09-11/02-27-02_epoch_20.txt |
 | EfficientNet_V2_M | 78.70             | 2023-09-11/02-58-55_epoch_15.txt |
 
 <!-- | ResNet18        | 78.03             | 2023-09-06/02-46-28.txt | -->
 <!-- | ResNet34        | 81.36             | 2023-09-06/22-54-45.txt | -->
-<!-- | EfficientNet_B6 | 89.27             | 2023-09-11/01-46-03.txt | -->
 
 ## Requirements & Installation
 
