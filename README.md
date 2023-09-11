@@ -1,5 +1,22 @@
 # Solar Panel Soiling Detection
 
+## Experiments' Results
+
+| Model Name        | Test Accuracy (%) | Config File                      |
+| ----------------- | ----------------- | -------------------------------- |
+| EfficientNet_B0   | 87.34             | 2023-09-11/13-19-26_epoch_27.txt |
+| EfficientNet_B1   | 86.90             | 2023-09-11/16-04-08_epoch_9.txt  |
+| EfficientNet_B3   | 85.77             | 2023-09-11/01-46-03_epoch_5.txt  |
+| EfficientNet_V2_S | 85.84             | 2023-09-11/02-27-02_epoch_20.txt |
+| EfficientNet_V2_M | 78.70             | 2023-09-11/02-58-55_epoch_15.txt |
+
+<!-- | ResNet18        | 78.03             | 2023-09-06/02-46-28.txt | -->
+<!-- | ResNet34        | 81.36             | 2023-09-06/22-54-45.txt | -->
+<!-- | EfficientNet_B0 | 86.98             | 2023-09-10/13-38-13.txt | -->
+<!-- | EfficientNet_B1 | 88.37             | 2023-09-10/21-19-35.txt | -->
+<!-- | EfficientNet_B2 | 84.89             | 2023-09-10/22-15-26.txt | -->
+<!-- | EfficientNet_B6 | 89.27             | 2023-09-11/01-46-03.txt | -->
+
 ## Requirements & Installation
 
 The project is developed in **Python 3.9.17**. The required packages are listed in the `requirements.txt` file. To create a virtual environment and to install them, run the following commands:
@@ -86,19 +103,3 @@ All the functionality for transforming the data is located in a single class in 
 ## Optimizers
 
 In order to update the parameters of a model an optimizer is used. The optimizers are accessed through `GetOptimizer` class located in `packages/utils/optim.py`. It picks an optimizer by its name (the name of the optimizer corresponds to the corresponding method in the class) and configures it through the optional `config` dictionary. Also, it needs the parameters of the model to be optimized.
-
-## Experiments' Results
-
-| Model Name        | Test Accuracy (%) | Config File                      |
-| ----------------- | ----------------- | -------------------------------- |
-| EfficientNet_B0   | 87.34             | 2023-09-11/13-19-26_epoch_27.txt |
-| EfficientNet_B3   | 85.77             | 2023-09-11/01-46-03_epoch_5.txt  |
-| EfficientNet_V2_S | 85.84             | 2023-09-11/02-27-02_epoch_20.txt |
-| EfficientNet_V2_M | 78.70             | 2023-09-11/02-58-55_epoch_15.txt |
-
-<!-- | ResNet18        | 78.03             | 2023-09-06/02-46-28.txt | -->
-<!-- | ResNet34        | 81.36             | 2023-09-06/22-54-45.txt | -->
-<!-- | EfficientNet_B0 | 86.98             | 2023-09-10/13-38-13.txt | -->
-<!-- | EfficientNet_B1 | 88.37             | 2023-09-10/21-19-35.txt | -->
-<!-- | EfficientNet_B2 | 84.89             | 2023-09-10/22-15-26.txt | -->
-<!-- | EfficientNet_B6 | 89.27             | 2023-09-11/01-46-03.txt | -->
