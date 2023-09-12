@@ -18,6 +18,7 @@
 | ResNet50           | 86.02             | 2023-09-12/15-16-40_epoch_2.txt  |
 | MobileNet_V2       | 85.51             | 2023-09-12/22-01-44_epoch_14.txt |
 | MobileNet_V3_Small | 87.65             | 2023-09-12/23_18_25_epoch_9.txt  |
+| MobileNet_V3_Large | 88.45             | 2023-09-13/00-49-38_epoch_28.txt |
 
 ## Requirements & Installation
 
