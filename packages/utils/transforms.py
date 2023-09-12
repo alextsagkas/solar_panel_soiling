@@ -362,6 +362,7 @@ class GetTransforms:
         return transforms.Compose([
             transforms.Resize(
                 size=self.test_config["resize_size"],
+                interpolation=transforms.InterpolationMode.BICUBIC,
             ),
             transforms.CenterCrop(
                 size=self.test_config["crop_size"]

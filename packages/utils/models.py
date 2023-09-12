@@ -9,6 +9,7 @@ from packages.models.efficientnet import (
     EfficientNetB2,
     EfficientNetB3,
     EfficientNetB6,
+    EfficientNetB7,
     EfficientNetV2L,
     EfficientNetV2M,
     EfficientNetV2S,
@@ -287,6 +288,26 @@ class GetModel:
         )
 
         return EfficientNetB6()
+
+    def _efficientnet_b7(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the EfficientNetB7 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The EfficientNetB7 model.
+        """
+
+        print(
+            "[INFO] Using EfficientNetB7 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return EfficientNetB7()
 
     def _efficientnet_v2_s(
         self: Self,
