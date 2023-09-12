@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_v2_l",
+            "model_name": "resnet18",
             "num_epochs": 35,
-            "batch_size": 16,
+            "batch_size": 128,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-2,
@@ -55,20 +55,16 @@ if __name__ == "__main__":
                 "min_lr": 1e-6,
             },
             "train_dir": download_train_dir,
-            "train_transform_name": "efficientnet",
+            "train_transform_name": "resnet",
             "train_transform_config": {
-                "resize_size": 480,
-                "crop_size": 480,
-                "mean": [0.5, 0.5, 0.5],
-                "std": [0.5, 0.5, 0.5],
+                "resize_size": 256,
+                "crop_size": 224,
             },
             "test_dir": download_test_dir,
-            "test_transform_name": "efficientnet",
+            "test_transform_name": "resnet",
             "test_transform_config": {
-                "resize_size": 480,
-                "crop_size": 480,
-                "mean": [0.5, 0.5, 0.5],
-                "std": [0.5, 0.5, 0.5],
+                "resize_size": 256,
+                "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
             "device": device,
