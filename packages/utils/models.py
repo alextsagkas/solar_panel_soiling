@@ -14,6 +14,7 @@ from packages.models.efficientnet import (
     EfficientNetV2M,
     EfficientNetV2S,
 )
+from packages.models.mobilenet import MobileNetV2
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
@@ -45,9 +46,11 @@ class GetModel:
         _efficientnet_b2: Returns the EfficientNetB2 model.
         _efficientnet_b3: Returns the EfficientNetB3 model.
         _efficientnet_b6: Returns the EfficientNetB6 model.
+        _efficientnet_b7: Returns the EfficientNetB7 model.
         _efficientnet_v2_s: Returns the EfficientNet_V2_S model.
         _efficientnet_v2_m: Returns the EfficientNet_V2_M model.
         _efficientnet_v2_l: Returns the EfficientNet_V2_L model.
+        _mobilenet_v2: Returns the MobileNetV2 model.
         _load_model: Uses the load_config parameter to get the model name and the configuration
             used while initially training it. It also computes the path of the model parameters
             checkpoint to be loaded.
@@ -368,6 +371,26 @@ class GetModel:
         )
 
         return EfficientNetV2L()
+
+    def _mobilenet_v2(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the MobileNetV2 model with pretrained the inner layers. Only the last 
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The MobileNet_V2 model.
+        """
+
+        print(
+            "[INFO] Using MobileNet_V2 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return MobileNetV2()
 
     def _load_model(
         self: Self,

@@ -31,12 +31,19 @@ class GetTransforms:
             (horizontal flip & rotation). In the end the image is converted to tensor with values
             between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225]
             are subtracted.
+        _mobilenet_train: Resize and central crops the image before applying data augmentation
+            (horizontal flip & rotation). In the end the image is converted to tensor with values
+            between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225]
+            are subtracted.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Test Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
         _simple_test: Resize and converts it to a tensor with values between 0 and 1.
         _resnet_test: Resize and crops the image before converting it to a tensor with values
             between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
             0.225] are subtracted.
         _efficientnet_test: Resize and crops the image before converting it to a tensor with values
+            between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
+            0.225] are subtracted.
+        _mobilenet_test: Resize and crops the image before converting it to a tensor with values
             between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
             0.225] are subtracted.
         # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
@@ -253,6 +260,63 @@ class GetTransforms:
 
         return transforms.Compose(transforms_list)
 
+    def _mobilenet_train(
+        self: Self,
+    ) -> transforms.transforms.Compose:
+        """Resize and central crops the image before applying data augmentation (horizontal flip, 
+        & random rotation). In the end the image is converted to tensor with values between 0 and 1 
+        and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The 
+        values of mean and std can be optionally configured through the train_config attribute.
+
+        Args:
+            self (Self): GetTransforms instance.
+
+        Returns:
+            transforms.transforms.Compose: The resnet train transform.
+        """
+        if self.train_config is None:
+            self.train_config = {}
+        self.train_config.setdefault("resize_size", 232)
+        self.train_config.setdefault("crop_size", 224)
+        self.train_config.setdefault("random_horizontal_flip", 0.5)
+        self.train_config.setdefault("random_rotation", 0)
+        self.train_config.setdefault("mean", [0.485, 0.456, 0.406])
+        self.train_config.setdefault("std", [0.229, 0.224, 0.225])
+
+        print(
+            "efficientnet transform with "
+            f"resize_size={self.train_config['resize_size']}, "
+            f"crop_size={self.train_config['crop_size']}, "
+            f"random_horizontal_flip={self.train_config['random_horizontal_flip']}, "
+            f"random_rotation={self.train_config['random_rotation']}, "
+            f"mean={self.train_config['mean']} and "
+            f"std={self.train_config['std']}."
+        )
+
+        # Create transform function
+        transforms_list = [
+            transforms.Resize(
+                size=self.train_config["resize_size"],
+                interpolation=transforms.InterpolationMode.BILINEAR,
+            ),
+            transforms.CenterCrop(
+                size=self.train_config["crop_size"]
+            ),
+            transforms.RandomHorizontalFlip(
+                p=self.train_config["random_horizontal_flip"]
+            ),
+            transforms.RandomRotation(
+                degrees=self.train_config["random_rotation"]
+            ),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.train_config["mean"],
+                std=self.train_config["std"],
+            )
+        ]
+
+        return transforms.Compose(transforms_list)
+
     def get_train_transform(
         self
     ) -> transforms.transforms.Compose:
@@ -363,6 +427,49 @@ class GetTransforms:
             transforms.Resize(
                 size=self.test_config["resize_size"],
                 interpolation=transforms.InterpolationMode.BICUBIC,
+            ),
+            transforms.CenterCrop(
+                size=self.test_config["crop_size"]
+            ),
+            transforms.ToTensor(),
+            transforms.Normalize(
+                mean=self.test_config["mean"],
+                std=self.test_config["std"],
+            )
+        ])
+
+    def _mobilenet_test(
+        self: Self,
+    ) -> transforms.transforms.Compose:
+        """Resize and crops the image before converting it to a tensor with values between 0 and 1.
+        In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        The values of mean and std can be optionally configured through the test_config attribute.
+
+        Args:
+            self (Self): The object itself.
+
+        Returns:
+            transforms.transforms.Compose: The resnet test transform.
+        """
+        if self.test_config is None:
+            self.test_config = {}
+        self.test_config.setdefault("resize_size", 232)
+        self.test_config.setdefault("crop_size", 224)
+        self.test_config.setdefault("mean", [0.485, 0.456, 0.406])
+        self.test_config.setdefault("std", [0.229, 0.224, 0.225])
+
+        print(
+            f"{self.test_transform_name} transform with "
+            f"resize_size={self.test_config['resize_size']}, "
+            f"crop_size={self.test_config['crop_size']}, "
+            f"mean={self.test_config['mean']} and "
+            f"std={self.test_config['std']}."
+        )
+
+        return transforms.Compose([
+            transforms.Resize(
+                size=self.test_config["resize_size"],
+                interpolation=transforms.InterpolationMode.BILINEAR,
             ),
             transforms.CenterCrop(
                 size=self.test_config["crop_size"]

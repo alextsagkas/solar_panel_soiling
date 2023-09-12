@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
-    test_name = test_names[2]
+    test_name = test_names[1]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "efficientnet_b7",
+            "model_name": "mobilenet_v2",
             "num_epochs": 35,
-            "batch_size": 16,
+            "batch_size": 64,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-2,
@@ -55,16 +55,16 @@ if __name__ == "__main__":
                 "min_lr": 1e-6,
             },
             "train_dir": download_train_dir,
-            "train_transform_name": "efficientnet",
+            "train_transform_name": "mobilenet",
             "train_transform_config": {
-                "resize_size": 600,
-                "crop_size": 600,
+                "resize_size": 232,
+                "crop_size": 224,
             },
             "test_dir": download_test_dir,
-            "test_transform_name": "efficientnet",
+            "test_transform_name": "mobilenet",
             "test_transform_config": {
-                "resize_size": 600,
-                "crop_size": 600,
+                "resize_size": 232,
+                "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
             "device": device,
