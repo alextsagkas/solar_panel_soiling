@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
-    test_name = test_names[0]
+    test_name = test_names[2]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -87,30 +87,39 @@ if __name__ == "__main__":
     elif test_name == "test_resume":
         hyperparameters = {
             "load_config": {
-                "checkpoint_timestamp_list": ["2023-09-10", "22-51-34"],
-                "load_epoch": 26,
+                "checkpoint_timestamp_list": ["2023-09-12", "16-31-24"],
+                "load_epoch": 9,
             },
             "test_name": test_name,
-            "model_name": "efficientnet_b6",
-            "num_epochs": 15,
-            "batch_size": 256,
-            "optimizer_name": "adam",
+            "model_name": "efficientnet_b7",
+            "num_epochs": 10,
+            "batch_size": 16,
+            "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-2,
-                "weight_decay": 1e-3
+                "momentum": 0.9,
+                "weight_decay": 1e-4
             },
-            "scheduler_name": "steplr",
+            "scheduler_name": "reducelronplateau",
             "scheduler_config": {
-                "step_size": 8,
-                "gamma": 0.1,
+                "metric": "loss",
+                "mode": "min",
+                "patience": 5,
+                "threshold": 1e-3,
+                "min_lr": 1e-6,
             },
             "train_dir": download_train_dir,
             "train_transform_name": "efficientnet",
             "train_transform_config": {
-                "random_rotation": 0
+                "resize_size": 600,
+                "crop_size": 600,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "efficientnet",
+            "test_transform_config": {
+                "resize_size": 600,
+                "crop_size": 600,
+            },
             "timestamp_list": timestamp_list,
             "device": device,
         }

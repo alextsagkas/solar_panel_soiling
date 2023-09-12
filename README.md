@@ -9,7 +9,7 @@
 | EfficientNet_B2   | 89.30             | 2023-09-11/16-45-38_epoch_21.txt |
 | EfficientNet_B3   | 85.77             | 2023-09-11/01-46-03_epoch_5.txt  |
 | EfficientNet_B6   | 83.73             | 2023-09-11/17-16-42_epoch_8.txt  |
-| EfficientNet_B7   |                   | 2023-09-12/.txt                  |
+| EfficientNet_B7   | 88.30             | 2023-09-12/19-13-46_epoch_6.txt  |
 | EfficientNet_V2_S | 83.78             | 2023-09-11/19-01-14_epoch_4.txt  |
 | EfficientNet_V2_M | 88.89             | 2023-09-11/19-25-44_epoch_23.txt |
 | EfficientNet_V2_L | 88.50             | 2023-09-12/01-00-32_epoch_1.txt  |
