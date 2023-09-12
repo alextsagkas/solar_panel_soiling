@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "mobilenet_v3_small",
+            "model_name": "mobilenet_v3_large",
             "num_epochs": 35,
-            "batch_size": 64,
+            "batch_size": 12,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-2,
@@ -57,13 +57,13 @@ if __name__ == "__main__":
             "train_dir": download_train_dir,
             "train_transform_name": "mobilenet",
             "train_transform_config": {
-                "resize_size": 256,
+                "resize_size": 232,
                 "crop_size": 224,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "mobilenet",
             "test_transform_config": {
-                "resize_size": 256,
+                "resize_size": 232,
                 "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
