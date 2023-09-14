@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "mobilenet_v3_large",
-            "num_epochs": 35,
-            "batch_size": 12,
+            "model_name": "shufflenet_v2_x0_5",
+            "num_epochs": 100,
+            "batch_size": 128,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 1e-2,
@@ -50,20 +50,20 @@ if __name__ == "__main__":
             "scheduler_config": {
                 "metric": "loss",
                 "mode": "min",
-                "patience": 5,
+                "patience": 6,
                 "threshold": 1e-3,
-                "min_lr": 1e-6,
+                "min_lr": 1e-8,
             },
             "train_dir": download_train_dir,
-            "train_transform_name": "mobilenet",
+            "train_transform_name": "shufflenet",
             "train_transform_config": {
-                "resize_size": 232,
+                "resize_size": 256,
                 "crop_size": 224,
             },
             "test_dir": download_test_dir,
-            "test_transform_name": "mobilenet",
+            "test_transform_name": "shufflenet",
             "test_transform_config": {
-                "resize_size": 232,
+                "resize_size": 256,
                 "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
