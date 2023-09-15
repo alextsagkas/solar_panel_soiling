@@ -444,6 +444,11 @@ class Solver:
             if test_metrics["accuracy"] > best_test_metrics["accuracy"]:
                 best_test_metrics = test_metrics
                 best_test_metrics["epoch"] = epoch
+                # Save best test metrics in case of early stopping
+                save_metrics(
+                    metrics=best_test_metrics,
+                    timestamp_list=self.timestamp_list,
+                )
 
             self._save_checkpoint(
                 model=model,
