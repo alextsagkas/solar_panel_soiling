@@ -16,7 +16,7 @@ from packages.models.efficientnet import (
 )
 from packages.models.mobilenet import MobileNetV2, MobileNetV3Large, MobileNetV3Small
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
-from packages.models.shufflenet import ShuffleNetV2X05, ShuffleNetV2X20
+from packages.models.shufflenet import ShuffleNetV2X05, ShuffleNetV2X15, ShuffleNetV2X20
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
 from packages.utils.storage import load_hyperparameters
@@ -455,6 +455,26 @@ class GetModel:
         )
 
         return ShuffleNetV2X05()
+
+    def _shufflenet_v2_x1_5(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the ShuffleNetV2X15 model with pretrained the inner layers. Only the last
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The ShuffleNet_V2_X1_5 model.
+        """
+
+        print(
+            "[INFO] Using ShuffleNet_V2_X1_5 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return ShuffleNetV2X15()
 
     def _shufflenet_v2_x2_0(
         self: Self,
