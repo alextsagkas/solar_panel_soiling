@@ -16,7 +16,12 @@ from packages.models.efficientnet import (
 )
 from packages.models.mobilenet import MobileNetV2, MobileNetV3Large, MobileNetV3Small
 from packages.models.resnet import ResNet18, ResNet34, ResNet50
-from packages.models.shufflenet import ShuffleNetV2X05, ShuffleNetV2X15, ShuffleNetV2X20
+from packages.models.shufflenet import (
+    ShuffleNetV2X05,
+    ShuffleNetV2X10,
+    ShuffleNetV2X15,
+    ShuffleNetV2X20,
+)
 from packages.models.tiny_vgg import TinyVGG, TinyVGGBatchnorm
 from packages.utils.configuration import checkpoint_dir
 from packages.utils.storage import load_hyperparameters
@@ -37,11 +42,14 @@ class GetModel:
 
 
     Methods:
+        # ~~~~~~~~~~~~~~~~~~~~~~~ TinyVGG ~~~~~~~~~~~~~~~~~~~~~~~ #
         _tiny_vgg: Returns the TinyVGG model.
         _tiny_vgg_batchnorm: Returns the TinyVGGBatchnorm model.
+        # ~~~~~~~~~~~~~~~~~~~~~~~ ResNet ~~~~~~~~~~~~~~~~~~~~~~~~ #
         _resnet18: Returns the ResNet18 model.
         _resnet34: Returns the ResNet34 model.
         _resnet50: Returns the ResNet50 model.
+        # ~~~~~~~~~~~~~~~~~~~~~~~ EfficientNet ~~~~~~~~~~~~~~~~~~~ # 
         _efficientnet_b0: Returns the EfficientNetB0 model.
         _efficientnet_b1: Returns the EfficientNetB1 model.
         _efficientnet_b2: Returns the EfficientNetB2 model.
@@ -51,10 +59,16 @@ class GetModel:
         _efficientnet_v2_s: Returns the EfficientNet_V2_S model.
         _efficientnet_v2_m: Returns the EfficientNet_V2_M model.
         _efficientnet_v2_l: Returns the EfficientNet_V2_L model.
+        # ~~~~~~~~~~~~~~~~~~~~~~~ MobileNet ~~~~~~~~~~~~~~~~~~~~~~ #
         _mobilenet_v2: Returns the MobileNetV2 model.
         _mobile_v3_small: Returns the MobileNetV3Small model.
         _mobile_v3_large: Returns the MobileNetV3Large model.
+        # ~~~~~~~~~~~~~~~~~~~~~~~ ShuffleNet ~~~~~~~~~~~~~~~~~~~~~~ #
         _shufflenet_v2_x0_5: Returns the ShuffleNetV2X05 model.
+        _shufflenet_v2_x1_0: Returns the ShuffleNetV2X10 model.
+        _shufflenet_v2_x1_5: Returns the ShuffleNetV2X15 model.
+        _shufflenet_v2_x2_0: Returns the ShuffleNetV2X20 model.
+        # ~~~~~~~~~~~~~~~~~~~~~~~  Utilizes ~~~~~~~~~~~~~~~~~~~~~~ #
         _load_model: Uses the load_config parameter to get the model name and the configuration
             used while initially training it. It also computes the path of the model parameters
             checkpoint to be loaded.
@@ -455,6 +469,26 @@ class GetModel:
         )
 
         return ShuffleNetV2X05()
+
+    def _shufflenet_v2_x1_0(
+        self: Self,
+    ) -> torch.nn.Module:
+        """Returns the ShuffleNetV2X10 model with pretrained the inner layers. Only the last
+        (classification) layer is trainable and outputs 2 classes.
+
+        Args:
+            self (Self): GetModel instance.
+
+        Returns:
+            torch.nn.Module: The ShuffleNet_V2_X1_0 model.
+        """
+
+        print(
+            "[INFO] Using ShuffleNet_V2_X1_0 model with: "
+            "pre-trained weights in all layers, but the classifier."
+        )
+
+        return ShuffleNetV2X10()
 
     def _shufflenet_v2_x1_5(
         self: Self,

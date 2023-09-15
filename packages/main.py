@@ -19,7 +19,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
-    test_name = test_names[2]
+    test_name = test_names[0]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -37,9 +37,9 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "shufflenet_v2_x1_5",
-            "num_epochs": 30,
-            "batch_size": 128,
+            "model_name": "shufflenet_v2_x1_0",
+            "num_epochs": 70,
+            "batch_size": 64,
             "optimizer_name": "sgd",
             "optimizer_config": {
                 "learning_rate": 0.5e-2,
@@ -50,20 +50,20 @@ if __name__ == "__main__":
             "scheduler_config": {
                 "metric": "loss",
                 "mode": "min",
-                "patience": 4,
+                "patience": 5,
                 "threshold": 1e-3,
                 "min_lr": 1e-8,
             },
             "train_dir": download_train_dir,
             "train_transform_name": "shufflenet",
             "train_transform_config": {
-                "resize_size": 232,
+                "resize_size": 256,
                 "crop_size": 224,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "shufflenet",
             "test_transform_config": {
-                "resize_size": 232,
+                "resize_size": 256,
                 "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
