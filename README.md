@@ -21,7 +21,7 @@
 | MobileNet_V3_Large | 88.45             | 2023-09-13/00-49-38_epoch_28.txt |
 | ShuffleNet_V2_X0_5 | 79.57             | 2023-09-15/01-00-49_epoch_11.txt |
 | ShuffleNet_V2_X1_0 | 81.80             | 2023-09-15/17-05-21_epoch_60.txt |
-| ShuffleNet_V2_X1_5 | 91.88             | 2023-09-15/16-24-02_epoch_9.txt  |
+| ShuffleNet_V2_X1_5 | 93.97             | 2023-09-20/16-29-21_epoch_79.txt |
 | ShuffleNet_V2_X2_0 | 90.36             | 2023-09-15/12-14-30_epoch_1.txt  |
 
 ## Requirements & Installation

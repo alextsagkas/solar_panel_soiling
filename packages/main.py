@@ -37,8 +37,8 @@ if __name__ == "__main__":
     if test_name == "test_solvers-simple":
         hyperparameters = {
             "test_name": test_name,
-            "model_name": "shufflenet_v2_x1_0",
-            "num_epochs": 70,
+            "model_name": "shufflenet_v2_x1_5",
+            "num_epochs": 80,
             "batch_size": 64,
             "optimizer_name": "sgd",
             "optimizer_config": {
@@ -50,20 +50,20 @@ if __name__ == "__main__":
             "scheduler_config": {
                 "metric": "loss",
                 "mode": "min",
-                "patience": 5,
+                "patience": 7,
                 "threshold": 1e-3,
                 "min_lr": 1e-8,
             },
             "train_dir": download_train_dir,
             "train_transform_name": "shufflenet",
             "train_transform_config": {
-                "resize_size": 256,
+                "resize_size": 232,
                 "crop_size": 224,
             },
             "test_dir": download_test_dir,
             "test_transform_name": "shufflenet",
             "test_transform_config": {
-                "resize_size": 256,
+                "resize_size": 232,
                 "crop_size": 224,
             },
             "timestamp_list": timestamp_list,
