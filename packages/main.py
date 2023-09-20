@@ -12,6 +12,7 @@ from packages.utils.configuration import (
     checkpoint_dir,
     download_test_dir,
     download_train_dir,
+    test_dir,
 )
 from packages.utils.storage import save_hyperparameters
 
@@ -19,7 +20,7 @@ if __name__ == "__main__":
 
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Setup hyperparameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
     test_names = ["test_solvers-simple", "test_model", "test_resume", "test_data", "test_scraping"]
-    test_name = test_names[0]
+    test_name = test_names[1]
 
     timestamp_list = datetime.now().strftime("%Y-%m-%d_%H-%M-%S").split("_")
 
@@ -75,10 +76,10 @@ if __name__ == "__main__":
         hyperparameters = {
             "test_name": test_name,
             "device": device,
-            "test_dir": download_test_dir,
+            "test_dir": test_dir,
             "save_dir": checkpoint_dir,
-            "extra": "epoch_26",
-            "test_timestamp_list": ["2023-09-10", "22-51-34"],
+            "extra": "epoch_79",
+            "test_timestamp_list": ["2023-09-20", "16-29-21"],
             "timestamp_list": timestamp_list,
             "save_images": False,
         }
