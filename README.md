@@ -1,9 +1,5 @@
 # Solar Panel Soiling Detection
 
-kksfk
-
-## Experiment Results
-
 | Model Name         | Test Accuracy (%) | Config File                      |
 | ------------------ | ----------------- | -------------------------------- |
 | ShuffleNet_V2_X1_5 | 93.97             | 2023-09-20/16-29-21_epoch_79.txt |
