@@ -1,7 +1,5 @@
 # Solar Panel Soiling Detection
 
-We are in Thetis
-
 ## Experiment Results
 
 | Model Name         | Test Accuracy (%) | Config File                      |
