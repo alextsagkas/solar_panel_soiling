@@ -1,6 +1,6 @@
 # Solar Panel Soiling Detection
 
-## Experiments' Results
+## Experiment Results
 
 | Model Name         | Test Accuracy (%) | Config File                      |
 | ------------------ | ----------------- | -------------------------------- |
