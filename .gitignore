@@ -1,11 +1,9 @@
-# python notebooks
-*.ipynb
-
 data/
 debug/
 config/
 miscellaneous/
 models/
+!packages/models/
 .vscode
 .DS_Store
 .VSCODECounter/
