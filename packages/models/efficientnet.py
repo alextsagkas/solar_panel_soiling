@@ -5,7 +5,7 @@ from typing_extensions import Self
 
 
 class EfficientNetB0(nn.Module):
-    """Class that returns a EfficientNet_B0 model with the last layer changed to output 2 classes.
+    """Class that returns a EfficientNet_B0 model with the last layer changed to output 2 classes. Hello World!
 
     **Attributes:**
         
