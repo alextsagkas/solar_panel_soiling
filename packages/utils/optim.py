@@ -6,32 +6,50 @@ from typing_extensions import Self
 
 
 class GetOptimizer:
-    """Class that returns an optimizer based on the optimizer_name parameter. The list of available
-    optimizers is: ["adam", "sgd"].
+    """Class that returns an optimizer based on the optimizer_name parameter. The list of available optimizers is: ["adam", "sgd"].
 
-    In addition, the class also returns a scheduler based on the scheduler_name parameter. The list
-    of available schedulers is: ["steplr"].
+    In addition, the class also returns a scheduler based on the scheduler_name parameter. The list of available schedulers is: ["steplr"].
 
-    Attributes:
-        optimizer_name (str): String that identifies the optimizer to be used.
-        params (Iterator[torch.nn.Parameter]): List of parameters of the model to be optimized.
-        config (Union[Dict[str, float], None]): Dictionary with the configuration of the optimizer. 
-        scheduler_name (Union[str, None]): String that identifies the scheduler to be used.
-        scheduler_config (Union[Dict, None]): Dictionary with the configuration of the scheduler.
+    **Attributes:**
 
-    Methods:
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Optimizers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        _sgd: Returns a SGD optimizer.
-        _adam: Returns an Adam optimizer.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Schedulers ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        _steplr: Returns a StepLR scheduler.
-        _reduce_lr_on_plateau: Returns a ReduceLROnPlateau scheduler.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        get_optimizer: Returns the optimizer based on the optimizer_name parameter.
-        get_scheduler: Returns the scheduler based on the scheduler_name parameter.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Update Scheduler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        update_scheduler: Updates the scheduler based on the scheduler_name parameter.
-            if there is not scheduler configured, it does nothing.
+        optimizer_name : str
+			String that identifies the optimizer to be used.
+        params : Iterator[torch.nn.Parameter]
+			List of parameters of the model to be optimized.
+        config : Union[Dict[str, float], None]
+			Dictionary with the configuration of the optimizer. 
+        scheduler_name : Union[str, None]
+			String that identifies the scheduler to be used.
+        scheduler_config : Union[Dict, None]
+			Dictionary with the configuration of the scheduler.
+
+    **Methods:**
+
+    -----------------------------------------------------------------------------
+        
+        _sgd:
+            Returns a SGD optimizer.
+        _adam:
+            Returns an Adam optimizer.
+
+    -----------------------------------------------------------------------------
+
+        _steplr:
+            Returns a StepLR scheduler.
+        _reduce_lr_on_plateau:
+            Returns a ReduceLROnPlateau scheduler.
+
+    -----------------------------------------------------------------------------
+
+        get_optimizer:
+            Returns the optimizer based on the optimizer_name parameter.
+        get_scheduler:
+            Returns the scheduler based on the scheduler_name parameter.
+
+    -----------------------------------------------------------------------------
+
+        update_scheduler:
+            Updates the scheduler based on the scheduler_name parameter. if there is not scheduler configured, it does nothing.
     """
 
     def __init__(
@@ -44,17 +62,24 @@ class GetOptimizer:
     ) -> None:
         """Initializes the GetOptimizer class.
 
-        Args:
-            self (Self): GetOptimizer instance.
-            params (List[torch.nn.Parameter]): List of parameters of the model to be optimized 
-            optimizer_name (str): String that identifies the optimizer to be used (should match
+        **Args:**
+
+            self : Self
+				GetOptimizer instance.
+            params : List[torch.nn.Parameter]
+				List of parameters of the model to be optimized 
+            optimizer_name : str
+				String that identifies the optimizer to be used (should match
                 with a method implemented below, e.g. "sgd", "adam").
-            config (Union[Dict[str, float], None], optional): Dictionary with the configuration 
+            config : Union[Dict[str, float], None], optional
+				Dictionary with the configuration 
                 of the optimizer. Defaults to None.
-            scheduler_name (Union[str, None], optional): String that identifies the scheduler to
+            scheduler_name : Union[str, None], optional
+				String that identifies the scheduler to
                 be used (should match with a method implemented below, e.g. "steplr"). Defaults to
                 None.
-            scheduler_config (Union[Dict, None], optional): Dictionary with the configuration of
+            scheduler_config : Union[Dict, None], optional
+				Dictionary with the configuration of
                 the scheduler. Defaults to None.
         """
         self.optimizer_name = optimizer_name
@@ -68,7 +93,8 @@ class GetOptimizer:
     ) -> torch.optim.Optimizer:
         """Returns a SGD optimizer.
 
-        Returns:
+        **Returns:**
+
             torch.optim.Optimizer: SGD optimizer.
         """
         if self.config is None:
@@ -95,7 +121,8 @@ class GetOptimizer:
     ) -> torch.optim.Optimizer:
         """Returns an Adam optimizer.
 
-        Returns:
+        **Returns:**
+
             torch.optim.Optimizer: Adam optimizer.
         """
         if self.config is None:
@@ -128,7 +155,8 @@ class GetOptimizer:
     ) -> torch.optim.Optimizer:
         """Returns the optimizer based on the optimizer_name attribute.
 
-        Returns:
+        **Returns:**
+
             torch.optim.Optimizer: Optimizer instance.
 
         Raises:
@@ -149,7 +177,8 @@ class GetOptimizer:
     ) -> torch.optim.lr_scheduler.LRScheduler:
         """Returns a StepLR scheduler.
 
-        Returns:
+        **Returns:**
+
             torch.optim.lr_scheduler.LRScheduler: StepLR scheduler.
         """
         if self.scheduler_config is None:
@@ -178,7 +207,8 @@ class GetOptimizer:
     ) -> torch.optim.lr_scheduler.ReduceLROnPlateau:
         """Returns a ReduceLROnPlateau scheduler.
 
-        Returns:
+        **Returns:**
+
             torch.optim.lr_scheduler.ReduceLROnPlateau: Scheduler.
         """
         if self.scheduler_config is None:
@@ -225,10 +255,12 @@ class GetOptimizer:
     ) -> Union[torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.ReduceLROnPlateau]:
         """Returns the scheduler based on the scheduler_name attribute.
 
-        Raises:
+        **Raises:**
+
             ValueError: When the scheduler_name does not correspond to any scheduler method.
 
-        Returns:
+        **Returns:**
+
             torch.optim.lr_scheduler.LRScheduler: Scheduler instance.
         """
         scheduler_method_name = f"_{self.scheduler_name}_scheduler"
@@ -248,14 +280,16 @@ class GetOptimizer:
             None,
         ],
     ) -> None:
-        """Updates the scheduler based on the scheduler_name attribute. If there is not scheduler
-        configured, it does nothing.
+        """Updates the scheduler based on the scheduler_name attribute. If there is not scheduler configured, it does nothing.
 
-        Args:
-            self (Self): Instance of GetOptimizer.
-            test_metrics (Dict[str, float]): Dictionary with the metrics of the test.
-            scheduler (Union[ torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.
-                ReduceLROnPlateau, None]): Scheduler instance.
+        **Args:**
+
+            self : Self
+				Instance of GetOptimizer.
+            test_metrics : Dict[str, float]
+				Dictionary with the metrics of the test.
+            scheduler : Union[ torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.ReduceLROnPlateau, None]
+                Scheduler instance.
         """
         if scheduler is not None:
             current_lr = self.config["learning_rate"]  # type: ignore

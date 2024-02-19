@@ -30,49 +30,89 @@ from packages.utils.storage import load_hyperparameters
 class GetModel:
     """Class that returns a model based on the model_name parameter.
 
-    Attributes:
-        model_name (str): String that identifies the model to be used.
-        config (Union[Dict[str, int], None]): Dictionary with the configuration of the model.
-        input_shape (int): Number of channels of the input images.
-        output_shape (int): Number of classes of the output.
-        load_checkpoint (bool): If True, the model is loaded from the checkpoint path, that is 
-            specified in the load_config parameter.
-        load_config (Union[Dict, None]): Dictionary with the configuration of the loaded model.
-        mode_save_path (str): Path to the model parameters checkpoint to be loaded.
+    **Attributes:**
+
+        model_name : str
+			String that identifies the model to be used.
+        config : Union[Dict[str, int], None]
+			Dictionary with the configuration of the model.
+        input_shape : int
+			Number of channels of the input images.
+        output_shape : int
+			Number of classes of the output.
+        load_checkpoint : bool
+			If True, the model is loaded from the checkpoint path, that is specified in the load_config parameter.
+        load_config : Union[Dict, None]
+			Dictionary with the configuration of the loaded model.
+        mode_save_path : str
+			Path to the model parameters checkpoint to be loaded.
 
 
-    Methods:
-        # ~~~~~~~~~~~~~~~~~~~~~~~ TinyVGG ~~~~~~~~~~~~~~~~~~~~~~~ #
-        _tiny_vgg: Returns the TinyVGG model.
-        _tiny_vgg_batchnorm: Returns the TinyVGGBatchnorm model.
-        # ~~~~~~~~~~~~~~~~~~~~~~~ ResNet ~~~~~~~~~~~~~~~~~~~~~~~~ #
-        _resnet18: Returns the ResNet18 model.
-        _resnet34: Returns the ResNet34 model.
-        _resnet50: Returns the ResNet50 model.
-        # ~~~~~~~~~~~~~~~~~~~~~~~ EfficientNet ~~~~~~~~~~~~~~~~~~~ # 
-        _efficientnet_b0: Returns the EfficientNetB0 model.
-        _efficientnet_b1: Returns the EfficientNetB1 model.
-        _efficientnet_b2: Returns the EfficientNetB2 model.
-        _efficientnet_b3: Returns the EfficientNetB3 model.
-        _efficientnet_b6: Returns the EfficientNetB6 model.
-        _efficientnet_b7: Returns the EfficientNetB7 model.
-        _efficientnet_v2_s: Returns the EfficientNet_V2_S model.
-        _efficientnet_v2_m: Returns the EfficientNet_V2_M model.
-        _efficientnet_v2_l: Returns the EfficientNet_V2_L model.
-        # ~~~~~~~~~~~~~~~~~~~~~~~ MobileNet ~~~~~~~~~~~~~~~~~~~~~~ #
-        _mobilenet_v2: Returns the MobileNetV2 model.
-        _mobile_v3_small: Returns the MobileNetV3Small model.
-        _mobile_v3_large: Returns the MobileNetV3Large model.
-        # ~~~~~~~~~~~~~~~~~~~~~~~ ShuffleNet ~~~~~~~~~~~~~~~~~~~~~~ #
-        _shufflenet_v2_x0_5: Returns the ShuffleNetV2X05 model.
-        _shufflenet_v2_x1_0: Returns the ShuffleNetV2X10 model.
-        _shufflenet_v2_x1_5: Returns the ShuffleNetV2X15 model.
-        _shufflenet_v2_x2_0: Returns the ShuffleNetV2X20 model.
-        # ~~~~~~~~~~~~~~~~~~~~~~~  Utilizes ~~~~~~~~~~~~~~~~~~~~~~ #
-        _load_model: Uses the load_config parameter to get the model name and the configuration
-            used while initially training it. It also computes the path of the model parameters
-            checkpoint to be loaded.
-        get_model: Returns the model based on the model_name parameter.
+    **Methods:**
+
+    ----------------------------------------------------------
+
+        _tiny_vgg: 
+            Returns the TinyVGG model.
+        _tiny_vgg_batchnorm: 
+            Returns the TinyVGGBatchnorm model.
+
+    ----------------------------------------------------------
+
+        _resnet18: 
+            Returns the ResNet18 model.
+        _resnet34: 
+            Returns the ResNet34 model.
+        _resnet50: 
+            Returns the ResNet50 model.
+
+    ----------------------------------------------------------
+
+        _efficientnet_b0 :
+			Returns the EfficientNetB0 model.
+        _efficientnet_b1 :
+			Returns the EfficientNetB1 model.
+        _efficientnet_b2 :
+			Returns the EfficientNetB2 model.
+        _efficientnet_b3 :
+			Returns the EfficientNetB3 model.
+        _efficientnet_b6 :
+			Returns the EfficientNetB6 model.
+        _efficientnet_b7 :
+			Returns the EfficientNetB7 model.
+        _efficientnet_v2_s :
+			Returns the EfficientNet_V2_S model.
+        _efficientnet_v2_m :
+			Returns the EfficientNet_V2_M model.
+        _efficientnet_v2_l :
+			Returns the EfficientNet_V2_L model.
+
+    ----------------------------------------------------------
+
+        _mobilenet_v2 :
+			Returns the MobileNetV2 model.
+        _mobile_v3_small :
+			Returns the MobileNetV3Small model.
+        _mobile_v3_large :
+			Returns the MobileNetV3Large model.
+
+    ----------------------------------------------------------
+
+        _shufflenet_v2_x0_5 :
+			Returns the ShuffleNetV2X05 model.
+        _shufflenet_v2_x1_0 :
+			Returns the ShuffleNetV2X10 model.
+        _shufflenet_v2_x1_5 :
+			Returns the ShuffleNetV2X15 model.
+        _shufflenet_v2_x2_0 :
+			Returns the ShuffleNetV2X20 model.
+
+    ----------------------------------------------------------
+
+        _load_model :
+			Uses the load_config parameter to get the model name and the configuration used while initially training it. It also computes the path of the model parameters checkpoint to be loaded.
+        get_model: 
+            Returns the model based on the model_name parameter.
     """
 
     def __init__(
@@ -84,19 +124,26 @@ class GetModel:
     ) -> None:
         """Initializes the GetModel class.
 
-        Args:
-            self (Self): GetModel instance.
-            model_name (str, optional): String that identifies the model to be used. Defaults to "".
-            config (Union[Dict[str, Union[int, float]], None], optional): Dictionary with the   
-                configuration of the model. Defaults to None.
-            load_checkpoint (bool, optional): If True, the model is loaded from the checkpoint
-                path, that is specified in the load_config parameter. Defaults to False.
-            load_config (Union[Dict, None], optional): Dictionary with the configuration of the
-                loaded model. An example of a load_config is the following:
-                    load_config = {
-                        "checkpoint_timestamp_list": ["2021-08-01", "2021-08-01_12-00-00"],
-                        "load_epoch": 1,
-                    }
+        **Args:**
+        
+            self : Self
+				GetModel instance.
+            model_name : str, optional
+				String that identifies the model to be used. Defaults to "".
+            config : Union[Dict[str, Union[int, float]], None], optional
+				Dictionary with the configuration of the model. Defaults to None.
+            load_checkpoint : bool, optional
+				If True, the model is loaded from the checkpoint path, that is specified in the load_config parameter. Defaults to False.
+            load_config : Union[Dict, None], optional
+				Dictionary with the configuration of the loaded model. An example of a load_config is the following:
+
+                    ::
+        
+                        load_config = {
+                            "checkpoint_timestamp_list": ["2021-08-01", "2021-08-01_12-00-00"],
+                            "load_epoch": 1,
+                        }
+
                 Defaults to None. 
         """
         self.model_name = model_name
@@ -153,13 +200,15 @@ class GetModel:
     def _resnet18(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the ResNet18 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the ResNet18 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
+        
+            self : Self
+				GetModel instance.
 
-        Returns:
+        **Returns:**
+
             torch.nn.Module: The ResNet18 model.
         """
 
@@ -173,13 +222,15 @@ class GetModel:
     def _resnet34(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the ResNet34 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the ResNet34 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
+        
+            self : Self
+				GetModel instance.
 
-        Returns:
+        **Returns:**
+        
             torch.nn.Module: The ResNet34 model.
         """
 
@@ -193,13 +244,15 @@ class GetModel:
     def _resnet50(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the ResNet50 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the ResNet50 model with pretrained the inner layers. Only the last  (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
+        
+            self : Self
+				GetModel instance.
 
-        Returns:
+        **Returns:**
+
             torch.nn.Module: The ResNet50 model.
         """
 
@@ -213,13 +266,15 @@ class GetModel:
     def _efficientnet_b0(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB0 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB0 model with pretrained the inner layers. Only the last  (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB0 model.
         """
 
@@ -233,13 +288,15 @@ class GetModel:
     def _efficientnet_b1(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB1 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB1 model with pretrained the inner layers. Only the last  (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB1 model.
         """
 
@@ -253,13 +310,15 @@ class GetModel:
     def _efficientnet_b2(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB2 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB2 model with pretrained the inner layers. Only the last  (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB2 model.
         """
 
@@ -273,13 +332,15 @@ class GetModel:
     def _efficientnet_b3(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB3 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB3 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB3 model.
         """
 
@@ -293,13 +354,15 @@ class GetModel:
     def _efficientnet_b6(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB6 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB6 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB6 model.
         """
 
@@ -313,13 +376,15 @@ class GetModel:
     def _efficientnet_b7(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNetB7 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNetB7 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNetB7 model.
         """
 
@@ -333,13 +398,15 @@ class GetModel:
     def _efficientnet_v2_s(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNet_V2_S model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNet_V2_S model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNet_V2_S model.
         """
 
@@ -353,13 +420,15 @@ class GetModel:
     def _efficientnet_v2_m(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNet_V2_M model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNet_V2_M model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNet_V2_M model.
         """
 
@@ -373,13 +442,15 @@ class GetModel:
     def _efficientnet_v2_l(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the EfficientNet_V2_L model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the EfficientNet_V2_L model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The EfficientNet_V2_L model.
         """
 
@@ -393,13 +464,15 @@ class GetModel:
     def _mobilenet_v2(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the MobileNetV2 model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the MobileNetV2 model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The MobileNet_V2 model.
         """
 
@@ -413,13 +486,15 @@ class GetModel:
     def _mobilenet_v3_small(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the MobileNetV3Small model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the MobileNetV3Small model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+        
             torch.nn.Module: The MobileNet_V3_Small model.
         """
 
@@ -433,13 +508,15 @@ class GetModel:
     def _mobilenet_v3_large(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the MobileNetV3Large model with pretrained the inner layers. Only the last 
-        (classification) layer is trainable and outputs 2 classes.
+        """Returns the MobileNetV3Large model with pretrained the inner layers. Only the last (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The MobileNet_V3_Large model.
         """
 
@@ -456,10 +533,13 @@ class GetModel:
         """Returns the ShuffleNetV2X05 model with pretrained the inner layers. Only the last
         (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The ShuffleNet_V2_X0_5 model.
         """
 
@@ -476,10 +556,13 @@ class GetModel:
         """Returns the ShuffleNetV2X10 model with pretrained the inner layers. Only the last
         (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The ShuffleNet_V2_X1_0 model.
         """
 
@@ -496,10 +579,13 @@ class GetModel:
         """Returns the ShuffleNetV2X15 model with pretrained the inner layers. Only the last
         (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The ShuffleNet_V2_X1_5 model.
         """
 
@@ -516,10 +602,13 @@ class GetModel:
         """Returns the ShuffleNetV2X20 model with pretrained the inner layers. Only the last
         (classification) layer is trainable and outputs 2 classes.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
 
-        Returns:
+            self : Self
+				GetModel instance.
+
+        **Returns:**
+
             torch.nn.Module: The ShuffleNet_V2_X2_0 model.
         """
 
@@ -533,19 +622,24 @@ class GetModel:
     def _load_model(
         self: Self,
     ) -> None:
-        """Uses the load_config parameter to get the model name and the configuration used while 
-        initially training it. It also computes the path of the model parameters checkpoint to be 
-        loaded. 
+        """Uses the load_config parameter to get the model name and the configuration used while  initially training it. It also computes the path of the model parameters checkpoint to be  loaded. 
 
         The following parameters are saved in class' attributes:
-            model_name: String that identifies the model to be used.
-            config: Dictionary with the configuration of the model.
-            model_save_path: Path to the model parameters checkpoint to be loaded.
 
-        Args:
-            self (Self): Instance of GetModel.
+            model_name: 
+                String that identifies the model to be used.
+            config: 
+                Dictionary with the configuration of the model.
+            model_save_path: 
+                Path to the model parameters checkpoint to be loaded.
 
-        Raises:
+        **Args:**
+        
+            self : Self
+				Instance of GetModel.
+
+        **Raises:**
+
             ValueError: If load_config is None.
         """
         if self.load_config == None:
@@ -571,16 +665,16 @@ class GetModel:
     def get_model(
         self: Self,
     ) -> torch.nn.Module:
-        """Returns the model based on the model_name parameter. If load_checkpoint is True, the 
-        model is loaded from the checkpoint path.
+        """Returns the model based on the model_name parameter. If load_checkpoint is True, the  model is loaded from the checkpoint path.
 
-        Args:
-            self (Self): GetModel instance.
+        **Args:**
+            self : Self
+				GetModel instance.
 
-        Returns:
+        **Returns:**
             torch.nn.Module: The model to be used.
 
-        Raises:
+        **Raises:**
             ValueError: If the model_name is not supported (there is no method that implements it).
         """
         if self.load_checkpoint:

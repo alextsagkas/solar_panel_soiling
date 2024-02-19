@@ -5,51 +5,51 @@ from typing_extensions import Self
 
 
 class GetTransforms:
-    """Get the transforms for training and testing data using the corresponding names for them. 
-    The transforms can also be optionally configured through the train_config and test_config 
-    attributes.
+    """Get the transforms for training and testing data using the corresponding names for them.  The transforms can also be optionally configured through the train_config and test_config attributes.
 
-    Attributes:
-        train_transform_name (str): Name of the transform to use on the train data.
-        train_config (Union[Dict[str, float], None]): Dictionary with the configuration of the
-            train transform.
-        test_transform_name (str): Name of the transform to use on the test data.
-        test_config (Union[Dict[str, float], None]): Dictionary with the configuration of the
-            test transform.
+    **Attributes:**
+    
+        train_transform_name : str
+			Name of the transform to use on the train data.
+        train_config : Union[Dict[str, float], None]
+			Dictionary with the configuration of the train transform.
+        test_transform_name : str
+			Name of the transform to use on the test data.
+        test_config : Union[Dict[str, float], None]
+			Dictionary with the configuration of the test transform.
 
-    Methods:
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Train Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        _simple_train: Resize and randomly flip the image horizontally, then convert it to a tensor
-            with values between 0 and 1.
-        _trivial_train: Resize and apply trivial augment wide transform 
-            (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0
-            and 1.
-        _resnet_train: Resize and crops the image before applying data augmentation (horizontal
-            flip & rotation). In the end the image is converted to tensor with values between 0 and
-            1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
-        _efficientnet_train: Resize and central crops the image before applying data augmentation
-            (horizontal flip & rotation). In the end the image is converted to tensor with values
-            between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225]
-            are subtracted.
-        _mobilenet_train: Resize and central crops the image before applying data augmentation
-            (horizontal flip & rotation). In the end the image is converted to tensor with values
-            between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225]
-            are subtracted.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Test Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        _simple_test: Resize and converts it to a tensor with values between 0 and 1.
-        _resnet_test: Resize and crops the image before converting it to a tensor with values
-            between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
-            0.225] are subtracted.
-        _efficientnet_test: Resize and crops the image before converting it to a tensor with values
-            between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
-            0.225] are subtracted.
-        _mobilenet_test: Resize and crops the image before converting it to a tensor with values
-            between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224,
-            0.225] are subtracted.
-        # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Get Transforms ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
-        get_train_transform: Returns the train transform based on the train_transform_name 
-            attribute.
-        get_test_transform: Returns the test transform based on the test_transform_name attribute.
+    **Methods:**
+
+    -----------------------------------------------------------------------------------------------
+
+        simple_train:
+			Resize and randomly flip the image horizontally, then convert it to a tensor with values between 0 and 1.
+        trivial_train:
+			Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0 and 1.
+        resnet_train:
+			Resize and crops the image before applying data augmentation (horizontal flip & rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        efficientnet_train:
+			Resize and central crops the image before applying data augmentation (horizontal flip & rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        mobilenet_train:
+			Resize and central crops the image before applying data augmentation (horizontal flip & rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+
+    -----------------------------------------------------------------------------------------------
+
+        simple_test:
+			Resize and converts it to a tensor with values between 0 and 1.
+        resnet_test:
+			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        efficientnet_test:
+			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        mobilenet_test:
+			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+
+    -----------------------------------------------------------------------------------------------
+
+        get_train_transform: 
+            Returns the train transform based on the train_transform_name  attribute.
+        get_test_transform: 
+            Returns the test transform based on the test_transform_name attribute.
     """
 
     def __init__(
@@ -61,15 +61,16 @@ class GetTransforms:
     ) -> None:
         """Initialize the transform object.
 
-        Args:
-            train_transform_name (str, optional): Name of the transform to use on the train data. 
-                Defaults to "simple".
-            train_config (Union[Dict, None], optional): Dictionary with the configuration of the 
-                train transform. Defaults to None.
-            test_transform_name (str, optional): Name of the transform to use on the test data. 
-                Defaults to "simple".
-            test_config (Union[Dict, None], optional): Dictionary with the configuration of the 
-                test transform. Defaults to None.
+        **Args**:
+
+            train_transform_name : str, optional
+                Name of the transform to use on the train data. Defaults to "simple".
+            train_config : Union[Dict, None], optional
+                Dictionary with the configuration of the train transform. Defaults to None.
+            test_transform_name : str, optional
+                Name of the transform to use on the test data. Defaults to "simple".
+            test_config : Union[Dict, None], optional
+                Dictionary with the configuration of the test transform. Defaults to None.
         """
         self.train_transform_name = train_transform_name
         self.train_config = train_config
@@ -79,11 +80,12 @@ class GetTransforms:
     def _simple_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and randomly flip the image horizontally, then convert it to a tensor with 
-        values between 0 and 1.
+        """Resize and randomly flip the image horizontally, then convert it to a tensor with values between 0 and 1.
 
-        Returns:
-            transforms.transforms.Compose: Simple transform.
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                Simple transform.
         """
         if self.train_config is None:
             self.train_config = {}
@@ -108,10 +110,10 @@ class GetTransforms:
     def _trivial_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158).
-            Then convert it to a tensor with values between 0 and 1.
+        """Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0 and 1.
 
-        Returns:
+        **Returns**:
+
             transforms.transforms.Compose: Trivial transform.
         """
         if self.train_config is None:
@@ -143,16 +145,17 @@ class GetTransforms:
     def _resnet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and randomly crops the image before applying data augmentation (horizontal flip, 
-        trivial transform (optional - avoid if num_magnitude_bins=0) & rotation). In the end the 
-        image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.
-        406] and std = [0.229, 0.224, 0.225] are subtracted.
+        """Resize and randomly crops the image before applying data augmentation (horizontal flip,  trivial transform (optional - avoid if num_magnitude_bins=0) & rotation). In the end the  image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0. 406] and std = [0.229, 0.224, 0.225] are subtracted.
 
-        Args:
-            self (Self): GetTransforms instance.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The resnet train transform.
+            self : Self
+			GetTransforms instance.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                The resnet train transform.
         """
         if self.train_config is None:
             self.train_config = {}
@@ -206,15 +209,15 @@ class GetTransforms:
     def _efficientnet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and central crops the image before applying data augmentation (horizontal flip, 
-        & random rotation). In the end the image is converted to tensor with values between 0 and 1 
-        and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The 
-        values of mean and std can be optionally configured through the train_config attribute.
+        """Resize and central crops the image before applying data augmentation (horizontal flip, & random rotation). In the end the image is converted to tensor with values between 0 and 1  and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The  values of mean and std can be optionally configured through the train_config attribute.
 
-        Args:
-            self (Self): GetTransforms instance.
+        **Args**:
 
-        Returns:
+            self : Self
+			GetTransforms instance.
+
+        **Returns**:
+
             transforms.transforms.Compose: The efficientnet train transform.
         """
         if self.train_config is None:
@@ -263,16 +266,17 @@ class GetTransforms:
     def _mobilenet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and central crops the image before applying data augmentation (horizontal flip, 
-        & random rotation). In the end the image is converted to tensor with values between 0 and 1 
-        and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The 
-        values of mean and std can be optionally configured through the train_config attribute.
+        """Resize and central crops the image before applying data augmentation (horizontal flip, & random rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the train_config attribute.
 
-        Args:
-            self (Self): GetTransforms instance.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The mobilenet train transform.
+            self : Self
+			GetTransforms instance.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                The mobilenet train transform.
         """
         if self.train_config is None:
             self.train_config = {}
@@ -320,16 +324,17 @@ class GetTransforms:
     def _shufflenet_train(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and central crops the image before applying data augmentation (horizontal flip). 
-        In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.
-        485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and 
-        std can be optionally configured through the train_config attribute.
+        """Resize and central crops the image before applying data augmentation (horizontal flip).  In the end the image is converted to tensor with values between 0 and 1 and the mean = [0. 485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the train_config attribute.
 
-        Args:
-            self (Self): GetTransforms instance.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The shufflenet train transform.
+            self : Self
+			GetTransforms instance.
+
+        **Returns**:
+
+            transforms.transforms.Compose:
+                The shufflenet train transform.
         """
         if self.train_config is None:
             self.train_config = {}
@@ -374,11 +379,15 @@ class GetTransforms:
     ) -> transforms.transforms.Compose:
         """Returns the train transform based on the train_transform_name attribute.
 
-        Raises:
-            ValueError: When the transform_name does not correspond to any transform method.
+        **Raises:**
 
-        Returns:
-            transforms.transforms.Compose: Train transform.
+            ValueError: 
+                When the transform_name does not correspond to any transform method.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                Train transform.
         """
         transform_method_name = f"_{self.train_transform_name}_train"
         transform_method = getattr(self, transform_method_name, None)
@@ -394,7 +403,8 @@ class GetTransforms:
     ) -> transforms.transforms.Compose:
         """Resize and converts it to a tensor with values between 0 and 1.
 
-        Returns:
+        **Returns**:
+
             transforms.transforms.Compose: Simple transform.
         """
         if self.test_config is None:
@@ -413,14 +423,17 @@ class GetTransforms:
     def _resnet_test(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and crops the image before converting it to a tensor with values between 0 and 1.
-        In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
+        """Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
 
-        Args:
-            self (Self): The object itself.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The resnet test transform.
+            self : Self
+			The object itself.
+
+        **Returns**:
+
+            transforms.transforms.Compose:
+                The resnet test transform.
         """
         if self.test_config is None:
             self.test_config = {}
@@ -450,15 +463,17 @@ class GetTransforms:
     def _efficientnet_test(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and crops the image before converting it to a tensor with values between 0 and 1.
-        In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
-        The values of mean and std can be optionally configured through the test_config attribute.
+        """Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.
 
-        Args:
-            self (Self): The object itself.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The efficientnet test transform.
+            self : Self
+			The object itself.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                The efficientnet test transform.
         """
         if self.test_config is None:
             self.test_config = {}
@@ -493,15 +508,17 @@ class GetTransforms:
     def _mobilenet_test(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and crops the image before converting it to a tensor with values between 0 and 1.
-        In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
-        The values of mean and std can be optionally configured through the test_config attribute.
+        """Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.
 
-        Args:
-            self (Self): The object itself.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The mobilenet test transform.
+            self : Self
+			The object itself.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                The mobilenet test transform.
         """
         if self.test_config is None:
             self.test_config = {}
@@ -536,15 +553,17 @@ class GetTransforms:
     def _shufflenet_test(
         self: Self,
     ) -> transforms.transforms.Compose:
-        """Resize and crops the image before converting it to a tensor with values between 0 and 1.
-        In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.
-        The values of mean and std can be optionally configured through the test_config attribute.
+        """Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.
 
-        Args:
-            self (Self): The object itself.
+        **Args**:
 
-        Returns:
-            transforms.transforms.Compose: The shufflenet test transform.
+            self : Self
+			The object itself.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                The shufflenet test transform.
         """
         if self.test_config is None:
             self.test_config = {}
@@ -581,11 +600,15 @@ class GetTransforms:
     ) -> transforms.transforms.Compose:
         """Returns the test transform based on the test_transform_name attribute.
 
-        Raises:
-            ValueError: When the transform_name does not correspond to any transform method.
+        **Raises:**
 
-        Returns:
-            transforms.transforms.Compose: Train transform.
+            ValueError: 
+                When the transform_name does not correspond to any transform method.
+
+        **Returns**:
+
+            transforms.transforms.Compose: 
+                Train transform.
         """
         transform_method_name = f"_{self.test_transform_name}_test"
         transform_method = getattr(self, transform_method_name, None)

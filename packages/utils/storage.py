@@ -16,11 +16,16 @@ def save_model(
 ) -> None:
     """Saves the state dict of model in save_dir/YYYY-MM-DD/HH-MM-SS_{extra}.pth.
 
-    Args:
-        model (torch.nn.Module): Model to save.
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
-        save_dir (Path, optional): Directory where to save the model. Defaults to models_dir.
-        extra (str): Extra information concerning the training (used as name of file saved).
+    **Args:**
+
+        model : torch.nn.Module
+			Model to save.
+        timestamp_list : List[str]
+			List of timestamp (YYYY-MM-DD, HH-MM-SS).
+        save_dir : Path, optional
+			Directory where to save the model. Defaults to models_dir.
+        extra : str
+			Extra information concerning the training (used as name of file saved).
     """
     model_save_dir = save_dir / timestamp_list[0]
     model_save_dir.mkdir(exist_ok=True, parents=True)
@@ -44,10 +49,12 @@ def save_metrics(
 ) -> None:
     """Saves the metrics of the experiment in metrics_dir/YYYY-MM-DD/HH-MM-SS.pth.
 
-    Args:
-        metrics (Dict[str, float]): The metrics of the experiment (classification metrics, loss,
-            duration).
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
+    **Args:**
+
+        metrics : Dict[str, float]
+			The metrics of the experiment (classification metrics, loss, duration).
+        timestamp_list : List[str]
+			List of timestamp (YYYY-MM-DD, HH-MM-SS).
     """
     save_metrics_dir = metrics_dir / timestamp_list[0]
     save_metrics_dir.mkdir(exist_ok=True, parents=True)
@@ -73,8 +80,10 @@ def save_hyperparameters(
 ) -> None:
     """Saves the hyperparameters of the experiment in config_dir/YYYY-MM-DD/HH-MM-SS.txt.
 
-    Args:
-        hyperparameters (Dict[str, Union[str, int, float]]): The hyperparameters of the experiment.
+    **Args:**
+
+        hyperparameters : Dict[str, Union[str, int, float]]
+			The hyperparameters of the experiment.
     """
     config_save_dir = config_dir / Path(hyperparameters["timestamp_list"][0])  # type: ignore
     config_save_dir.mkdir(exist_ok=True)
@@ -94,10 +103,13 @@ def load_hyperparameters(
 ) -> Dict[str, Union[str, int, float, Dict[str, Union[str, int, float]]]]:
     """Loads the hyperparameters of the experiment from config_dir/YYYY-MM-DD/HH-MM-SS.txt.
 
-    Args:
-        test_timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
+    **Args:**
 
-    Returns:
+        test_timestamp_list : List[str]
+			List of timestamp (YYYY-MM-DD, HH-MM-SS).
+
+    **Returns:**
+
         Dict[str, str]: hyperparameters used for the loaded experiment.
     """
     config_path = config_dir / test_timestamp_list[0] / f"{test_timestamp_list[1]}.txt"

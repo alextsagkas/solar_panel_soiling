@@ -21,20 +21,24 @@ def plot_transformed_images(
         n: int = 3,
         seed: Union[int, None] = None
 ) -> None:
-    """Saves a series of random images from image_paths to the debug/data_transforms/transform_name/
-    YYYY-MM-DD/HH-MM-SS/ folder.
+    """Saves a series of random images from image_paths to the debug/data_transforms/transform_name/YYYY-MM-DD/HH-MM-SS/ folder.
 
-    Will open n image paths from image_paths, transform them
-    with transform and save them one by one.
+    Will open n image paths from image_paths, transform them with transform and save them one by one.
 
-    Args:
-        image_paths (list[Path]): List of target image paths. 
-        transform (PyTorch Transforms): Transforms to apply to images.
-        transform_name (str): Name of the transform to use as a subfolder for 
-            saving the transformed images.
-        timestamp_list (List[str]): Timestamp of the test.
-        n (int, optional): Number of images to plot. Defaults to 3.
-        seed (int, optional): Random seed for the random generator. Defaults to None.k
+    **Args:**
+    
+        image_paths : list[Path]
+			List of target image paths. 
+        transform : PyTorch Transforms
+			Transforms to apply to images.
+        transform_name : str
+			Name of the transform to use as a subfolder for saving the transformed images.
+        timestamp_list : List[str]
+			Timestamp of the test.
+        n : int, optional
+			Number of images to plot. Defaults to 3.
+        seed : int, optional
+			Random seed for the random generator. Defaults to None.k
     """
     # Set seed
     if seed != None:
@@ -77,20 +81,29 @@ def get_dataloader(
 ) -> tuple[torch.utils.data.DataLoader, list[str]]:
     """Creates a dataset and passes it ot a dataloader, which is return in addition to class names.
 
-    Args:
-        dir (str): Directory of the data.
-        data_transform (transforms.transforms.Compose): Transforms to apply to the data.
-        batch_size (int): Batch size.
-        num_workers (int, optional): The number workers that load the data (usually equals 
-            to the cpu cores). Defaults to 1.
-        shuffle (bool, optional): Shuffle the data or not (usually shuffle only the training
-            data). Defaults to False.
+    **Args:**
 
-    Returns:
-        tuple[
-            torch.utils.data.DataLoader,
-            list[str]
-        ]: Dataloader of the data and the class names.
+        dir : str
+			Directory of the data.
+        data_transform : transforms.transforms.Compose
+			Transforms to apply to the data.
+        batch_size : int
+			Batch size.
+        num_workers : int, optional
+			The number workers that load the data (usually equals to the cpu cores). Defaults to 1.
+        shuffle : bool, optional
+			Shuffle the data or not (usually shuffle only the training data). Defaults to False.
+
+    **Returns:**
+
+        Dataloader of the data and the class names:
+
+            ::  
+
+                tuple[
+                    torch.utils.data.DataLoader,
+                    list[str]
+                ]
     """
     data = datasets.ImageFolder(
         root=dir,

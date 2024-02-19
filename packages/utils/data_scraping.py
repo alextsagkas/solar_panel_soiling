@@ -19,10 +19,14 @@ def download_image(
     """Download an image from a url and save it to download_path/file_name. The image is converted 
     to RGB color format and JPEG file format.
 
-    Args:
-        download_path (Path): Path to download the image to.
-        url (str): Url of the image to download.
-        file_name (str): Name of the file to save the image to.
+    **Args:**
+    
+        download_path : Path
+			Path to download the image to.
+        url : str
+			Url of the image to download.
+        file_name : str
+			Name of the file to save the image to.
     """
     try:
         response = requests.get(url)
@@ -57,10 +61,14 @@ def get_image_urls(
     The delay is the number of seconds to wait so as to allow the images to load. It is used
     while scrolling down the page or clicking on a button.
 
-    Args:
-        url (str): Google images url.
-        delay (float): Delay in seconds.
-        max_images (int): Maximum number of images to scrape.
+    **Args:**
+    
+        url : str
+			Google images url.
+        delay : float
+			Delay in seconds.
+        max_images : int
+			Maximum number of images to scrape.
 
     Returns:
         Set[str]: Set of image urls.
@@ -114,11 +122,16 @@ def _press_button(
     """Press a button with the given text and class value, if it exists. Then wait for delay
     seconds.
 
-    Args:
-        wd (WebDriver): Chrome webdriver.
-        button_text (str): Text of the button to press.
-        class_value (str): Class value of the button to press.
-        delay (float): Delay in seconds after pressing the button.
+    **Args:**
+    
+        wd : WebDriver
+			Chrome webdriver.
+        button_text : str
+			Text of the button to press.
+        class_value : str
+			Class value of the button to press.
+        delay : float
+			Delay in seconds after pressing the button.
     """
     buttons = wd.find_elements(
         by=By.CLASS_NAME,
@@ -139,9 +152,12 @@ def _scroll_down(
 
     After scrolling down, or pressing the button, wait for delay seconds.
 
-    Args:
-        wd (_type_): Chrome webdriver.
-        delay (_type_): Delay in seconds after scrolling down.
+    **Args:**
+
+        wd : _type_
+			Chrome webdriver.
+        delay : _type_
+			Delay in seconds after scrolling down.
     """
     wd.execute_script("window.scrollTo(0, document.body.scrollHeight);")
     time.sleep(delay)
@@ -169,12 +185,18 @@ def _add_image_urls_to_Set(
     done to get the highest resolution image and not the dummy one that is displayed on the 
     thumbnail.
 
-    Args:
-        thumbnails (List): List of google images thumbnails.
-        wd (WebDriver): Chrome webdriver.
-        delay (float): Delay in seconds.
-        max_images (int): Maximum number of images to scrape.
-        image_urls (Set[str]): Set of image urls.
+    **Args:**
+    
+        thumbnails : List
+			List of google images thumbnails.
+        wd : WebDriver
+			Chrome webdriver.
+        delay : float
+			Delay in seconds.
+        max_images : int
+			Maximum number of images to scrape.
+        image_urls : Set[str]
+			Set of image urls.
     """
     for thumbnail in thumbnails:
         # Click on thumbnail to display big image

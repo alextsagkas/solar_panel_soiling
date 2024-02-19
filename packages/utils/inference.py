@@ -24,20 +24,22 @@ def inference(
 ) -> None:
     """Tests model in data from the test_dataloader.
 
-    Evaluates the prediction probabilities for the classes the data are separated to. 
-    Saves a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and prints it on the console.
+    Evaluates the prediction probabilities for the classes the data are separated to. Saves a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and prints it on the console.
 
-    It also optionally saves every image in the test_model_dir/timestamp_list[0]/timestamp_list[1] 
-    folder and provides information about the classification on the title of the image. This 
-    behavior is controlled by the save_images argument.
+    It also optionally saves every image in the test_model_dir/timestamp_list[0]/timestamp_list[1] folder and provides information about the classification on the title of the image. This behavior is controlled by the save_images argument.
 
-    Args:
-      model (torch.nn.Module): A PyTorch model to be trained and tested.
-      test_dataloader (torch.utils.data.DataLoader): A DataLoader instance for the model to be 
-        tested on (using size of batches = 1).
-      class_names (List[int]): A list of the classes the model is trained on.
-      device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
-      timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
+    **Args:**
+    
+      model : torch.nn.Module 
+		A PyTorch model to be trained and tested.
+      test_dataloader : torch.utils.data.DataLoader 
+		A DataLoader instance for the model to be tested on (using size of batches = 1).
+      class_names : List[int] 
+		A list of the classes the model is trained on.
+      device : torch.device 
+		A target device to compute on ("cuda", "cpu", "mps").
+      timestamp_list : List[str] 
+		List of timestamp (YYYY-MM-DD, HH-MM-SS).
     """
     if save_images:
         save_folder = test_model_dir / timestamp_list[0] / timestamp_list[1]
