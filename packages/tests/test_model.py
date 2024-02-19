@@ -23,35 +23,38 @@ def test_model(
     save_images: bool = False,
     **kwargs,
 ) -> None:
-    """Tests a model on the test set. It uses the `dir` directory to test the model on.
-    The model is loaded using its corresponding timestamp, which is the `test_timestamp_list`. 
+    """Tests a model on the test set. It uses the ``dir`` directory to test the model on.
+    The model is loaded using its corresponding timestamp, which is the ``test_timestamp_list``. 
 
-    Also, despite the evaluation of classification metrics, images are saved in `debug/test_model/
-    YYYY-MM-DD, HH-MM-SS/` containing the predicted class and the ground truth, while displaying the
-    probability with which the choice was made. This behavior is controlled optionally by the
-    `save_images` argument.
+    Also, despite the evaluation of classification metrics, images are saved in ``debug/test_model/
+    YYYY-MM-DD, HH-MM-SS/`` containing the predicted class and the ground truth, while displaying 
+    the probability with which the choice was made. This behavior is controlled optionally by the
+    ``save_images`` argument.
 
-    Via the `**kwargs` argument, the test transform, that is picked by the train_transform name of 
-    the loaded parameters, can be configured further. An example is the following:
+    Via the ``**kwargs`` argument, the test transform, that is picked by the train_transform name 
+    of the loaded parameters, can be configured further. An example is the following::
+
         kwargs = {
             "test_transform_config": {
                 "resize_size": 256,
                 "crop_size": 224,
         }
 
-    Args:
-        device (torch.device): Device to use for the testing.
-        test_timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the trained
-            model used.
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was
-            called.
-        test_dir (Path, optional): Directory where the test data is located. 
-            Defaults to download_train_dir.
-        save_dir (Path, optional): Directory where the model is saved. Defaults to models_dir. It 
-            can be used to load checkpoints from training.
-        extra (Union[str, None], optional): Extra string to append to the model name. Used to 
-            choose which epoch of checkpoint you would like to pick. Defaults to None.
-        save_images (bool, optional): Whether to save images or not. Defaults to False.
+    **Args:**
+        device (torch.device):
+            Device to use for the testing.
+        test_timestamp_list : List[str]
+            List of timestamp (YYYY-MM-DD, HH-MM-SS) the trained model used.
+        timestamp_list : List[str]
+            List of timestamp (YYYY-MM-DD, HH-MM-SS) the test_model was called.
+        test_dir : Path, optional
+            Directory where the test data is located. Defaults to download_train_dir.
+        save_dir : Path, optional
+            Directory where the model is saved. Defaults to models_dir. It can be used to load checkpoints from training.
+        extra : Union[str, None], optional
+            Extra string to append to the model name. Used to choose which epoch of checkpoint you would like to pick. Defaults to None.
+        save_images : bool, optional
+            Whether to save images or not. Defaults to False.
     """
     test_transform_config = kwargs.get("test_transform_config", None)
 

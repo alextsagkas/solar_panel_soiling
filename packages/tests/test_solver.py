@@ -27,8 +27,8 @@ def test_solver(
 ) -> None:
     """Train and test a model using simple train from Solver.
 
-    Via the kwargs the training can be further customized. An example of the supported 
-    kwargs is the following:
+    Via the kwargs the training can be further customized. An example of the supported kwargs is the following::
+
         kwargs = {
             "model_config": {"hidden_units": 128},
             "optimizer_config": {"weight_decay": 0.001},
@@ -37,24 +37,32 @@ def test_solver(
             "scheduler_config": {"step_size": 10, "gamma": 0.1},
         }
 
-    Args:
-        model_name (str): String that identifies the model to be used.
-        num_epochs (int): The number of epochs to train the model.
-        batch_size (int): The size of the batches to be used in the training and testing.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        train_transform_name (str): String that identifies the transform to be used on the 
-            train data.
-        test_transform_name (str): String that identifies the transform to be used on the
-            test data.
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
-        device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
-        train_dir (Path, optional): Path to the directory containing the training data.
-            Defaults to train_dir.
-        test_dir (Path, optional): Path to the directory containing the testing data.
-            Defaults to test_dir.
-        scheduler_name (Union[str, None], optional): String that identifies the scheduler to
-            be used. Defaults to None.
-        kwargs (dict): Dictionary of optional arguments. Defaults to None.
+    **Args:**
+
+        model_name : str 
+			String that identifies the model to be used.
+        num_epochs : int 
+			The number of epochs to train the model.
+        batch_size : int 
+			The size of the batches to be used in the training and testing.
+        optimizer_name : str 
+			String that identifies the optimizer to be used.
+        train_transform_name : str 
+			String that identifies the transform to be used on the train data.
+        test_transform_name : str 
+			String that identifies the transform to be used on the test data.
+        timestamp_list : List[str] 
+			List of timestamp (YYYY-MM-DD, HH-MM-SS).
+        device : torch.device 
+			A target device to compute on ("cuda", "cpu", "mps").
+        train_dir : Path, optional 
+			Path to the directory containing the training data. Defaults to train_dir.
+        test_dir : Path, optional 
+			Path to the directory containing the testing data. Defaults to test_dir.
+        scheduler_name : Union[str, None], optional 
+			String that identifies the scheduler to be used. Defaults to None.
+        kwargs : dict 
+			Dictionary of optional arguments. Defaults to None.
     """
     model_config = kwargs.get("model_config", None)
     optimizer_config = kwargs.get("optimizer_config", None)
@@ -123,7 +131,8 @@ def test_kfold_solver(
     """Train and test a model using k-fold train from Solver.
 
     Via the kwargs the training can be further customized. An example of the supported
-    kwargs is the following:    
+    kwargs is the following::
+
         kwargs = {
             "model_config": {"hidden_units": 128},
             "optimizer_config": {"weight_decay": 0.001},
@@ -131,19 +140,27 @@ def test_kfold_solver(
             "test_transform_config": {"random_rotation": 180},
         }
 
-    Args:
-        model_name (str): String that identifies the model to be used.
-        num_folds (int): Number of fold to be used in the k-fold training.
-        num_epochs (int): The number of epochs to train the model.
-        batch_size (int): The size of the batches to be used in the training and testing.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        train_transform_name (str): String that identifies the transform to be used on the
-            train data.
-        test_transform_name (str): String that identifies the transform to be used on the   
-            test data.
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
-        device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
-        kwargs (dict): Dictionary of optional arguments. Defaults to None.
+    **Args:**
+        model_name : str 
+			String that identifies the model to be used.
+        num_folds : int 
+			Number of fold to be used in the k-fold training.
+        num_epochs : int 
+			The number of epochs to train the model.
+        batch_size : int 
+			The size of the batches to be used in the training and testing.
+        optimizer_name : str 
+			String that identifies the optimizer to be used.
+        train_transform_name : str 
+			String that identifies the transform to be used on the train data.
+        test_transform_name : str 
+			String that identifies the transform to be used on the test data.
+        timestamp_list : List[str] 
+			List of timestamp (YYYY-MM-DD, HH-MM-SS).
+        device : torch.device 
+			A target device to compute on ("cuda", "cpu", "mps").
+        kwargs : dict 
+			Dictionary of optional arguments. Defaults to None.
     """
     model_config = kwargs.get("model_config", None)
     optimizer_config = kwargs.get("optimizer_config", None)

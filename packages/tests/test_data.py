@@ -11,22 +11,26 @@ def test_transform(
     n: int = 10,
     **kwargs,
 ) -> None:
-    """Test the train and test transform on the data. The results are saved in debug/
-    data_transforms/transform_name. 
+    """Test the train and test transform on the data. The results are saved in ``debug/
+    data_transforms/transform_name``. 
 
-    The hyperparameters provided in the function should contain only train or test transform 
-    infos, and not both. An example is provided below:
-        hyperparameters = {
-            "timestamp_list": timestamp_list,
-            "test_name": test_name,
-            "train_transform_name": "resnet",
-            "train_transform_config": {"random_rotation": 180},
-        }
+    The hyperparameters provided in the function should contain only train or test transform infos, and not both. An example is provided below::
 
-    Args:
-        timestamp_list (List[str]): The timestamp of the test. Used to create subfolders.
-        n (int, optional): The number of images to visualize. Defaults to 10.
-        kwargs (dict): The configuration of the test.
+            hyperparameters = {
+                "timestamp_list": timestamp_list,
+                "test_name": test_name,
+                "train_transform_name": "resnet",
+                "train_transform_config": {"random_rotation": 180},
+            }
+
+    **Args:**
+
+        timestamp_list : List[str]
+            The timestamp of the test. Used to create subfolders. 
+        n : int, optional
+            The number of images to visualize. Defaults to 10.
+        kwargs : dict
+            The configuration of the test.
     """
     train_transform_name = kwargs.pop("train_transform_name", None)
     train_transform_config = kwargs.pop("train_transform_config", None)

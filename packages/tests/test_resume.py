@@ -27,8 +27,9 @@ def test_resume(
 ) -> None:
     """Resume training and testing of a loaded model using simple train from Solver.
 
-    Via the kwargs the training can be further customized. An example of the supported 
-    kwargs is the following:
+    Via the ``**kwargs`` the training can be further customized. An example of the supported 
+    ``kwargs`` is the following::
+
         kwargs = {
             "optimizer_config": {"weight_decay": 0.001},
             "scheduler_config": {"step_size": 2, "gamma": 0.1},
@@ -36,29 +37,51 @@ def test_resume(
             "test_transform_config": {"random_rotation": 180},
         }
 
-    Args:
-        load_config (Dict): Dictionary with the configuration of the loaded model. An example of a
-            load_config is the following:
+    **Args:**
+
+        load_config : Dict 
+            Dictionary with the configuration of the loaded model. An example of a ``load_config`` is the following:
+
+        ::
+
                 load_config = {
                     "checkpoint_timestamp_list": ["2021-08-01", "2021-08-01_12-00-00"],
                     "load_epoch": 1,
                 }
-        num_epochs (int): The number of epochs to train the model.
-        batch_size (int): The size of the batches to be used in the training and testing.
-        optimizer_name (str): String that identifies the optimizer to be used.
-        train_transform_name (str): String that identifies the transform to be used on the 
-            train data.
-        test_transform_name (str): String that identifies the transform to be used on the
-            test data.
-        timestamp_list (List[str]): List of timestamp (YYYY-MM-DD, HH-MM-SS).
-        device (torch.device): A target device to compute on ("cuda", "cpu", "mps").
-        train_dir (Path, optional): Path to the directory containing the training data.
-            Defaults to train_dir.
-        test_dir (Path, optional): Path to the directory containing the testing data.
-            Defaults to test_dir.
-        scheduler_name (Union[str, None], optional): String that identifies the scheduler to be
-            used. Defaults to None.
-        kwargs (dict): Dictionary of optional arguments. Defaults to None.
+
+        num_epochs : int
+            The number of epochs to train the model.
+
+        batch_size : int 
+            The size of the batches to be used in the training and testing.
+
+        optimizer_name : str 
+            String that identifies the optimizer to be used.
+
+        train_transform_name : str 
+            String that identifies the transform to be used on the train data.
+
+        test_transform_name : str 
+            String that identifies the transform to be used on the test data.
+
+        timestamp_list : List[str] 
+            List of timestamp (YYYY-MM-DD, HH-MM-SS).
+
+        device : torch.device 
+            A target device to compute on (“cuda”, “cpu”, “mps”).
+
+        train_dir : Path, optional 
+            Path to the directory containing the training data. Defaults to train_dir.
+
+        test_dir : Path, optional 
+            Path to the directory containing the testing data. Defaults to test_dir.
+
+        scheduler_name : Union[str, None], optional 
+            String that identifies the scheduler to be used. Defaults to None.
+
+        kwargs : dict 
+            Dictionary of optional arguments. Defaults to None.
+
     """
     optimizer_config = kwargs.get("optimizer_config", None)
     scheduler_config = kwargs.get("scheduler_config", None)
