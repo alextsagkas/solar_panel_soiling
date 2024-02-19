@@ -7,20 +7,23 @@ from typing_extensions import Self
 class MobileNetV2(nn.Module):
     """Class that returns a MobileNetV2 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the MobileNetV2 model from IMAGENET1K_V2.
-        model (torch.nn.Module): MobileNetV2 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+            Downloaded weights for the MobileNetV2 model from IMAGENET1K_V2.
+        model : torch.nn.Module
+            MobileNetV2 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V2 weights for MobileNetV2 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V2 weights for MobileNetV2 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -50,11 +53,15 @@ class MobileNetV2(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -64,20 +71,23 @@ class MobileNetV2(nn.Module):
 class MobileNetV3Small(nn.Module):
     """Class that returns a MobileNetV3Small model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the MobileNetV3Small model from IMAGENET1K_V1.
-        model (torch.nn.Module): MobileNetV3Small model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the MobileNetV3Small model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				MobileNetV3Small model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for MobileNetV3Small and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for MobileNetV3Small and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -117,11 +127,15 @@ class MobileNetV3Small(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -131,20 +145,23 @@ class MobileNetV3Small(nn.Module):
 class MobileNetV3Large(nn.Module):
     """Class that returns a MobileNetV3Large model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the MobileNetV3Large model from IMAGENET1K_V2.
-        model (torch.nn.Module): MobileNetV3Large model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+            Downloaded weights for the MobileNetV3Large model from IMAGENET1K_V2.
+        model : torch.nn.Module
+            MobileNetV3Large model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V2 weights for MobileNetV3Large and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V2 weights for MobileNetV3Large and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -186,11 +203,15 @@ class MobileNetV3Large(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 

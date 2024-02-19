@@ -7,20 +7,23 @@ from typing_extensions import Self
 class EfficientNetB0(nn.Module):
     """Class that returns a EfficientNet_B0 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_B0 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_B0 model with the pretrained weights on all layers.
+    **Attributes:**
+        
+        weights : str
+			Downloaded weights for the EfficientNet_B0 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+			EfficientNet_B0 model with the pretrained weights on all layers.
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_B0 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_B0 and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -50,11 +53,15 @@ class EfficientNetB0(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -64,20 +71,23 @@ class EfficientNetB0(nn.Module):
 class EfficientNetB1(nn.Module):
     """Class that returns a EfficientNet_B1 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_B1 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_B1 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_B1 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_B1 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_B1 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_B1 and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -107,11 +117,15 @@ class EfficientNetB1(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -121,20 +135,23 @@ class EfficientNetB1(nn.Module):
 class EfficientNetB2(nn.Module):
     """Class that returns a EfficientNet_B2 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_B2 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_B2 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_B2 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_B2 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_B2 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_B2 and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -164,11 +181,15 @@ class EfficientNetB2(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -178,20 +199,23 @@ class EfficientNetB2(nn.Module):
 class EfficientNetB3(nn.Module):
     """Class that returns a EfficientNet_B3 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_B3 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_B3 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_B3 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_B3 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_B3 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_B3 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -221,11 +245,15 @@ class EfficientNetB3(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -235,20 +263,23 @@ class EfficientNetB3(nn.Module):
 class EfficientNetB6(nn.Module):
     """Class that returns a EfficientNet_B6 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_B6 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_B6 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_B6 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_B6 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_B6 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_B6 and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -278,11 +309,15 @@ class EfficientNetB6(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -292,20 +327,23 @@ class EfficientNetB6(nn.Module):
 class EfficientNetB7(nn.Module):
     """Class that returns a EfficientNetB7 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNetB7 model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNetB7 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNetB7 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNetB7 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNetB7 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNetB7 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -335,11 +373,15 @@ class EfficientNetB7(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -349,20 +391,23 @@ class EfficientNetB7(nn.Module):
 class EfficientNetV2S(nn.Module):
     """Class that returns a EfficientNet_V2_S model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_V2_S model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_V2_S model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_V2_S model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_V2_S model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_S and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_S and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -392,11 +437,15 @@ class EfficientNetV2S(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -406,20 +455,23 @@ class EfficientNetV2S(nn.Module):
 class EfficientNetV2M(nn.Module):
     """Class that returns a EfficientNet_V2_M model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_V2_M model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_V2_M model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_V2_M model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_V2_M model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_M and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_M and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -449,11 +501,15 @@ class EfficientNetV2M(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -463,20 +519,23 @@ class EfficientNetV2M(nn.Module):
 class EfficientNetV2L(nn.Module):
     """Class that returns a EfficientNet_V2_L model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the EfficientNet_V2_L model from IMAGENET1K_V1.
-        model (torch.nn.Module): EfficientNet_V2_L model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the EfficientNet_V2_L model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				EfficientNet_V2_L model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_L and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for EfficientNet_V2_L and initializes the model with  the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -506,11 +565,15 @@ class EfficientNetV2L(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 

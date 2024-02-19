@@ -68,8 +68,7 @@ class TinyVGG(nn.Module):
 
 class TinyVGGBatchnorm(nn.Module):
     """
-    Model architecture copying TinyVGG from: https://poloclub.github.io/cnn-explainer/
-    with dropout layers and batchnorm layers.
+    Model architecture copying TinyVGG from: https://poloclub.github.io/cnn-explainer/ with dropout layers and batchnorm layers.
     """
 
     def __init__(

@@ -7,20 +7,23 @@ from typing_extensions import Self
 class ResNet18(nn.Module):
     """Class that returns a ResNet18 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the ResNet18 model from IMAGENET1K_V1.
-        model (torch.nn.Module): ResNet18 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+            Downloaded weights for the ResNet18 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+            ResNet18 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for ResNet18 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for ResNet18 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -43,11 +46,15 @@ class ResNet18(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -57,20 +64,23 @@ class ResNet18(nn.Module):
 class ResNet34(nn.Module):
     """Class that returns a ResNet34 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the ResNet34 model from IMAGENET1K_V1.
-        model (torch.nn.Module): ResNet34 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+				Downloaded weights for the ResNet34 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+				ResNet34 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for ResNet34 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for ResNet34 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -93,11 +103,15 @@ class ResNet34(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
@@ -107,20 +121,23 @@ class ResNet34(nn.Module):
 class ResNet50(nn.Module):
     """Class that returns a ResNet50 model with the last layer changed to output 2 classes.
 
-    Attributes:
-        weights (str): Downloaded weights for the ResNet50 model from IMAGENET1K_V1.
-        model (torch.nn.Module): ResNet50 model with the pretrained weights on all layers.
+    **Attributes**:
 
-    Methods:
-        forward: Passes the input tensor x through the model.
+        weights : str
+            Downloaded weights for the ResNet50 model from IMAGENET1K_V1.
+        model : torch.nn.Module
+            ResNet50 model with the pretrained weights on all layers.
+
+    **Methods**:
+
+        forward: 
+            Passes the input tensor x through the model.
     """
 
     def __init__(
         self: Self,
     ) -> None:
-        """Download the IMAGENET1K_V1 weights for ResNet50 and initializes the model with 
-        the pre-trained weights on all layers. Afterwards, freeze all layers except the last
-        one and change it to output 2 classes.
+        """Download the IMAGENET1K_V1 weights for ResNet50 and initializes the model with the pre-trained weights on all layers. Afterwards, freeze all layers except the last one and change it to output 2 classes.
         """
         super().__init__()
 
@@ -143,11 +160,15 @@ class ResNet50(nn.Module):
     ) -> torch.nn.Module:
         """Passes the input tensor x through the model.
 
-        Args:
-            self (Self): Instance of the class.
-            x (torch.Tensor): Input tensor to pass it through the model.
+        **Args**:
 
-        Returns:
+            self : Self
+				Instance of the class.
+            x : torch.Tensor
+				Input tensor to pass it through the model.
+
+        **Returns**:
+
             torch.nn.Module: Output of the model.
         """
 
