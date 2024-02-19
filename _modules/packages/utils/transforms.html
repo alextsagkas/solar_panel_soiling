@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>packages.utils.transforms &mdash; Solar Panel Soiling  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Solar Panel Soiling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">packages</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Solar Panel Soiling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">packages.utils.transforms</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for packages.utils.transforms</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">from</span> <span class="nn">torchvision</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">typing_extensions</span> <span class="kn">import</span> <span class="n">Self</span>
+
+
+<div class="viewcode-block" id="GetTransforms">
+<a class="viewcode-back" href="../../../packages.utils.html#packages.utils.transforms.GetTransforms">[docs]</a>
+<span class="k">class</span> <span class="nc">GetTransforms</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the transforms for training and testing data using the corresponding names for them.  The transforms can also be optionally configured through the train_config and test_config attributes.</span>
+
+<span class="sd">    **Attributes:**</span>
+<span class="sd">    </span>
+<span class="sd">        train_transform_name : str</span>
+<span class="sd">			Name of the transform to use on the train data.</span>
+<span class="sd">        train_config : Union[Dict[str, float], None]</span>
+<span class="sd">			Dictionary with the configuration of the train transform.</span>
+<span class="sd">        test_transform_name : str</span>
+<span class="sd">			Name of the transform to use on the test data.</span>
+<span class="sd">        test_config : Union[Dict[str, float], None]</span>
+<span class="sd">			Dictionary with the configuration of the test transform.</span>
+
+<span class="sd">    **Methods:**</span>
+
+<span class="sd">    -----------------------------------------------------------------------------------------------</span>
+
+<span class="sd">        simple_train:</span>
+<span class="sd">			Resize and randomly flip the image horizontally, then convert it to a tensor with values between 0 and 1.</span>
+<span class="sd">        trivial_train:</span>
+<span class="sd">			Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0 and 1.</span>
+<span class="sd">        resnet_train:</span>
+<span class="sd">			Resize and crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+<span class="sd">        efficientnet_train:</span>
+<span class="sd">			Resize and central crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+<span class="sd">        mobilenet_train:</span>
+<span class="sd">			Resize and central crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+
+<span class="sd">    -----------------------------------------------------------------------------------------------</span>
+
+<span class="sd">        simple_test:</span>
+<span class="sd">			Resize and converts it to a tensor with values between 0 and 1.</span>
+<span class="sd">        resnet_test:</span>
+<span class="sd">			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+<span class="sd">        efficientnet_test:</span>
+<span class="sd">			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+<span class="sd">        mobilenet_test:</span>
+<span class="sd">			Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+
+<span class="sd">    -----------------------------------------------------------------------------------------------</span>
+
+<span class="sd">        get_train_transform: </span>
+<span class="sd">            Returns the train transform based on the train_transform_name  attribute.</span>
+<span class="sd">        get_test_transform: </span>
+<span class="sd">            Returns the test transform based on the test_transform_name attribute.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+        <span class="n">train_transform_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+        <span class="n">train_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">test_transform_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+        <span class="n">test_config</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">Dict</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the transform object.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            train_transform_name : str, optional</span>
+<span class="sd">                Name of the transform to use on the train data. Defaults to &quot;simple&quot;.</span>
+<span class="sd">            train_config : Union[Dict, None], optional</span>
+<span class="sd">                Dictionary with the configuration of the train transform. Defaults to None.</span>
+<span class="sd">            test_transform_name : str, optional</span>
+<span class="sd">                Name of the transform to use on the test data. Defaults to &quot;simple&quot;.</span>
+<span class="sd">            test_config : Union[Dict, None], optional</span>
+<span class="sd">                Dictionary with the configuration of the test transform. Defaults to None.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_transform_name</span> <span class="o">=</span> <span class="n">train_transform_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="n">train_config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span> <span class="o">=</span> <span class="n">test_transform_name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="n">test_config</span>
+
+    <span class="k">def</span> <span class="nf">_simple_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and randomly flip the image horizontally, then convert it to a tensor with values between 0 and 1.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                Simple transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;simple transform with resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_horizontal_flip=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_horizontal_flip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_trivial_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and apply trivial augment wide transform (https://arxiv.org/abs/2103.10158). Then convert it to a tensor with values between 0 and 1.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: Trivial transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;num_magnitude_bins&quot;</span><span class="p">,</span> <span class="mi">31</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;trivial transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random rotation of </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_rotation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">˚ and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_magnitude_bins=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;num_magnitude_bins&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomRotation</span><span class="p">(</span>
+                <span class="n">degrees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">TrivialAugmentWide</span><span class="p">(</span>
+                <span class="n">num_magnitude_bins</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;num_magnitude_bins&quot;</span><span class="p">]),</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_resnet_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and randomly crops the image before applying data augmentation (horizontal flip,  trivial transform (optional - avoid if num_magnitude_bins=0) &amp; rotation). In the end the  image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0. 406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			GetTransforms instance.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                The resnet train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;num_magnitude_bins&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;resnet transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;num_magnitude_bins=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;num_magnitude_bins&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_horizontal_flip=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_horizontal_flip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_rotation=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_rotation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create transform function</span>
+        <span class="n">transforms_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomResizedCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomRotation</span><span class="p">(</span>
+                <span class="n">degrees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># Add trivial augment wide transform if num_magnitude_bins &gt; 0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;num_magnitude_bins&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">transforms_list</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span>
+                <span class="mi">2</span><span class="p">,</span>
+                <span class="n">transforms</span><span class="o">.</span><span class="n">TrivialAugmentWide</span><span class="p">(</span>
+                    <span class="n">num_magnitude_bins</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;num_magnitude_bins&quot;</span><span class="p">],</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span><span class="n">transforms_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_efficientnet_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and central crops the image before applying data augmentation (horizontal flip, &amp; random rotation). In the end the image is converted to tensor with values between 0 and 1  and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The  values of mean and std can be optionally configured through the train_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			GetTransforms instance.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: The efficientnet train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;efficientnet transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_horizontal_flip=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_horizontal_flip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_rotation=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_rotation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create transform function</span>
+        <span class="n">transforms_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BICUBIC</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomRotation</span><span class="p">(</span>
+                <span class="n">degrees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span><span class="n">transforms_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_mobilenet_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and central crops the image before applying data augmentation (horizontal flip, &amp; random rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the train_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			GetTransforms instance.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                The mobilenet train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">232</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;efficientnet transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_horizontal_flip=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_horizontal_flip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_rotation=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_rotation&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create transform function</span>
+        <span class="n">transforms_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomRotation</span><span class="p">(</span>
+                <span class="n">degrees</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_rotation&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span><span class="n">transforms_list</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_shufflenet_train</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and central crops the image before applying data augmentation (horizontal flip).  In the end the image is converted to tensor with values between 0 and 1 and the mean = [0. 485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the train_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			GetTransforms instance.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose:</span>
+<span class="sd">                The shufflenet train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;shufflenet transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;random_horizontal_flip=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;random_horizontal_flip&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Create transform function</span>
+        <span class="n">transforms_list</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(</span>
+                <span class="n">p</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;random_horizontal_flip&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">(</span><span class="n">transforms_list</span><span class="p">)</span>
+
+<div class="viewcode-block" id="GetTransforms.get_train_transform">
+<a class="viewcode-back" href="../../../packages.utils.html#packages.utils.transforms.GetTransforms.get_train_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_train_transform</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the train transform based on the train_transform_name attribute.</span>
+
+<span class="sd">        **Raises:**</span>
+
+<span class="sd">            ValueError: </span>
+<span class="sd">                When the transform_name does not correspond to any transform method.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                Train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">transform_method_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_transform_name</span><span class="si">}</span><span class="s2">_train&quot;</span>
+        <span class="n">transform_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform_method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">transform_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">callable</span><span class="p">(</span><span class="n">transform_method</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] Train data augmentation: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">transform_method</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transform name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">train_transform_name</span><span class="si">}</span><span class="s2"> is not supported.&quot;</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_simple_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and converts it to a tensor with values between 0 and 1.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: Simple transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">64</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;simple transform with resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">()</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_resnet_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			The object itself.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose:</span>
+<span class="sd">                The resnet test transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2"> transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_efficientnet_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			The object itself.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                The efficientnet test transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2"> transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BICUBIC</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_mobilenet_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			The object itself.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                The mobilenet test transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">232</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2"> transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">_shufflenet_test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">:</span> <span class="n">Self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted. The values of mean and std can be optionally configured through the test_config attribute.</span>
+
+<span class="sd">        **Args**:</span>
+
+<span class="sd">            self : Self</span>
+<span class="sd">			The object itself.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                The shufflenet test transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;resize_size&quot;</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;crop_size&quot;</span><span class="p">,</span> <span class="mi">224</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.485</span><span class="p">,</span> <span class="mf">0.456</span><span class="p">,</span> <span class="mf">0.406</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;std&quot;</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.229</span><span class="p">,</span> <span class="mf">0.224</span><span class="p">,</span> <span class="mf">0.225</span><span class="p">])</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2"> transform with &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;resize_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;resize_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;crop_size=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;crop_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;mean=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;mean&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> and &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;std=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s1">&#39;std&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;resize_size&quot;</span><span class="p">],</span>
+                <span class="n">interpolation</span><span class="o">=</span><span class="n">transforms</span><span class="o">.</span><span class="n">InterpolationMode</span><span class="o">.</span><span class="n">BILINEAR</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">CenterCrop</span><span class="p">(</span>
+                <span class="n">size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;crop_size&quot;</span><span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+            <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span>
+                <span class="n">mean</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">],</span>
+                <span class="n">std</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">test_config</span><span class="p">[</span><span class="s2">&quot;std&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">])</span>
+
+<div class="viewcode-block" id="GetTransforms.get_test_transform">
+<a class="viewcode-back" href="../../../packages.utils.html#packages.utils.transforms.GetTransforms.get_test_transform">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_test_transform</span><span class="p">(</span>
+        <span class="bp">self</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">transforms</span><span class="o">.</span><span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns the test transform based on the test_transform_name attribute.</span>
+
+<span class="sd">        **Raises:**</span>
+
+<span class="sd">            ValueError: </span>
+<span class="sd">                When the transform_name does not correspond to any transform method.</span>
+
+<span class="sd">        **Returns**:</span>
+
+<span class="sd">            transforms.transforms.Compose: </span>
+<span class="sd">                Train transform.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">transform_method_name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2">_test&quot;</span>
+        <span class="n">transform_method</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">transform_method_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">transform_method</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">callable</span><span class="p">(</span><span class="n">transform_method</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[INFO] Test data augmentation: &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">transform_method</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Transform name </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_transform_name</span><span class="si">}</span><span class="s2"> is not supported.&quot;</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandros Tsagkaropoulos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

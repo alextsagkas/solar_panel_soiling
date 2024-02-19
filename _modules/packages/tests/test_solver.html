@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>packages.tests.test_solver &mdash; Solar Panel Soiling  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Solar Panel Soiling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">packages</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Solar Panel Soiling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">packages.tests.test_solver</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for packages.tests.test_solver</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Union</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.utils.data</span>
+<span class="kn">from</span> <span class="nn">torchvision.datasets</span> <span class="kn">import</span> <span class="n">ImageFolder</span>
+
+<span class="kn">from</span> <span class="nn">packages.utils.configuration</span> <span class="kn">import</span> <span class="n">test_dir</span><span class="p">,</span> <span class="n">train_dir</span>
+<span class="kn">from</span> <span class="nn">packages.utils.models</span> <span class="kn">import</span> <span class="n">GetModel</span>
+<span class="kn">from</span> <span class="nn">packages.utils.solver</span> <span class="kn">import</span> <span class="n">Solver</span>
+<span class="kn">from</span> <span class="nn">packages.utils.transforms</span> <span class="kn">import</span> <span class="n">GetTransforms</span>
+
+
+<div class="viewcode-block" id="test_solver">
+<a class="viewcode-back" href="../../../packages.tests.html#packages.tests.test_solver.test_solver">[docs]</a>
+<span class="k">def</span> <span class="nf">test_solver</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">optimizer_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">train_transform_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">test_transform_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">timestamp_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+    <span class="n">train_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">train_dir</span><span class="p">,</span>
+    <span class="n">test_dir</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">test_dir</span><span class="p">,</span>
+    <span class="n">scheduler_name</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train and test a model using simple train from Solver.</span>
+
+<span class="sd">    Via the kwargs the training can be further customized. An example of the supported kwargs is the following::</span>
+
+<span class="sd">        kwargs = {</span>
+<span class="sd">            &quot;model_config&quot;: {&quot;hidden_units&quot;: 128},</span>
+<span class="sd">            &quot;optimizer_config&quot;: {&quot;weight_decay&quot;: 0.001},</span>
+<span class="sd">            &quot;train_transform_config&quot;: {&quot;random_horizontal_flip&quot;: 0.45},</span>
+<span class="sd">            &quot;test_transform_config&quot;: {&quot;random_rotation&quot;: 180},</span>
+<span class="sd">            &quot;scheduler_config&quot;: {&quot;step_size&quot;: 10, &quot;gamma&quot;: 0.1},</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Args:**</span>
+
+<span class="sd">        model_name : str </span>
+<span class="sd">			String that identifies the model to be used.</span>
+<span class="sd">        num_epochs : int </span>
+<span class="sd">			The number of epochs to train the model.</span>
+<span class="sd">        batch_size : int </span>
+<span class="sd">			The size of the batches to be used in the training and testing.</span>
+<span class="sd">        optimizer_name : str </span>
+<span class="sd">			String that identifies the optimizer to be used.</span>
+<span class="sd">        train_transform_name : str </span>
+<span class="sd">			String that identifies the transform to be used on the train data.</span>
+<span class="sd">        test_transform_name : str </span>
+<span class="sd">			String that identifies the transform to be used on the test data.</span>
+<span class="sd">        timestamp_list : List[str] </span>
+<span class="sd">			List of timestamp (YYYY-MM-DD, HH-MM-SS).</span>
+<span class="sd">        device : torch.device </span>
+<span class="sd">			A target device to compute on (&quot;cuda&quot;, &quot;cpu&quot;, &quot;mps&quot;).</span>
+<span class="sd">        train_dir : Path, optional </span>
+<span class="sd">			Path to the directory containing the training data. Defaults to train_dir.</span>
+<span class="sd">        test_dir : Path, optional </span>
+<span class="sd">			Path to the directory containing the testing data. Defaults to test_dir.</span>
+<span class="sd">        scheduler_name : Union[str, None], optional </span>
+<span class="sd">			String that identifies the scheduler to be used. Defaults to None.</span>
+<span class="sd">        kwargs : dict </span>
+<span class="sd">			Dictionary of optional arguments. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">optimizer_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;optimizer_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">scheduler_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;scheduler_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">train_transform_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;train_transform_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">test_transform_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_transform_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">transform_obj</span> <span class="o">=</span> <span class="n">GetTransforms</span><span class="p">(</span>
+        <span class="n">train_transform_name</span><span class="o">=</span><span class="n">train_transform_name</span><span class="p">,</span>
+        <span class="n">train_config</span><span class="o">=</span><span class="n">train_transform_config</span><span class="p">,</span>
+        <span class="n">test_transform_name</span><span class="o">=</span><span class="n">test_transform_name</span><span class="p">,</span>
+        <span class="n">test_config</span><span class="o">=</span><span class="n">test_transform_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">train_dir</span><span class="p">),</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform_obj</span><span class="o">.</span><span class="n">get_train_transform</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">test_dir</span><span class="p">),</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform_obj</span><span class="o">.</span><span class="n">get_test_transform</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[INFO] Using </span><span class="si">{</span><span class="n">train_dir</span><span class="si">}</span><span class="s2"> data to train the model and &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">test_dir</span><span class="si">}</span><span class="s2"> data to test the model.&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+
+    <span class="n">model_obj</span> <span class="o">=</span> <span class="n">GetModel</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+        <span class="n">config</span><span class="o">=</span><span class="n">model_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span>
+        <span class="n">model_obj</span><span class="o">=</span><span class="n">model_obj</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">loss_fn</span><span class="o">=</span><span class="n">loss_fn</span><span class="p">,</span>
+        <span class="n">optimizer_name</span><span class="o">=</span><span class="n">optimizer_name</span><span class="p">,</span>
+        <span class="n">scheduler_name</span><span class="o">=</span><span class="n">scheduler_name</span><span class="p">,</span>
+        <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+        <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+        <span class="n">timestamp_list</span><span class="o">=</span><span class="n">timestamp_list</span><span class="p">,</span>
+        <span class="n">optimizer_config</span><span class="o">=</span><span class="n">optimizer_config</span><span class="p">,</span>
+        <span class="n">scheduler_config</span><span class="o">=</span><span class="n">scheduler_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">solver</span><span class="o">.</span><span class="n">train_model</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="test_kfold_solver">
+<a class="viewcode-back" href="../../../packages.tests.html#packages.tests.test_solver.test_kfold_solver">[docs]</a>
+<span class="k">def</span> <span class="nf">test_kfold_solver</span><span class="p">(</span>
+    <span class="n">model_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">num_folds</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">num_epochs</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">optimizer_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">train_transform_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">test_transform_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">timestamp_list</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="n">device</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Train and test a model using k-fold train from Solver.</span>
+
+<span class="sd">    Via the kwargs the training can be further customized. An example of the supported</span>
+<span class="sd">    kwargs is the following::</span>
+
+<span class="sd">        kwargs = {</span>
+<span class="sd">            &quot;model_config&quot;: {&quot;hidden_units&quot;: 128},</span>
+<span class="sd">            &quot;optimizer_config&quot;: {&quot;weight_decay&quot;: 0.001},</span>
+<span class="sd">            &quot;train_transform_config&quot;: {&quot;random_horizontal_flip&quot;: 0.45},</span>
+<span class="sd">            &quot;test_transform_config&quot;: {&quot;random_rotation&quot;: 180},</span>
+<span class="sd">        }</span>
+
+<span class="sd">    **Args:**</span>
+<span class="sd">        model_name : str </span>
+<span class="sd">			String that identifies the model to be used.</span>
+<span class="sd">        num_folds : int </span>
+<span class="sd">			Number of fold to be used in the k-fold training.</span>
+<span class="sd">        num_epochs : int </span>
+<span class="sd">			The number of epochs to train the model.</span>
+<span class="sd">        batch_size : int </span>
+<span class="sd">			The size of the batches to be used in the training and testing.</span>
+<span class="sd">        optimizer_name : str </span>
+<span class="sd">			String that identifies the optimizer to be used.</span>
+<span class="sd">        train_transform_name : str </span>
+<span class="sd">			String that identifies the transform to be used on the train data.</span>
+<span class="sd">        test_transform_name : str </span>
+<span class="sd">			String that identifies the transform to be used on the test data.</span>
+<span class="sd">        timestamp_list : List[str] </span>
+<span class="sd">			List of timestamp (YYYY-MM-DD, HH-MM-SS).</span>
+<span class="sd">        device : torch.device </span>
+<span class="sd">			A target device to compute on (&quot;cuda&quot;, &quot;cpu&quot;, &quot;mps&quot;).</span>
+<span class="sd">        kwargs : dict </span>
+<span class="sd">			Dictionary of optional arguments. Defaults to None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;model_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">optimizer_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;optimizer_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">train_transform_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;train_transform_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="n">test_transform_config</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;test_transform_config&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+    <span class="n">transform_obj</span> <span class="o">=</span> <span class="n">GetTransforms</span><span class="p">(</span>
+        <span class="n">train_transform_name</span><span class="o">=</span><span class="n">train_transform_name</span><span class="p">,</span>
+        <span class="n">train_config</span><span class="o">=</span><span class="n">train_transform_config</span><span class="p">,</span>
+        <span class="n">test_transform_name</span><span class="o">=</span><span class="n">test_transform_name</span><span class="p">,</span>
+        <span class="n">test_config</span><span class="o">=</span><span class="n">test_transform_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">train_dir</span><span class="p">),</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform_obj</span><span class="o">.</span><span class="n">get_train_transform</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">ImageFolder</span><span class="p">(</span>
+        <span class="n">root</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">test_dir</span><span class="p">),</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">transform_obj</span><span class="o">.</span><span class="n">get_test_transform</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="n">loss_fn</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+
+    <span class="n">model_obj</span> <span class="o">=</span> <span class="n">GetModel</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+        <span class="n">config</span><span class="o">=</span><span class="n">model_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">solver</span> <span class="o">=</span> <span class="n">Solver</span><span class="p">(</span>
+        <span class="n">model_obj</span><span class="o">=</span><span class="n">model_obj</span><span class="p">,</span>
+        <span class="n">device</span><span class="o">=</span><span class="n">device</span><span class="p">,</span>
+        <span class="n">num_folds</span><span class="o">=</span><span class="n">num_folds</span><span class="p">,</span>
+        <span class="n">num_epochs</span><span class="o">=</span><span class="n">num_epochs</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">loss_fn</span><span class="o">=</span><span class="n">loss_fn</span><span class="p">,</span>
+        <span class="n">optimizer_name</span><span class="o">=</span><span class="n">optimizer_name</span><span class="p">,</span>
+        <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+        <span class="n">test_dataset</span><span class="o">=</span><span class="n">test_dataset</span><span class="p">,</span>
+        <span class="n">timestamp_list</span><span class="o">=</span><span class="n">timestamp_list</span><span class="p">,</span>
+        <span class="n">optimizer_config</span><span class="o">=</span><span class="n">optimizer_config</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">solver</span><span class="o">.</span><span class="n">train_model_kfold</span><span class="p">()</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandros Tsagkaropoulos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

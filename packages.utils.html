@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>packages.utils package &mdash; Solar Panel Soiling  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="packages.tests package" href="packages.tests.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Solar Panel Soiling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">packages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="packages.html">packages package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="packages.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="packages.models.html">packages.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages.tests.html">packages.tests package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">packages.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="packages.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages.html#module-packages.main">packages.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solar Panel Soiling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">packages</a></li>
+          <li class="breadcrumb-item"><a href="packages.html">packages package</a></li>
+      <li class="breadcrumb-item active">packages.utils package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/packages.utils.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="packages-utils-package">
+<h1>packages.utils package<a class="headerlink" href="#packages-utils-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-packages.utils.configuration">
+<span id="packages-utils-configuration-module"></span><h2>packages.utils.configuration module<a class="headerlink" href="#module-packages.utils.configuration" title="Link to this heading"></a></h2>
+</section>
+<section id="module-packages.utils.data_scraping">
+<span id="packages-utils-data-scraping-module"></span><h2>packages.utils.data_scraping module<a class="headerlink" href="#module-packages.utils.data_scraping" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.data_scraping.download_image">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.data_scraping.</span></span><span class="sig-name descname"><span class="pre">download_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">download_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/data_scraping.html#download_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.data_scraping.download_image" title="Link to this definition"></a></dt>
+<dd><p>Download an image from a url and save it to download_path/file_name. The image is converted 
+to RGB color format and JPEG file format.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>download_path<span class="classifier">Path</span></dt><dd><p>Path to download the image to.</p>
+</dd>
+<dt>url<span class="classifier">str</span></dt><dd><p>Url of the image to download.</p>
+</dd>
+<dt>file_name<span class="classifier">str</span></dt><dd><p>Name of the file to save the image to.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.data_scraping.get_image_urls">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.data_scraping.</span></span><span class="sig-name descname"><span class="pre">get_image_urls</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delay</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/packages/utils/data_scraping.html#get_image_urls"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.data_scraping.get_image_urls" title="Link to this definition"></a></dt>
+<dd><p>Get max_images number of image urls from the given google images url.</p>
+<p>The delay is the number of seconds to wait so as to allow the images to load. It is used
+while scrolling down the page or clicking on a button.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>url<span class="classifier">str</span></dt><dd><p>Google images url.</p>
+</dd>
+<dt>delay<span class="classifier">float</span></dt><dd><p>Delay in seconds.</p>
+</dd>
+<dt>max_images<span class="classifier">int</span></dt><dd><p>Maximum number of images to scrape.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Set[str]: Set of image urls.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.inference">
+<span id="packages-utils-inference-module"></span><h2>packages.utils.inference module<a class="headerlink" href="#module-packages.utils.inference" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.inference.inference">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.inference.</span></span><span class="sig-name descname"><span class="pre">inference</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataloader</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">DataLoader</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">class_names</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_images</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/inference.html#inference"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.inference.inference" title="Link to this definition"></a></dt>
+<dd><p>Tests model in data from the test_dataloader.</p>
+<p>Evaluates the prediction probabilities for the classes the data are separated to. Saves a dictionary containing the classification metrics (accuracy, precession, recall, f-beta score) and prints it on the console.</p>
+<p>It also optionally saves every image in the test_model_dir/timestamp_list[0]/timestamp_list[1] folder and provides information about the classification on the title of the image. This behavior is controlled by the save_images argument.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>model<span class="classifier">torch.nn.Module </span></dt><dd><p>A PyTorch model to be trained and tested.</p>
+</dd>
+<dt>test_dataloader<span class="classifier">torch.utils.data.DataLoader </span></dt><dd><p>A DataLoader instance for the model to be tested on (using size of batches = 1).</p>
+</dd>
+<dt>class_names<span class="classifier">List[int] </span></dt><dd><p>A list of the classes the model is trained on.</p>
+</dd>
+<dt>device<span class="classifier">torch.device </span></dt><dd><p>A target device to compute on (“cuda”, “cpu”, “mps”).</p>
+</dd>
+<dt>timestamp_list<span class="classifier">List[str] </span></dt><dd><p>List of timestamp (YYYY-MM-DD, HH-MM-SS).</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.load_data">
+<span id="packages-utils-load-data-module"></span><h2>packages.utils.load_data module<a class="headerlink" href="#module-packages.utils.load_data" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.load_data.get_dataloader">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.load_data.</span></span><span class="sig-name descname"><span class="pre">get_dataloader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Compose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_workers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataLoader</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/packages/utils/load_data.html#get_dataloader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.load_data.get_dataloader" title="Link to this definition"></a></dt>
+<dd><p>Creates a dataset and passes it ot a dataloader, which is return in addition to class names.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>dir<span class="classifier">str</span></dt><dd><p>Directory of the data.</p>
+</dd>
+<dt>data_transform<span class="classifier">transforms.transforms.Compose</span></dt><dd><p>Transforms to apply to the data.</p>
+</dd>
+<dt>batch_size<span class="classifier">int</span></dt><dd><p>Batch size.</p>
+</dd>
+<dt>num_workers<span class="classifier">int, optional</span></dt><dd><p>The number workers that load the data (usually equals to the cpu cores). Defaults to 1.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool, optional</span></dt><dd><p>Shuffle the data or not (usually shuffle only the training data). Defaults to False.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><p>Dataloader of the data and the class names:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">tuple</span><span class="p">[</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">DataLoader</span><span class="p">,</span>
+    <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.load_data.plot_transformed_images">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.load_data.</span></span><span class="sig-name descname"><span class="pre">plot_transformed_images</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_paths</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">Path</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Compose</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/load_data.html#plot_transformed_images"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.load_data.plot_transformed_images" title="Link to this definition"></a></dt>
+<dd><p>Saves a series of random images from image_paths to the debug/data_transforms/transform_name/YYYY-MM-DD/HH-MM-SS/ folder.</p>
+<p>Will open n image paths from image_paths, transform them with transform and save them one by one.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>image_paths<span class="classifier">list[Path]</span></dt><dd><p>List of target image paths.</p>
+</dd>
+<dt>transform<span class="classifier">PyTorch Transforms</span></dt><dd><p>Transforms to apply to images.</p>
+</dd>
+<dt>transform_name<span class="classifier">str</span></dt><dd><p>Name of the transform to use as a subfolder for saving the transformed images.</p>
+</dd>
+<dt>timestamp_list<span class="classifier">List[str]</span></dt><dd><p>Timestamp of the test.</p>
+</dd>
+<dt>n<span class="classifier">int, optional</span></dt><dd><p>Number of images to plot. Defaults to 3.</p>
+</dd>
+<dt>seed<span class="classifier">int, optional</span></dt><dd><p>Random seed for the random generator. Defaults to None.k</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.models">
+<span id="packages-utils-models-module"></span><h2>packages.utils.models module<a class="headerlink" href="#module-packages.utils.models" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.utils.models.GetModel">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.utils.models.</span></span><span class="sig-name descname"><span class="pre">GetModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_checkpoint</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">load_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/utils/models.html#GetModel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.models.GetModel" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that returns a model based on the model_name parameter.</p>
+<p><strong>Attributes:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>model_name<span class="classifier">str</span></dt><dd><p>String that identifies the model to be used.</p>
+</dd>
+<dt>config<span class="classifier">Union[Dict[str, int], None]</span></dt><dd><p>Dictionary with the configuration of the model.</p>
+</dd>
+<dt>input_shape<span class="classifier">int</span></dt><dd><p>Number of channels of the input images.</p>
+</dd>
+<dt>output_shape<span class="classifier">int</span></dt><dd><p>Number of classes of the output.</p>
+</dd>
+<dt>load_checkpoint<span class="classifier">bool</span></dt><dd><p>If True, the model is loaded from the checkpoint path, that is specified in the load_config parameter.</p>
+</dd>
+<dt>load_config<span class="classifier">Union[Dict, None]</span></dt><dd><p>Dictionary with the configuration of the loaded model.</p>
+</dd>
+<dt>mode_save_path<span class="classifier">str</span></dt><dd><p>Path to the model parameters checkpoint to be loaded.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods:</strong></p>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_tiny_vgg: </dt><dd><p>Returns the TinyVGG model.</p>
+</dd>
+<dt>_tiny_vgg_batchnorm: </dt><dd><p>Returns the TinyVGGBatchnorm model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_resnet18: </dt><dd><p>Returns the ResNet18 model.</p>
+</dd>
+<dt>_resnet34: </dt><dd><p>Returns the ResNet34 model.</p>
+</dd>
+<dt>_resnet50: </dt><dd><p>Returns the ResNet50 model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_efficientnet_b0 :</dt><dd><p>Returns the EfficientNetB0 model.</p>
+</dd>
+<dt>_efficientnet_b1 :</dt><dd><p>Returns the EfficientNetB1 model.</p>
+</dd>
+<dt>_efficientnet_b2 :</dt><dd><p>Returns the EfficientNetB2 model.</p>
+</dd>
+<dt>_efficientnet_b3 :</dt><dd><p>Returns the EfficientNetB3 model.</p>
+</dd>
+<dt>_efficientnet_b6 :</dt><dd><p>Returns the EfficientNetB6 model.</p>
+</dd>
+<dt>_efficientnet_b7 :</dt><dd><p>Returns the EfficientNetB7 model.</p>
+</dd>
+<dt>_efficientnet_v2_s :</dt><dd><p>Returns the EfficientNet_V2_S model.</p>
+</dd>
+<dt>_efficientnet_v2_m :</dt><dd><p>Returns the EfficientNet_V2_M model.</p>
+</dd>
+<dt>_efficientnet_v2_l :</dt><dd><p>Returns the EfficientNet_V2_L model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_mobilenet_v2 :</dt><dd><p>Returns the MobileNetV2 model.</p>
+</dd>
+<dt>_mobile_v3_small :</dt><dd><p>Returns the MobileNetV3Small model.</p>
+</dd>
+<dt>_mobile_v3_large :</dt><dd><p>Returns the MobileNetV3Large model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_shufflenet_v2_x0_5 :</dt><dd><p>Returns the ShuffleNetV2X05 model.</p>
+</dd>
+<dt>_shufflenet_v2_x1_0 :</dt><dd><p>Returns the ShuffleNetV2X10 model.</p>
+</dd>
+<dt>_shufflenet_v2_x1_5 :</dt><dd><p>Returns the ShuffleNetV2X15 model.</p>
+</dd>
+<dt>_shufflenet_v2_x2_0 :</dt><dd><p>Returns the ShuffleNetV2X20 model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_load_model :</dt><dd><p>Uses the load_config parameter to get the model name and the configuration used while initially training it. It also computes the path of the model parameters checkpoint to be loaded.</p>
+</dd>
+<dt>get_model: </dt><dd><p>Returns the model based on the model_name parameter.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.models.GetModel.get_model">
+<span class="sig-name descname"><span class="pre">get_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/utils/models.html#GetModel.get_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.models.GetModel.get_model" title="Link to this definition"></a></dt>
+<dd><p>Returns the model based on the model_name parameter. If load_checkpoint is True, the  model is loaded from the checkpoint path.</p>
+<dl class="simple">
+<dt><strong>Args:</strong></dt><dd><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>GetModel instance.</p>
+</dd>
+</dl>
+</dd>
+<dt><strong>Returns:</strong></dt><dd><p>torch.nn.Module: The model to be used.</p>
+</dd>
+<dt><strong>Raises:</strong></dt><dd><p>ValueError: If the model_name is not supported (there is no method that implements it).</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.optim">
+<span id="packages-utils-optim-module"></span><h2>packages.utils.optim module<a class="headerlink" href="#module-packages.utils.optim" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.utils.optim.GetOptimizer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.utils.optim.</span></span><span class="sig-name descname"><span class="pre">GetOptimizer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">params</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Iterator</span><span class="p"><span class="pre">[</span></span><span class="pre">Parameter</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/utils/optim.html#GetOptimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.optim.GetOptimizer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that returns an optimizer based on the optimizer_name parameter. The list of available optimizers is: [“adam”, “sgd”].</p>
+<p>In addition, the class also returns a scheduler based on the scheduler_name parameter. The list of available schedulers is: [“steplr”].</p>
+<p><strong>Attributes:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>optimizer_name<span class="classifier">str</span></dt><dd><p>String that identifies the optimizer to be used.</p>
+</dd>
+<dt>params<span class="classifier">Iterator[torch.nn.Parameter]</span></dt><dd><p>List of parameters of the model to be optimized.</p>
+</dd>
+<dt>config<span class="classifier">Union[Dict[str, float], None]</span></dt><dd><p>Dictionary with the configuration of the optimizer.</p>
+</dd>
+<dt>scheduler_name<span class="classifier">Union[str, None]</span></dt><dd><p>String that identifies the scheduler to be used.</p>
+</dd>
+<dt>scheduler_config<span class="classifier">Union[Dict, None]</span></dt><dd><p>Dictionary with the configuration of the scheduler.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods:</strong></p>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_sgd:</dt><dd><p>Returns a SGD optimizer.</p>
+</dd>
+<dt>_adam:</dt><dd><p>Returns an Adam optimizer.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>_steplr:</dt><dd><p>Returns a StepLR scheduler.</p>
+</dd>
+<dt>_reduce_lr_on_plateau:</dt><dd><p>Returns a ReduceLROnPlateau scheduler.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>get_optimizer:</dt><dd><p>Returns the optimizer based on the optimizer_name parameter.</p>
+</dd>
+<dt>get_scheduler:</dt><dd><p>Returns the scheduler based on the scheduler_name parameter.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>update_scheduler:</dt><dd><p>Updates the scheduler based on the scheduler_name parameter. if there is not scheduler configured, it does nothing.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.optim.GetOptimizer.get_optimizer">
+<span class="sig-name descname"><span class="pre">get_optimizer</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optimizer</span></span></span><a class="reference internal" href="_modules/packages/utils/optim.html#GetOptimizer.get_optimizer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.optim.GetOptimizer.get_optimizer" title="Link to this definition"></a></dt>
+<dd><p>Returns the optimizer based on the optimizer_name attribute.</p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><p>torch.optim.Optimizer: Optimizer instance.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>Raises:</dt><dd><p>ValueError: When the optimizer_name does not correspond to any optimizer method.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.optim.GetOptimizer.get_scheduler">
+<span class="sig-name descname"><span class="pre">get_scheduler</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">LRScheduler</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ReduceLROnPlateau</span></span></span><a class="reference internal" href="_modules/packages/utils/optim.html#GetOptimizer.get_scheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.optim.GetOptimizer.get_scheduler" title="Link to this definition"></a></dt>
+<dd><p>Returns the scheduler based on the scheduler_name attribute.</p>
+<p><strong>Raises:</strong></p>
+<blockquote>
+<div><p>ValueError: When the scheduler_name does not correspond to any scheduler method.</p>
+</div></blockquote>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><p>torch.optim.lr_scheduler.LRScheduler: Scheduler instance.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.optim.GetOptimizer.update_scheduler">
+<span class="sig-name descname"><span class="pre">update_scheduler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">LRScheduler</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">ReduceLROnPlateau</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/optim.html#GetOptimizer.update_scheduler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.optim.GetOptimizer.update_scheduler" title="Link to this definition"></a></dt>
+<dd><p>Updates the scheduler based on the scheduler_name attribute. If there is not scheduler configured, it does nothing.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of GetOptimizer.</p>
+</dd>
+<dt>test_metrics<span class="classifier">Dict[str, float]</span></dt><dd><p>Dictionary with the metrics of the test.</p>
+</dd>
+<dt>scheduler<span class="classifier">Union[ torch.optim.lr_scheduler.LRScheduler, torch.optim.lr_scheduler.ReduceLROnPlateau, None]</span></dt><dd><p>Scheduler instance.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.solver">
+<span id="packages-utils-solver-module"></span><h2>packages.utils.solver module<a class="headerlink" href="#module-packages.utils.solver" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.utils.solver.Solver">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.utils.solver.</span></span><span class="sig-name descname"><span class="pre">Solver</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model_obj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#packages.utils.models.GetModel" title="packages.utils.models.GetModel"><span class="pre">GetModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">optimizer_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">device</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">device</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ImageFolder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_dataset</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ImageFolder</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_folds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scheduler_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/utils/solver.html#Solver"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.solver.Solver" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class that trains and tests a Pytorch model. It provides functionality for a simple train  function and a k-fold cross validation train function.</p>
+<p>In the first case, the model is trained on the train dataset for num_epochs and evaluated on  the test dataset in the end. The results on the test dataset are saved in the debug/metrics. Also, the metrics generated on every epoch are saved on tensorboard, in debug/runs folder.</p>
+<p>In the second case, the train dataset is split into num_folds folds and the model is trained on the 1 - mun_folds folds for num_epochs, whereas it is evaluated in the 1 fold remaining (validation set), for every epoch. The process is repeated until every single fold has been used as a validation set. In the end of each fold the model is also evaluated on the test set.  The results on the test set are averaged out and saved in the debug/metrics. Also, the metrics generated on each epoch are saved on tensorboard in debug/runs folder.</p>
+<p>In addition, any model that is trained is saved in the models/ folder.</p>
+<p><strong>Attributes:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>model_obj<span class="classifier">GetModel</span></dt><dd><p>The model object to be trained and tested.</p>
+</dd>
+<dt>num_folds<span class="classifier">int</span></dt><dd><p>Number of folds to be used in k-fold cross validation.</p>
+</dd>
+<dt>num_epochs<span class="classifier">int</span></dt><dd><p>Number of epochs to train the model.</p>
+</dd>
+<dt>batch_size<span class="classifier">int</span></dt><dd><p>Number of samples per batch.</p>
+</dd>
+<dt>loss_fn<span class="classifier">torch.nn.Module</span></dt><dd><p>Loss function to be used.</p>
+</dd>
+<dt>optimizer_name<span class="classifier">str</span></dt><dd><p>String that identifies the optimizer to be used.</p>
+</dd>
+<dt>scheduler_name<span class="classifier">Union[str, None]</span></dt><dd><p>String that identifies the scheduler to be used.</p>
+</dd>
+<dt>device<span class="classifier">torch.device</span></dt><dd><p>Device to be used to load the model.</p>
+</dd>
+<dt>train_dataset<span class="classifier">torchvision.datasets.ImageFolder</span></dt><dd><p>Train dataset.</p>
+</dd>
+<dt>test_dataset<span class="classifier">torchvision.datasets.ImageFolder</span></dt><dd><p>Test dataset.</p>
+</dd>
+<dt>timestamp_list<span class="classifier">List[str]</span></dt><dd><p>List of strings that contain the timestamp of the experiment.</p>
+</dd>
+<dt>optimizer_config<span class="classifier">Union[Dict[str, float], None]</span></dt><dd><p>Dictionary with the configuration of the optimizer.</p>
+</dd>
+<dt>scheduler_config<span class="classifier">Union[Dict, None]</span></dt><dd><p>Dictionary with the configuration of the scheduler.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>_train_step: </dt><dd><p>Trains a PyTorch model for one epoch.</p>
+</dd>
+<dt>_test_step: </dt><dd><p>Tests a PyTorch model for one epoch.</p>
+</dd>
+<dt>_create_writer: </dt><dd><p>Creates a torch.utils.tensorboard.writer.SummaryWriter() instance saving to the directory: debug/runs/YYYY-MM-DD/HH-MM-SS/”.</p>
+</dd>
+<dt>_display_metrics: </dt><dd><p>Receives data about the phase and epoch and prints out the metrics while saving them to a tensorboard writer.</p>
+</dd>
+<dt>train_model: </dt><dd><p>Trains and tests a PyTorch model.</p>
+</dd>
+<dt>_average_metrics: </dt><dd><p>Receives a dictionary of test results produced in each fold and produces another, which contains the average of each metric.</p>
+</dd>
+<dt>train_model_kfold: </dt><dd><p>Trains and tests a model using k-fold cross validation.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.solver.Solver.train_model">
+<span class="sig-name descname"><span class="pre">train_model</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/packages/utils/solver.html#Solver.train_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.solver.Solver.train_model" title="Link to this definition"></a></dt>
+<dd><p>Trains and tests a PyTorch model.</p>
+<p>Passes a target PyTorch models through _train_step() function for a number of epochs. When the training is done, passes the same updated model through _test_step() function, to evaluate the model’s performance on the test dataset.</p>
+<p>Calculates, prints and stores evaluation metrics on training set throughout.</p>
+<p>Stores metrics to specified writer in <code class="docutils literal notranslate"><span class="pre">debug/runs/</span></code> folder and in the <code class="docutils literal notranslate"><span class="pre">debug/metrics/</span></code> folder.</p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>Dict[str, float]: </dt><dd><p>A dictionary containing the classification metrics, the loss for the test dataset, and the time taken to train it. Example:</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="mf">0.94</span><span class="p">,</span>
+    <span class="s2">&quot;precession&quot;</span><span class="p">:</span> <span class="mf">0.80</span><span class="p">,</span>
+    <span class="s2">&quot;recall&quot;</span><span class="p">:</span> <span class="mf">0.69</span><span class="p">,</span>
+    <span class="s2">&quot;fscore&quot;</span><span class="p">:</span> <span class="mf">0.76</span><span class="p">,</span>
+    <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.solver.Solver.train_model_kfold">
+<span class="sig-name descname"><span class="pre">train_model_kfold</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/packages/utils/solver.html#Solver.train_model_kfold"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.solver.Solver.train_model_kfold" title="Link to this definition"></a></dt>
+<dd><p>Trains and test a model using k-fold cross validation.</p>
+<p>Passes a target PyTorch models through _train_step() function for a number of epochs. When the training is done, passes the same updated model through _test_step() function, to evaluate the model’s performance on the test dataset.</p>
+<p>Calculates, prints and stores evaluation metrics on training set throughout.</p>
+<p>Stores metrics to specified writer in debug/runs/folder and in the debug/metrics folder.</p>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>Dict[str, float]: </dt><dd><p>A dictionary containing the classification metrics, the loss for the test dataset, and the time taken to train it. Example:</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">metrics</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;accuracy&quot;</span><span class="p">:</span> <span class="mf">0.94</span><span class="p">,</span>
+    <span class="s2">&quot;precession&quot;</span><span class="p">:</span> <span class="mf">0.80</span><span class="p">,</span>
+    <span class="s2">&quot;recall&quot;</span><span class="p">:</span> <span class="mf">0.69</span><span class="p">,</span>
+    <span class="s2">&quot;fscore&quot;</span><span class="p">:</span> <span class="mf">0.76</span><span class="p">,</span>
+    <span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="mf">0.18</span><span class="p">,</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.storage">
+<span id="packages-utils-storage-module"></span><h2>packages.utils.storage module<a class="headerlink" href="#module-packages.utils.storage" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.storage.load_hyperparameters">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.storage.</span></span><span class="sig-name descname"><span class="pre">load_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/packages/utils/storage.html#load_hyperparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.storage.load_hyperparameters" title="Link to this definition"></a></dt>
+<dd><p>Loads the hyperparameters of the experiment from config_dir/YYYY-MM-DD/HH-MM-SS.txt.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>test_timestamp_list<span class="classifier">List[str]</span></dt><dd><p>List of timestamp (YYYY-MM-DD, HH-MM-SS).</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><p>Dict[str, str]: hyperparameters used for the loaded experiment.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.storage.save_hyperparameters">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.storage.</span></span><span class="sig-name descname"><span class="pre">save_hyperparameters</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hyperparameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/storage.html#save_hyperparameters"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.storage.save_hyperparameters" title="Link to this definition"></a></dt>
+<dd><p>Saves the hyperparameters of the experiment in config_dir/YYYY-MM-DD/HH-MM-SS.txt.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>hyperparameters<span class="classifier">Dict[str, Union[str, int, float]]</span></dt><dd><p>The hyperparameters of the experiment.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.storage.save_metrics">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.storage.</span></span><span class="sig-name descname"><span class="pre">save_metrics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">metrics</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/storage.html#save_metrics"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.storage.save_metrics" title="Link to this definition"></a></dt>
+<dd><p>Saves the metrics of the experiment in metrics_dir/YYYY-MM-DD/HH-MM-SS.pth.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>metrics<span class="classifier">Dict[str, float]</span></dt><dd><p>The metrics of the experiment (classification metrics, loss, duration).</p>
+</dd>
+<dt>timestamp_list<span class="classifier">List[str]</span></dt><dd><p>List of timestamp (YYYY-MM-DD, HH-MM-SS).</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.storage.save_model">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.storage.</span></span><span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Module</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timestamp_list</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">save_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">PosixPath('/Users/alextsagkas/Document/Office/solar_panels/models')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extra</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/packages/utils/storage.html#save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.storage.save_model" title="Link to this definition"></a></dt>
+<dd><p>Saves the state dict of model in save_dir/YYYY-MM-DD/HH-MM-SS_{extra}.pth.</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>Model to save.</p>
+</dd>
+<dt>timestamp_list<span class="classifier">List[str]</span></dt><dd><p>List of timestamp (YYYY-MM-DD, HH-MM-SS).</p>
+</dd>
+<dt>save_dir<span class="classifier">Path, optional</span></dt><dd><p>Directory where to save the model. Defaults to models_dir.</p>
+</dd>
+<dt>extra<span class="classifier">str</span></dt><dd><p>Extra information concerning the training (used as name of file saved).</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.time">
+<span id="packages-utils-time-module"></span><h2>packages.utils.time module<a class="headerlink" href="#module-packages.utils.time" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="packages.utils.time.get_time">
+<span class="sig-prename descclassname"><span class="pre">packages.utils.time.</span></span><span class="sig-name descname"><span class="pre">get_time</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/packages/utils/time.html#get_time"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.time.get_time" title="Link to this definition"></a></dt>
+<dd><p>Returns a string of the time in seconds or minutes, depending on the value of <cite>time</cite> (when  time is greater than 60 sec, it is converted to minutes, weatherwise it is left as seconds).</p>
+<p><strong>Args:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>time<span class="classifier">float</span></dt><dd><p>Time in seconds.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>str: </dt><dd><p>Time in seconds or minutes.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</section>
+<section id="module-packages.utils.transforms">
+<span id="packages-utils-transforms-module"></span><h2>packages.utils.transforms module<a class="headerlink" href="#module-packages.utils.transforms" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.utils.transforms.GetTransforms">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.utils.transforms.</span></span><span class="sig-name descname"><span class="pre">GetTransforms</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train_transform_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'simple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_transform_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'simple'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/utils/transforms.html#GetTransforms"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.transforms.GetTransforms" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Get the transforms for training and testing data using the corresponding names for them.  The transforms can also be optionally configured through the train_config and test_config attributes.</p>
+<p><strong>Attributes:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>train_transform_name<span class="classifier">str</span></dt><dd><p>Name of the transform to use on the train data.</p>
+</dd>
+<dt>train_config<span class="classifier">Union[Dict[str, float], None]</span></dt><dd><p>Dictionary with the configuration of the train transform.</p>
+</dd>
+<dt>test_transform_name<span class="classifier">str</span></dt><dd><p>Name of the transform to use on the test data.</p>
+</dd>
+<dt>test_config<span class="classifier">Union[Dict[str, float], None]</span></dt><dd><p>Dictionary with the configuration of the test transform.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods:</strong></p>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>simple_train:</dt><dd><p>Resize and randomly flip the image horizontally, then convert it to a tensor with values between 0 and 1.</p>
+</dd>
+<dt>trivial_train:</dt><dd><p>Resize and apply trivial augment wide transform (<a class="reference external" href="https://arxiv.org/abs/2103.10158">https://arxiv.org/abs/2103.10158</a>). Then convert it to a tensor with values between 0 and 1.</p>
+</dd>
+<dt>resnet_train:</dt><dd><p>Resize and crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+<dt>efficientnet_train:</dt><dd><p>Resize and central crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+<dt>mobilenet_train:</dt><dd><p>Resize and central crops the image before applying data augmentation (horizontal flip &amp; rotation). In the end the image is converted to tensor with values between 0 and 1 and the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>simple_test:</dt><dd><p>Resize and converts it to a tensor with values between 0 and 1.</p>
+</dd>
+<dt>resnet_test:</dt><dd><p>Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+<dt>efficientnet_test:</dt><dd><p>Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+<dt>mobilenet_test:</dt><dd><p>Resize and crops the image before converting it to a tensor with values between 0 and 1. In the end the mean = [0.485, 0.456, 0.406] and std = [0.229, 0.224, 0.225] are subtracted.</p>
+</dd>
+</dl>
+</div></blockquote>
+<hr class="docutils" />
+<blockquote>
+<div><dl class="simple">
+<dt>get_train_transform: </dt><dd><p>Returns the train transform based on the train_transform_name  attribute.</p>
+</dd>
+<dt>get_test_transform: </dt><dd><p>Returns the test transform based on the test_transform_name attribute.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.transforms.GetTransforms.get_test_transform">
+<span class="sig-name descname"><span class="pre">get_test_transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Compose</span></span></span><a class="reference internal" href="_modules/packages/utils/transforms.html#GetTransforms.get_test_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.transforms.GetTransforms.get_test_transform" title="Link to this definition"></a></dt>
+<dd><p>Returns the test transform based on the test_transform_name attribute.</p>
+<p><strong>Raises:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>ValueError: </dt><dd><p>When the transform_name does not correspond to any transform method.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>transforms.transforms.Compose: </dt><dd><p>Train transform.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.utils.transforms.GetTransforms.get_train_transform">
+<span class="sig-name descname"><span class="pre">get_train_transform</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Compose</span></span></span><a class="reference internal" href="_modules/packages/utils/transforms.html#GetTransforms.get_train_transform"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.utils.transforms.GetTransforms.get_train_transform" title="Link to this definition"></a></dt>
+<dd><p>Returns the train transform based on the train_transform_name attribute.</p>
+<p><strong>Raises:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>ValueError: </dt><dd><p>When the transform_name does not correspond to any transform method.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>transforms.transforms.Compose: </dt><dd><p>Train transform.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="packages.tests.html" class="btn btn-neutral float-left" title="packages.tests package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandros Tsagkaropoulos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

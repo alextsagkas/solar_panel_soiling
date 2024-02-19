@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>packages.utils.data_scraping &mdash; Solar Panel Soiling  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Solar Panel Soiling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">packages</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Solar Panel Soiling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">packages.utils.data_scraping</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for packages.utils.data_scraping</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Set</span>
+
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.webdriver</span> <span class="kn">import</span> <span class="n">WebDriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.by</span> <span class="kn">import</span> <span class="n">By</span>
+
+
+<div class="viewcode-block" id="download_image">
+<a class="viewcode-back" href="../../../packages.utils.html#packages.utils.data_scraping.download_image">[docs]</a>
+<span class="k">def</span> <span class="nf">download_image</span><span class="p">(</span>
+    <span class="n">download_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span>
+    <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">file_name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Download an image from a url and save it to download_path/file_name. The image is converted </span>
+<span class="sd">    to RGB color format and JPEG file format.</span>
+
+<span class="sd">    **Args:**</span>
+<span class="sd">    </span>
+<span class="sd">        download_path : Path</span>
+<span class="sd">			Path to download the image to.</span>
+<span class="sd">        url : str</span>
+<span class="sd">			Url of the image to download.</span>
+<span class="sd">        file_name : str</span>
+<span class="sd">			Name of the file to save the image to.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+        <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>  <span class="c1"># Raise an error for 4xx and 5xx HTTP status codes</span>
+
+        <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">download_path</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">content</span><span class="p">))</span><span class="o">.</span><span class="n">convert</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">)</span>
+
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">download_path</span><span class="p">,</span> <span class="n">file_name</span><span class="p">)</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;wb&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">image</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="s2">&quot;JPEG&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[INFO] Image </span><span class="si">{</span><span class="n">file_name</span><span class="si">}</span><span class="s2"> downloaded successfully.&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] HTTP error occurred: </span><span class="si">{</span><span class="n">http_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="n">requests</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">RequestException</span> <span class="k">as</span> <span class="n">req_err</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] Request error occurred: </span><span class="si">{</span><span class="n">req_err</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] An error occurred: </span><span class="si">{</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_image_urls">
+<a class="viewcode-back" href="../../../packages.utils.html#packages.utils.data_scraping.get_image_urls">[docs]</a>
+<span class="k">def</span> <span class="nf">get_image_urls</span><span class="p">(</span>
+        <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+        <span class="n">max_images</span><span class="p">:</span> <span class="nb">int</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get max_images number of image urls from the given google images url. </span>
+
+<span class="sd">    The delay is the number of seconds to wait so as to allow the images to load. It is used</span>
+<span class="sd">    while scrolling down the page or clicking on a button.</span>
+
+<span class="sd">    **Args:**</span>
+<span class="sd">    </span>
+<span class="sd">        url : str</span>
+<span class="sd">			Google images url.</span>
+<span class="sd">        delay : float</span>
+<span class="sd">			Delay in seconds.</span>
+<span class="sd">        max_images : int</span>
+<span class="sd">			Maximum number of images to scrape.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Set[str]: Set of image urls.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[INFO] Scraping </span><span class="si">{</span><span class="n">max_images</span><span class="si">}</span><span class="s2"> images from </span><span class="si">{</span><span class="n">url</span><span class="si">}</span><span class="s2">, &quot;</span>
+        <span class="sa">f</span><span class="s2">&quot;delaying </span><span class="si">{</span><span class="n">delay</span><span class="si">}</span><span class="s2"> seconds between scrolls. &quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="o">.</span><span class="n">Chrome</span><span class="p">()</span>
+    <span class="n">wd</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+
+    <span class="c1"># Click Reject all button</span>
+    <span class="n">_press_button</span><span class="p">(</span>
+        <span class="n">wd</span><span class="o">=</span><span class="n">wd</span><span class="p">,</span>
+        <span class="n">button_text</span><span class="o">=</span><span class="s2">&quot;Απόρριψη όλων&quot;</span><span class="p">,</span>
+        <span class="n">class_value</span><span class="o">=</span><span class="s2">&quot;Nc7WLe&quot;</span><span class="p">,</span>
+        <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">image_urls</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_urls</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">max_images</span><span class="p">:</span>
+        <span class="n">_scroll_down</span><span class="p">(</span><span class="n">wd</span><span class="p">,</span> <span class="n">delay</span><span class="p">)</span>
+
+        <span class="n">thumbnails</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span>
+            <span class="n">by</span><span class="o">=</span><span class="n">By</span><span class="o">.</span><span class="n">CLASS_NAME</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;Q4LuWd&quot;</span>
+        <span class="p">)</span>
+
+        <span class="n">_add_image_urls_to_Set</span><span class="p">(</span>
+            <span class="n">thumbnails</span><span class="o">=</span><span class="n">thumbnails</span><span class="p">,</span>
+            <span class="n">wd</span><span class="o">=</span><span class="n">wd</span><span class="p">,</span>
+            <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+            <span class="n">max_images</span><span class="o">=</span><span class="n">max_images</span><span class="p">,</span>
+            <span class="n">image_urls</span><span class="o">=</span><span class="n">image_urls</span>
+        <span class="p">)</span>
+
+    <span class="n">wd</span><span class="o">.</span><span class="n">quit</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">image_urls</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_press_button</span><span class="p">(</span>
+        <span class="n">wd</span><span class="p">:</span> <span class="n">WebDriver</span><span class="p">,</span>
+        <span class="n">button_text</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">class_value</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Press a button with the given text and class value, if it exists. Then wait for delay</span>
+<span class="sd">    seconds.</span>
+
+<span class="sd">    **Args:**</span>
+<span class="sd">    </span>
+<span class="sd">        wd : WebDriver</span>
+<span class="sd">			Chrome webdriver.</span>
+<span class="sd">        button_text : str</span>
+<span class="sd">			Text of the button to press.</span>
+<span class="sd">        class_value : str</span>
+<span class="sd">			Class value of the button to press.</span>
+<span class="sd">        delay : float</span>
+<span class="sd">			Delay in seconds after pressing the button.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">buttons</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span>
+        <span class="n">by</span><span class="o">=</span><span class="n">By</span><span class="o">.</span><span class="n">CLASS_NAME</span><span class="p">,</span>
+        <span class="n">value</span><span class="o">=</span><span class="n">class_value</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">button</span> <span class="ow">in</span> <span class="n">buttons</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">button</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="n">button_text</span><span class="p">:</span>
+            <span class="n">button</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+            <span class="k">break</span>
+
+
+<span class="k">def</span> <span class="nf">_scroll_down</span><span class="p">(</span>
+    <span class="n">wd</span><span class="p">:</span> <span class="n">WebDriver</span><span class="p">,</span>
+    <span class="n">delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scroll down the page to load more images. Press the &quot;Show more results&quot; button if it exists.</span>
+
+<span class="sd">    After scrolling down, or pressing the button, wait for delay seconds.</span>
+
+<span class="sd">    **Args:**</span>
+
+<span class="sd">        wd : _type_</span>
+<span class="sd">			Chrome webdriver.</span>
+<span class="sd">        delay : _type_</span>
+<span class="sd">			Delay in seconds after scrolling down.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wd</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;window.scrollTo(0, document.body.scrollHeight);&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+    <span class="n">_press_button</span><span class="p">(</span>
+        <span class="n">wd</span><span class="o">=</span><span class="n">wd</span><span class="p">,</span>
+        <span class="n">button_text</span><span class="o">=</span><span class="s2">&quot;Show more results&quot;</span><span class="p">,</span>
+        <span class="n">class_value</span><span class="o">=</span><span class="s2">&quot;LZ4I&quot;</span><span class="p">,</span>
+        <span class="n">delay</span><span class="o">=</span><span class="n">delay</span><span class="p">,</span>
+    <span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_add_image_urls_to_Set</span><span class="p">(</span>
+    <span class="n">thumbnails</span><span class="p">:</span> <span class="n">List</span><span class="p">,</span>
+    <span class="n">wd</span><span class="p">:</span> <span class="n">WebDriver</span><span class="p">,</span>
+    <span class="n">delay</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span>
+    <span class="n">max_images</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">image_urls</span><span class="p">:</span> <span class="n">Set</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Add image urls to the given set. The image urls are extracted from the given thumbnails.</span>
+<span class="sd">    If the number of image urls in the set is greater than or equal to max_images, then it returns.</span>
+<span class="sd">    The delay is the number of seconds to wait so as to allow the images to load.</span>
+
+<span class="sd">    Precisely, it clicks on each thumbnail to display the big image. Then it finds the urls of the </span>
+<span class="sd">    big image (the one that is displayed after interaction) and adds its url to the set. This is </span>
+<span class="sd">    done to get the highest resolution image and not the dummy one that is displayed on the </span>
+<span class="sd">    thumbnail.</span>
+
+<span class="sd">    **Args:**</span>
+<span class="sd">    </span>
+<span class="sd">        thumbnails : List</span>
+<span class="sd">			List of google images thumbnails.</span>
+<span class="sd">        wd : WebDriver</span>
+<span class="sd">			Chrome webdriver.</span>
+<span class="sd">        delay : float</span>
+<span class="sd">			Delay in seconds.</span>
+<span class="sd">        max_images : int</span>
+<span class="sd">			Maximum number of images to scrape.</span>
+<span class="sd">        image_urls : Set[str]</span>
+<span class="sd">			Set of image urls.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">thumbnail</span> <span class="ow">in</span> <span class="n">thumbnails</span><span class="p">:</span>
+        <span class="c1"># Click on thumbnail to display big image</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">thumbnail</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+            <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">delay</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Find big image (the one that is displayed after interaction)</span>
+        <span class="n">images</span> <span class="o">=</span> <span class="n">wd</span><span class="o">.</span><span class="n">find_elements</span><span class="p">(</span>
+            <span class="n">by</span><span class="o">=</span><span class="n">By</span><span class="o">.</span><span class="n">CLASS_NAME</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="s2">&quot;r48jcc&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">image</span> <span class="ow">in</span> <span class="n">images</span><span class="p">:</span>
+            <span class="n">image_src</span> <span class="o">=</span> <span class="n">image</span><span class="o">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s2">&quot;src&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">image_src</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;http&quot;</span> <span class="ow">in</span> <span class="n">image_src</span><span class="p">:</span>  <span class="c1"># type: ignore</span>
+                <span class="n">image_urls</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">image_src</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_urls</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">max_images</span><span class="p">:</span>
+            <span class="k">break</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandros Tsagkaropoulos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

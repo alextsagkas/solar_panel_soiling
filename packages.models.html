@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>packages.models package &mdash; Solar Panel Soiling  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="_static/doctools.js?v=888ff710"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="packages.tests package" href="packages.tests.html" />
+    <link rel="prev" title="packages package" href="packages.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Solar Panel Soiling
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">packages</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="packages.html">packages package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="packages.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">packages.models package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages.tests.html">packages.tests package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="packages.utils.html">packages.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="packages.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="packages.html#module-packages.main">packages.main module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Solar Panel Soiling</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">packages</a></li>
+          <li class="breadcrumb-item"><a href="packages.html">packages package</a></li>
+      <li class="breadcrumb-item active">packages.models package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/packages.models.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="packages-models-package">
+<h1>packages.models package<a class="headerlink" href="#packages-models-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-packages.models.efficientnet">
+<span id="packages-models-efficientnet-module"></span><h2>packages.models.efficientnet module<a class="headerlink" href="#module-packages.models.efficientnet" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB0">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB0</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB0"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB0" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_B0 model with the last layer changed to output 2 classes. Hello World!</p>
+<p><strong>Attributes:</strong></p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_B0 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_B0 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB0.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB0.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB0.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB0.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB0.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB1">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB1</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB1"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB1" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_B1 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_B1 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_B1 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB1.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB1.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB1.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB1.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB1.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB2</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB2" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_B2 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_B2 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_B2 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB2.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB2.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB2.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB2.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB2.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB3</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB3"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB3" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_B3 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_B3 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_B3 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB3.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB3.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB3.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB3.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB3.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB6">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB6</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB6"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB6" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_B6 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_B6 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_B6 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB6.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB6.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB6.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB6.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB6.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB7">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetB7</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB7"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB7" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNetB7 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNetB7 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNetB7 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB7.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetB7.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB7.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetB7.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetB7.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2L">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetV2L</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2L"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2L" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_V2_L model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_V2_L model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_V2_L model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2L.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2L.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2L.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2L.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2L.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2M">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetV2M</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2M"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2M" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_V2_M model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_V2_M model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_V2_M model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2M.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2M.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2M.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2M.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2M.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2S">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.efficientnet.</span></span><span class="sig-name descname"><span class="pre">EfficientNetV2S</span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2S"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2S" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a EfficientNet_V2_S model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the EfficientNet_V2_S model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>EfficientNet_V2_S model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2S.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/efficientnet.html#EfficientNetV2S.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2S.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.efficientnet.EfficientNetV2S.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.efficientnet.EfficientNetV2S.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.models.mobilenet">
+<span id="packages-models-mobilenet-module"></span><h2>packages.models.mobilenet module<a class="headerlink" href="#module-packages.models.mobilenet" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV2">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.mobilenet.</span></span><span class="sig-name descname"><span class="pre">MobileNetV2</span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV2"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV2" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a MobileNetV2 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the MobileNetV2 model from IMAGENET1K_V2.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>MobileNetV2 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV2.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV2.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV2.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV2.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.mobilenet.MobileNetV2.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Large">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.mobilenet.</span></span><span class="sig-name descname"><span class="pre">MobileNetV3Large</span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV3Large"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Large" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a MobileNetV3Large model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the MobileNetV3Large model from IMAGENET1K_V2.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>MobileNetV3Large model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Large.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV3Large.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Large.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Large.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Large.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Small">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.mobilenet.</span></span><span class="sig-name descname"><span class="pre">MobileNetV3Small</span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV3Small"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Small" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a MobileNetV3Small model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the MobileNetV3Small model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>MobileNetV3Small model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Small.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/mobilenet.html#MobileNetV3Small.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Small.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.mobilenet.MobileNetV3Small.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.mobilenet.MobileNetV3Small.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.models.resnet">
+<span id="packages-models-resnet-module"></span><h2>packages.models.resnet module<a class="headerlink" href="#module-packages.models.resnet" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet18">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.resnet.</span></span><span class="sig-name descname"><span class="pre">ResNet18</span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet18"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet18" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ResNet18 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ResNet18 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ResNet18 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet18.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet18.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet18.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet18.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.resnet.ResNet18.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet34">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.resnet.</span></span><span class="sig-name descname"><span class="pre">ResNet34</span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet34"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet34" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ResNet34 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ResNet34 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ResNet34 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet34.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet34.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet34.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet34.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.resnet.ResNet34.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet50">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.resnet.</span></span><span class="sig-name descname"><span class="pre">ResNet50</span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet50"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet50" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ResNet50 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ResNet50 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ResNet50 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet50.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/resnet.html#ResNet50.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.resnet.ResNet50.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.resnet.ResNet50.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.resnet.ResNet50.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.models.shufflenet">
+<span id="packages-models-shufflenet-module"></span><h2>packages.models.shufflenet module<a class="headerlink" href="#module-packages.models.shufflenet" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X05">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.shufflenet.</span></span><span class="sig-name descname"><span class="pre">ShuffleNetV2X05</span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X05"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X05" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ShuffleNet_V2_X0_5 model with the last layer changed to output 2 
+classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ShuffleNet_V2_X0_5 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ShuffleNet_V2_X0_5 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X05.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X05.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X05.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X05.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X05.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X10">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.shufflenet.</span></span><span class="sig-name descname"><span class="pre">ShuffleNetV2X10</span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X10"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X10" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ShuffleNet_V2_X1_0 model with the last layer changed to output 2 
+classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ShuffleNet_V2_X1_0 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ShuffleNet_V2_X1_0 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X10.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X10.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X10.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>torch.nn.Module: </dt><dd><p>Output of the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X10.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X10.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X15">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.shufflenet.</span></span><span class="sig-name descname"><span class="pre">ShuffleNetV2X15</span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X15"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X15" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ShuffleNet_V2_X1_5 model with the last layer changed to output 2 
+classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ShuffleNet_V2_X1_5 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ShuffleNet_V2_X1_5 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X15.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X15.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X15.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>torch.nn.Module: </dt><dd><p>Output of the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X15.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X15.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X20">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.shufflenet.</span></span><span class="sig-name descname"><span class="pre">ShuffleNetV2X20</span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X20"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X20" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Class that returns a ShuffleNet_V2_X2_0 model with the last layer changed to output 2 classes.</p>
+<p><strong>Attributes</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>weights<span class="classifier">str</span></dt><dd><p>Downloaded weights for the ShuffleNet_V2_X2_0 model from IMAGENET1K_V1.</p>
+</dd>
+<dt>model<span class="classifier">torch.nn.Module</span></dt><dd><p>ShuffleNet_V2_X2_0 model with the pretrained weights on all layers.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Methods</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>forward: </dt><dd><p>Passes the input tensor x through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X20.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Module</span></span></span><a class="reference internal" href="_modules/packages/models/shufflenet.html#ShuffleNetV2X20.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X20.forward" title="Link to this definition"></a></dt>
+<dd><p>Passes the input tensor x through the model.</p>
+<p><strong>Args</strong>:</p>
+<blockquote>
+<div><dl class="simple">
+<dt>self<span class="classifier">Self</span></dt><dd><p>Instance of the class.</p>
+</dd>
+<dt>x<span class="classifier">torch.Tensor</span></dt><dd><p>Input tensor to pass it through the model.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p><strong>Returns</strong>:</p>
+<blockquote>
+<div><p>torch.nn.Module: Output of the model.</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.shufflenet.ShuffleNetV2X20.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.shufflenet.ShuffleNetV2X20.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-packages.models.tiny_vgg">
+<span id="packages-models-tiny-vgg-module"></span><h2>packages.models.tiny_vgg module<a class="headerlink" href="#module-packages.models.tiny_vgg" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGG">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.tiny_vgg.</span></span><span class="sig-name descname"><span class="pre">TinyVGG</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dropout_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/models/tiny_vgg.html#TinyVGG"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGG" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Model architecture copying TinyVGG from: <a class="reference external" href="https://poloclub.github.io/cnn-explainer/">https://poloclub.github.io/cnn-explainer/</a>
+with dropout layers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGG.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/models/tiny_vgg.html#TinyVGG.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGG.forward" title="Link to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGG.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGG.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGGBatchnorm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">packages.models.tiny_vgg.</span></span><span class="sig-name descname"><span class="pre">TinyVGGBatchnorm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dropout_rate</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hidden_units</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_shape</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/models/tiny_vgg.html#TinyVGGBatchnorm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGGBatchnorm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></p>
+<p>Model architecture copying TinyVGG from: <a class="reference external" href="https://poloclub.github.io/cnn-explainer/">https://poloclub.github.io/cnn-explainer/</a> with dropout layers and batchnorm layers.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGGBatchnorm.forward">
+<span class="sig-name descname"><span class="pre">forward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/packages/models/tiny_vgg.html#TinyVGGBatchnorm.forward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGGBatchnorm.forward" title="Link to this definition"></a></dt>
+<dd><p>Defines the computation performed at every call.</p>
+<p>Should be overridden by all subclasses.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Although the recipe for forward pass needs to be defined within
+this function, one should call the <code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code> instance afterwards
+instead of this since the former takes care of running the
+registered hooks while the latter silently ignores them.</p>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="packages.models.tiny_vgg.TinyVGGBatchnorm.training">
+<span class="sig-name descname"><span class="pre">training</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#packages.models.tiny_vgg.TinyVGGBatchnorm.training" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="packages.html" class="btn btn-neutral float-left" title="packages package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="packages.tests.html" class="btn btn-neutral float-right" title="packages.tests package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Alexandros Tsagkaropoulos.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
